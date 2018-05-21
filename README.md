@@ -10,10 +10,10 @@ a creare o gestire le Issue.
 - Tramite expressJs creare un piccolo webserver che risponde a qualche comando basico
 - Tramite Curl fare qualche prova per impratichirsi con le chiamate Rest di Jira
 - Creare una analisi di progetto, contenete:
-  -Descrizione dell'obiettivo
-  -Storyboard dell'applicativo con le interazioni
-  -previste (tutte, anche le opzionali)
-  -User Stories
+  - Descrizione dell'obiettivo
+  - Storyboard dell'applicativo con le interazioni
+  - previste (tutte, anche le opzionali)
+  - User Stories
 - (Sprint) Iniziare l'implementazione della interfaccia utente senza il recupero delle informazioni via rest, simulando i dati recuperati con un array fisso
 - (Sprint) Implementare un set di funzioni per la comunicazione Rest
 - (Sprint) Unire il tutto in una prima versione
