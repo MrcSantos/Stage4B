@@ -1,0 +1,17 @@
+GG 1:
+Programmato:
+- Imparare le basi di NJS e Exp;
+- Capire al meglio il progetto e pensare a come realizzarlo.
+
+Fatto:
+- Imparato le basi di NodeJS e di Express;
+- Installato le cose necessarie (Node - Express - Atom);
+- Guardato il corso di NodeJS su code school;
+- Creata repo e messo su GH le prime cose (https://github.com/MrcSossy/Stage4B);
+- Creata bacheca trello (https://trello.com/b/EZOFBiH0/stage);
+- Guardato il corso di Express su code school;
+- Aperte le prime issues.
+
+Da fare domani obbligatoriamente:
+- Iniziare a progettare con metodo agile seriamente;
+- Migliorare il lato server, iniziando a far restituire dei file html (anche semplici) in modo da vedere le risposte.

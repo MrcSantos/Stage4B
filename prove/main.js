@@ -1,21 +1,23 @@
-var http = require('http');
-var url = require('url');
-var fs = require('fs');
+var express = require('express');
+var app = express();
 
-http.createServer(function (req, res) {
-  var q = url.parse(req.url, true);
-  var filename = q.href.replace("/", "");
-  fs.readFile(filename, function(err, data) {
-    if (err) {
-    console.log("Qualcuno è entrato nel sito ma ha ricevuto 404");
-      res.writeHead(404, {'Content-Type': 'text/html'});
-      return res.end("404 Not Found");
-    } 
-else{
-    console.log("Qualcuno è entrato nel sito in: " + req.url);
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.write(data);
-    return res.end();
-}
-  });
-}).listen(8080); 
+app.get('/', function (req, res) {
+    console.log("Someone entered in the root folder");
+    res.send("Hello world!");
+    res.end();
+});
+
+app.get('/winter', function (req, res) {
+    console.log("Someone entered in the winter folder");
+    res.sendFile(__dirname + "/winter.html");
+    res.end();
+});
+
+app.get('/summer', function (req, res) {
+    console.log("Someone entered in the summer folder");
+    res.sendFile(__dirname + "/summer.html");
+    res.end();
+});
+
+app.listen('3000');
+console.log("[ DONE ] Server running, waiting...");
