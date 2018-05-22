@@ -1,4 +1,4 @@
-GG 1:
+Aggiornamenti 21-5-2018
 Programmato:
 - Imparare le basi di NJS e Exp;
 - Capire al meglio il progetto e pensare a come realizzarlo.
@@ -15,3 +15,12 @@ Fatto:
 Da fare domani obbligatoriamente:
 - Iniziare a progettare con metodo agile seriamente;
 - Migliorare il lato server, iniziando a far restituire dei file html (anche semplici) in modo da vedere le risposte.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 22-5-2018
+Fatto:
+- Pianificazione del progetto su Trello;
+- Posta delle milestone (release);
+- Chiesti chiarimenti su Jira;
+- 
