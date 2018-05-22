@@ -12,7 +12,7 @@ Fatto:
 - Guardato il corso di Express su code school;
 - Aperte le prime issues.
 
-Da fare domani obbligatoriamente:
+Da fare domani:
 - Iniziare a progettare con metodo agile seriamente;
 - Migliorare il lato server, iniziando a far restituire dei file html (anche semplici) in modo da vedere le risposte.
 
@@ -20,7 +20,14 @@ Da fare domani obbligatoriamente:
 
 Aggiornamenti 22-5-2018
 Fatto:
-- Pianificazione del progetto su Trello;
+- Pianificazione del progetto su Trello (Mattinata);
 - Posta delle milestone (release);
 - Chiesti chiarimenti su Jira;
-- 
+- Creato un progetto con Express;
+- Snippets con Express;
+- Risolto le issues aperte su Jira da Torricelli.
+
+Da fare domani:
+- Mandare una pagina html tramite Express;
+- Iniziare a inserire i dati Json;
+- Simulare una lettura da Jira da far visualizzare.

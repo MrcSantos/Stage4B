@@ -59,5 +59,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
+console.log("[ DONE ] Check completed - server running...\n");
 
 module.exports = app;
