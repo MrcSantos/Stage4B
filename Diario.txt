@@ -31,3 +31,10 @@ Da fare domani:
 - Mandare una pagina html tramite Express;
 - Iniziare a inserire i dati Json;
 - Simulare una lettura da Jira da far visualizzare.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 23-5-2018
+Fatto:
+- Moqup del sito;
+- 
