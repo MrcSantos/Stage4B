@@ -36,5 +36,13 @@ Da fare domani:
 
 Aggiornamenti 23-5-2018
 Fatto:
-- Moqup del sito;
-- problemi con express e con la creazione delle pagine
+- Moqup dell'API;
+- Problemi con il progetto di express;
+- Tentativo di refactorizzare togliendo il progetto generato da express;
+- Problemi con GH;
+- Controllo di Torricelli dell'operato;
+- Tentativo di ripristino del progetto.
+
+Da fare domani:
+- Pullare il progetto se i problemi sono stati risolti;
+- Visualizzare del JSon nella pagina html.
