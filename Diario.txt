@@ -46,3 +46,16 @@ Fatto:
 Da fare domani:
 - Pullare il progetto se i problemi sono stati risolti;
 - Visualizzare del JSon nella pagina html.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 24-5-2018
+Fatto:
+- Ripristino progetto con GH;
+- Integrazione pug (al posto di jade);
+- Progetto ricominciato riciclando il codice vecchio;
+- Apprendimento chiamate Ajax;
+- Rendering di html con integrazione javascript (per ajax);
+- Funziona tutto (al contrario di prima);
+- Creata una tabella che faccia vedere tutti gli elementi di json che servono;
+- Creata una funzione che mostri tutti i valori delle chiavi di un JSon nella tabella;

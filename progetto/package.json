@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodejs ./bin/www",
-    "server": "nodemon -q ./bin/www"
+    "start": "nodejs ./app.js",
+    "server": "nodemon -q ./app.js"
   },
   "dependencies": {
     "body-parser": "~1.0.0",

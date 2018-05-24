@@ -1,63 +1,55 @@
-var express = require('express');
-var path = require('path');
-var logger = require('morgan');
-var bodyParser = require('body-parser');
-const fs = require('fs');
+Black = "\x1b[30m"
+Red = "\x1b[31m"
+Green = "\x1b[32m"
+Yellow = "\x1b[33m"
+Blue = "\x1b[34m"
+Magenta = "\x1b[35m"
+Cyan = "\x1b[36m"
+White = "\x1b[37m"
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
-var cool = require('./routes/cool');
-var param = require('./routes/param');
+const express = require('express')
+const app = express()
+const port = 8080;
 
-var app = express();
+var json = [{Id:"todo-1", Titolo:"Iniziare...", Status:"wip", Descrizione:"Sono una tastiera qwerty!"}, {Id:"todo-2", Titolo:"bla bla...", Status:"done", Descrizione:"Sono una tastiera bella!"}];
 
-/*----------------------------------------------------------------------------*/
-
-// view engine setup
-app.set('view', path.join(__dirname, 'views'));
+app.use(express.static('pages'));
+app.set('views', './pages');
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
-app.use(express.static(path.join(__dirname, 'pages')));
+app.get('/', (req, res) => res.render('index', { titolo: 'Ciao Torricelli' }));
+app.get('/id', (req, res) => res.send(json[0].Id));
+app.get('/titolo', (req, res) => res.send(json[0].Titolo));
+app.get('/json', (req, res) => res.send(tabelize(json)));
+app.get('/:nome', (req, res) => error(res));
 
-/*----------------------------------------------------------------------------*/
-
-app.use('/', routes);
-app.use('/users', users);
-app.use('/users/cool', cool);
-app.use('/', param);
-
-/// catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
+function error(res) {
+    res.send("Il link che hai inserito non è valido - error 404");
+    console.log(Red + "Qualcuno ha ricevuto 404");
 }
 
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
-});
+function tabelize(obj) {
+    var out = "<tr>";
+    var i;
 
-module.exports = app;
+    for (i in obj[0]) {
+        out +=  "<td>\
+                        " + i + "\
+                    </td>";
+    }
+    out += "</tr>";
+
+    for (i in obj) {
+        out += "<tr>";
+        for (j in obj[i]) {
+            out +=  "<td>\
+            " + obj[i][j] + "\
+            </td>";
+        }
+        out += "</tr>";
+    }
+
+    return out;
+}
+
+app.listen(port, () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
