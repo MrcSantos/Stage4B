@@ -58,4 +58,10 @@ Fatto:
 - Rendering di html con integrazione javascript (per ajax);
 - Funziona tutto (al contrario di prima);
 - Creata una tabella che faccia vedere tutti gli elementi di json che servono;
-- Creata una funzione che mostri tutti i valori delle chiavi di un JSon nella tabella;
+- Creata una funzione che mostri tutti i valori nella tabella;
+- Sperimentazioni con w3.css.
+
+Da fare domani
+- Fare il popup con le informazioni (https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_modal_login);
+- Finire HTML;
+- (OPZIONALE) Rendere la tabella esteticamente migliore.

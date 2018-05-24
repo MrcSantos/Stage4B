@@ -21,23 +21,16 @@ app.get('/', (req, res) => res.render('index', { titolo: 'Ciao Torricelli' }));
 app.get('/id', (req, res) => res.send(json[0].Id));
 app.get('/titolo', (req, res) => res.send(json[0].Titolo));
 app.get('/json', (req, res) => res.send(tabelize(json)));
-app.get('/:nome', (req, res) => error(res));
+app.get('/:error', (req, res) => error(res, req.params.error));
 
-function error(res) {
-    res.send("Il link che hai inserito non è valido - error 404");
+function error(res, e) {
+    res.send("Il link " + e + " non è valido - error 404");
     console.log(Red + "Qualcuno ha ricevuto 404");
 }
 
 function tabelize(obj) {
-    var out = "<tr>";
+    var out = "";
     var i;
-
-    for (i in obj[0]) {
-        out +=  "<td>\
-                        " + i + "\
-                    </td>";
-    }
-    out += "</tr>";
 
     for (i in obj) {
         out += "<tr>";
@@ -46,10 +39,9 @@ function tabelize(obj) {
             " + obj[i][j] + "\
             </td>";
         }
-        out += "</tr>";
     }
 
     return out;
 }
 
-app.listen(port, () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
+app.listen(port, '0.0.0.0', () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
