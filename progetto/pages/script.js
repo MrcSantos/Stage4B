@@ -22,5 +22,5 @@ function tabella() {
 tabella();
 
 function pop() {
-	
+
 }

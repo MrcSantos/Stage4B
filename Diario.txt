@@ -65,3 +65,10 @@ Da fare domani
 - Fare il popup con le informazioni (https://www.w3schools.com/w3css/tryit.asp?filename=tryw3css_examples_modal_login);
 - Finire HTML;
 - (OPZIONALE) Rendere la tabella esteticamente migliore.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 25-5-2018
+Fatto:
+- Implementazione parziale del popup;
+- 
