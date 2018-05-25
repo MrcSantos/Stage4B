@@ -20,3 +20,7 @@ function tabella() {
 }
 
 tabella();
+
+function pop() {
+	document.getElementById('popup').style.display='block';
+}

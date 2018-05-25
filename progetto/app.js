@@ -8,12 +8,12 @@ Cyan = "\x1b[36m"
 White = "\x1b[37m"
 
 const express = require('express')
+const request = require('ajax-request');
 const app = express()
 const port = 8080;
 
-const request = require('ajax-request');
+const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
 
-var head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
 
 app.use(express.static('pages'));
 app.set('views', './pages');
@@ -23,8 +23,8 @@ app.get('/', (req, res) => res.render('index'));
 app.get('/json', (req, res) => res.send(tabelize()));
 app.get('/:error', (req, res) => error(res, req.params.error));
 
-function error(res, e) {
-    res.send("Il link " + e + " non è valido, prego inserirne un altro - error 404");
+function error(res, link) {
+    res.send("Il link " + link + " non è valido, prego inserirne un altro - error 404");
     console.log(Red + "Qualcuno ha ricevuto 404");
 }
 
