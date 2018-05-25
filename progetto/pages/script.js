@@ -6,15 +6,17 @@ httpReq.onreadystatechange = function() {
 	}
 };
 
-function asd() {
+/*function key() {
     httpReq.open("GET", "/id", true);
     httpReq.send();
 }
 function titolo() {
     httpReq.open("GET", "/titolo", true);
     httpReq.send();
-}
+}*/
 function tabella() {
     httpReq.open("GET", "/json", true);
     httpReq.send();
 }
+
+tabella();

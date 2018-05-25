@@ -11,37 +11,46 @@ const express = require('express')
 const app = express()
 const port = 8080;
 
-var json = [{Id:"todo-1", Titolo:"Iniziare...", Status:"wip", Descrizione:"Sono una tastiera qwerty!"}, {Id:"todo-2", Titolo:"bla bla...", Status:"done", Descrizione:"Sono una tastiera bella!"}];
+const request = require('ajax-request');
+
+var head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
 
 app.use(express.static('pages'));
 app.set('views', './pages');
 app.set('view engine', 'pug');
 
-app.get('/', (req, res) => res.render('index', { titolo: 'Ciao Torricelli' }));
-app.get('/id', (req, res) => res.send(json[0].Id));
-app.get('/titolo', (req, res) => res.send(json[0].Titolo));
-app.get('/json', (req, res) => res.send(tabelize(json)));
+app.get('/', (req, res) => res.render('index'));
+app.get('/json', (req, res) => res.send(tabelize()));
 app.get('/:error', (req, res) => error(res, req.params.error));
 
 function error(res, e) {
-    res.send("Il link " + e + " non è valido - error 404");
+    res.send("Il link " + e + " non è valido, prego inserirne un altro - error 404");
     console.log(Red + "Qualcuno ha ricevuto 404");
 }
 
-function tabelize(obj) {
-    var out = "";
-    var i;
+function riga(obj, isHead) {
+    if (isHead === undefined) isHead = false;
+    var out;
 
-    for (i in obj) {
-        out += "<tr>";
-        for (j in obj[i]) {
-            out +=  "<td>\
-            " + obj[i][j] + "\
-            </td>";
-        }
+    if(isHead) out = "<tr class='w3-light-grey'>";
+    else out = "<tr>";
+
+    for (var i in obj) {
+        out +=  "<td>\
+        " + obj[i] + "\
+        </td>";
     }
+    out += "</tr>";
 
     return out;
 }
 
-app.listen(port, '0.0.0.0', () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
+function tabelize() {
+    var out = "";
+
+    out += riga(head, true);
+
+    return out;
+}
+
+app.listen(port, () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
