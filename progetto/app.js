@@ -1,6 +1,7 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione
 
-const express = require('express');
+const express = require('express'); // Implementa Express
+const ajax = require('ajax-request'); // Implementa le chiamate
 const app = express();
 app.use(express.static('pages'));
 
@@ -13,13 +14,18 @@ const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZION
 
 const base = "http://stage.gnet.it/"; // Inizio URL
 const middle = "rest/api/latest/issue/"; // Metà dell'URL
-const all = base + middle;
+const all = base + middle; // Tutta la prima parte dell'URL
+const auth = "os_authType=any"; // Per le autorizzazioni
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/json', (req, res) => res.send("Ciao"));
+app.get('/json', (req, res) => {
+    ajax({
+        url: "http://stage.gnet.it/rest/api/latest/issue/TODO-6?os_authType=basic",
+        method: 'GET'
+    }, (err, aaa, body) => res.send(body))});
 
 app.get('/:error', (req, res) => {
     res.send("<h1>Il link " + req.params.error + " non è valido, prego inserirne un altro - error 404</h1>");
