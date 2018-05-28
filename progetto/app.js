@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione
 
 const express = require('express'); // Implementa Express
-const ajax = require('ajax-request'); // Implementa le chiamate
+const request = require('ajax-request'); // Implementa le chiamate
 const app = express();
 app.use(express.static('pages'));
 
@@ -21,11 +21,19 @@ const auth = "os_authType=any"; // Per le autorizzazioni
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/json', (req, res) => {
-    ajax({
-        url: "http://stage.gnet.it/rest/api/latest/issue/TODO-6?os_authType=basic",
-        method: 'GET'
-    }, (err, aaa, body) => res.send(body))});
+app.get('/json', (req, res) =>
+request({
+    url: all+"TODO-6?os_authType=any",
+    method: 'GET'/*,
+    data: {
+        "os_authType": "basic"
+    }*/
+}, function(err, obj, body) {
+    console.log(all+"TODO-6?os_authType=any");
+    if(body) res.send(body);
+    if(obj) res.send(obj);
+    if(err) res.send(err);
+}));
 
 app.get('/:error', (req, res) => {
     res.send("<h1>Il link " + req.params.error + " non è valido, prego inserirne un altro - error 404</h1>");

@@ -70,5 +70,25 @@ Da fare domani
 
 Aggiornamenti 25-5-2018
 Fatto:
-- Implementazione parziale del popup;
-- 
+- Implementazione parziale del popup (fallita);
+- Lavoro deviato sulla comunicazione con Jira;
+- Visualizzazione del Json ma non nell'api.
+
+Da fare domani:
+- Finire le rest API.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 28-5-2018
+Fatto:
+- Riscontrato il muro dell'autenticazione nelle chiamate Jira;
+- Primo studio di come lavora la sicurezza e le autenticazioni;
+- Utilizzo dell'autenticazione base;
+- Rimosse le librerie per le chiamate Jira (a causa di forze maggiori);
+- Rifatta la gestione delle chiamate a Jira;
+- Ripreso il problema dell'autenticazione;
+- Problemi con la visualizzazione delle issues;
+- Spaciugato un po' con il codice per le autorizzazioni.
+
+Da fare domani:
+- Finire le rest API (autenticazione + lettura).
