@@ -1,37 +1,32 @@
-Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; Blue = "\x1b[34m"; Magenta = "\x1b[35m"; Cyan = "\x1b[36m"; White = "\x1b[37m";
+/*----------------------------------------------------------------------------*/ // Inizializzazione
 
-const express = require('express')
-const app = express()
-const port = 8080;
+const express = require('express');
+const app = express();
+app.use(express.static('pages'));
+
+/*----------------------------------------------------------------------------*/ // Variabili
+
+Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; Blue = "\x1b[34m"; Magenta = "\x1b[35m"; Cyan = "\x1b[36m"; White = "\x1b[37m";
+const port = 8080; // Porta di ascolto
+
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
 
-const rest = require('jira-rest');
+const base = "http://stage.gnet.it/"; // Inizio URL
+const middle = "rest/api/latest/issue/"; // Metà dell'URL
+const all = base + middle;
 
-var config = {
-    "url": "http://stage.gnet.it/rest/api/latest/issue/10008",
-    "authorization": {
-        "username": "mrcsossy",
-        "password": "Stage.2018"
-    }
-};
-var jira = rest.connect(config);
+/*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
-app.use(express.static('pages'));
-app.set('views', './pages');
-app.set('view engine', 'pug');
+app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/', (req, res) => res.render('index'));
-app.get('/json', (req, res) => request(res));
-app.get('/:error', (req, res) => error(res, req.params.error));
+app.get('/json', (req, res) => res.send("Ciao"));
 
-function request(res) {
-    jira.fetchProjects((error, data) => res.send(error+data));
-}
+app.get('/:error', (req, res) => {
+    res.send("<h1>Il link " + req.params.error + " non è valido, prego inserirne un altro - error 404</h1>");
+    console.log(Red + "Qualcuno ha ricevuto 404 all'indirizzo " + req.params.error + White);
+});
 
-function error(res, link) {
-    res.send("Il link " + link + " non è valido, prego inserirne un altro - error 404");
-    console.log(Red + "Qualcuno ha ricevuto 404" + White);
-}
+/*----------------------------------------------------------------------------*/ // Funzioni varie
 
 function riga(obj, isHead) {
     if (isHead === undefined) isHead = false;
@@ -58,4 +53,6 @@ function tabelize() {
     return out;
 }
 
-app.listen(port, () => console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n' + White));
+/*----------------------------------------------------------------------------*/ // Fine
+
+app.listen(port, console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n' + White));
