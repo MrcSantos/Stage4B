@@ -12,11 +12,10 @@ Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; B
 const port = 8080; // Porta di ascolto
 
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
-const config = {key:"prova", priv:"rsa.pem"};
 
 const username = 'mrcsossy';
 const password = 'Stage.2018';
-const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
+const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
 
 const base = "http://stage.gnet.it/"; // Inizio URL
 const middle = "rest/api/latest/issue/"; // Metà dell'URL
