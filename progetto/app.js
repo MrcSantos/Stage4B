@@ -20,7 +20,7 @@ const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64')
 const base = "http://stage.gnet.it/"; // Inizio URL
 const middle = "rest/api/latest/issue/"; // Metà dell'URL
 const all = base + middle; // Tutta la prima parte dell'URL
-const auth = "os_authType=any"; // Per le autorizzazioni
+const os = "os_authType=any"; // Per le autorizzazioni
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
@@ -30,9 +30,10 @@ app.get('/json', (req, res) =>
 request({
     url: middle+"TODO-6",
     method: 'PUT',
+    authorization: auth,
     json: {
         "fields": {
-		"summary":"test 123321"
+		"id":"TODO-6"
 		}
     }, function(err, obj, body) {
         if (error) res.send(error);
