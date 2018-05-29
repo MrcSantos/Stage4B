@@ -2,7 +2,6 @@
 
 const express = require('express'); // Implementa Express
 const request = require('ajax-request'); // Implementa le chiamate
-const OAuth = require('oauth').OAuth
 const app = express();
 app.use(express.static('pages'));
 
@@ -37,7 +36,6 @@ const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64')
 const base = "http://stage.gnet.it/"; // Inizio URL
 const middle = "rest/api/latest/issue/"; // Metà dell'URL
 const all = base + middle; // Tutta la prima parte dell'URL
-const os = "os_authType=any"; // Per le autorizzazioni
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
@@ -48,14 +46,13 @@ app.get('/json', (req, res) => request({
     method: 'GET',
     headers: {
             'Authorization': auth
-    },
-    json: {
-        "fields": {
-		"id":"TODO-6"
-		}
-    }}, function(err, obj, body) {
+    }
+}, function(err, obj, body) {
         if (err) res.send(err);
-        else res.send(body);
+        else {
+            var got = JSON.parse(body);
+            res.send(got);
+        }
     })
 );
 

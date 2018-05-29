@@ -92,3 +92,22 @@ Fatto:
 
 Da fare domani:
 - Finire le rest API (autenticazione + lettura).
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 29-5-2018
+Fatto:
+- Inizio implementazione di un basic auth;
+- Provata implementazione di OAuth auth;
+- Auth fallito, spostamento focus sul popup e la tabella;
+- Implementazione di vari metodi di popup;
+- Utilizzo Jquery per popup;
+- Reso più estetica la tabella in modo che non superi la pagina;
+- Risolto vari problemi del metodo request;
+- Chiesto aiuto per l'autorizzazione (problema di header);
+- Finalmente stampa qualcosa a schermo che non siano errori;
+- Refactory codice + commenti.
+
+Da fare domani:
+- Impaginare correttamente il Json ricevuto nell'html;
+- (OPZIONALE) Iniziare la creazione di issues.
