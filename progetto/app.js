@@ -12,19 +12,11 @@ Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; B
 const port = 8080; // Porta di ascolto
 
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
-const config = {key:"prova", priv:"atlassian-oauth-examples/rsa.pem"};
+const config = {key:"prova", priv:"rsa.pem"};
 
-const consumer = new OAuth(
-    "https://jdog.atlassian.com/plugins/servlet/oauth/request-token",
-    "https://jdog.atlassian.com/plugins/servlet/oauth/access-token",
-    config.key,
-    "",
-    "1.0",
-    "http://localhost:8080/sessions/callback",
-    "RSA-SHA1",
-	null,
-	config.priv
-);
+const username = 'mrcsossy';
+const password = 'Stage.2018';
+const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
 
 const base = "http://stage.gnet.it/"; // Inizio URL
 const middle = "rest/api/latest/issue/"; // Metà dell'URL
@@ -35,63 +27,19 @@ const auth = "os_authType=any"; // Per le autorizzazioni
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/sessions/connect', function(request, response){
-	consumer.getOAuthRequestToken (
-		function(error, oauthToken, oauthTokenSecret, results) {
-    		if (error) {
-				console.log(error.data);
-      			response.send('Error getting OAuth access token');
-			}
-    		else {
-      			request.session.oauthRequestToken = oauthToken;
-      			request.session.oauthRequestTokenSecret = oauthTokenSecret;
-      			response.redirect("https://jdog.atlassian.com/plugins/servlet/oauth/authorize?oauth_token="+request.session.oauthRequestToken);
-			}
-		}
-	)
-});
-
-app.get('/sessions/callback', function(request, response){
-	consumer.getOAuthAccessToken (
-		request.session.oauthRequestToken,
-		request.session.oauthRequestTokenSecret,
-		request.query.oauth_verifier,
-		function(error, oauthAccessToken, oauthAccessTokenSecret, results){
-			if (error) {
-				console.log(error.data);
-				response.send("error getting access token");
-			}
-    		else {
-                request.session.oauthAccessToken = oauthAccessToken;
-                request.session.oauthAccessTokenSecret = oauthAccessTokenSecret;
-                consumer.get("https://jdog.atlassian.com/rest/api/latest/issue/JRADEV-8110.json",
-                	request.session.oauthAccessToken,
-                	request.session.oauthAccessTokenSecret,
-                	"application/json",
-
-                	function(error, data, resp){
-                    	console.log(data);
-                        data = JSON.parse(data);
-                        response.send("I am looking at: "+data["key"]);
-                	}
-        		);
-            }
-		}
-	)
-});
-
-app.get('/json', (req, res) => 
+app.get('/json', (req, res) =>
 request({
-    url: all+"TODO-6?os_authType=basic",
-    method: 'GET'/*,
-    data: {
-        "os_authType": "basic"
-    }*/
-}, function(err, obj, body) {
-    if(body) res.send(body);
-    if(obj) res.send(obj);
-    if(err) res.send(err);
-}));
+    url: middle+"TODO-6",
+    method: 'PUT',
+    json: {
+        "fields": {
+		"summary":"test 123321"
+		}
+    }, function(err, obj, body) {
+        if (error) res.send(error);
+        else res.send(response.statusCode, body);
+    }})
+);
 
 app.get('/:error', (req, res) => {
     res.send("<h1>Il link " + req.params.error + " non è valido, prego inserirne un altro - error 404</h1>");
