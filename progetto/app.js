@@ -43,19 +43,20 @@ const os = "os_authType=any"; // Per le autorizzazioni
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/json', (req, res) => res.send(tabelize())
-/*request({
-    url: middle+"TODO-6",
-    method: 'PUT',
-    authorization: auth,
+app.get('/json', (req, res) => request({
+    url: all+"TODO-6",
+    method: 'GET',
+    headers: {
+            'Authorization': auth
+    },
     json: {
         "fields": {
 		"id":"TODO-6"
 		}
-    }, function(err, obj, body) {
-        if (error) res.send(error);
-        else res.send(response.statusCode, body);
-    }})*/
+    }}, function(err, obj, body) {
+        if (err) res.send(err);
+        else res.send(body);
+    })
 );
 
 app.get('/:error', (req, res) => {
@@ -67,10 +68,10 @@ app.get('/:error', (req, res) => {
 
 function riga(obj, isHead) {
     if (isHead === undefined) isHead = false;
-    var out;
+    var out = "";
 
-    if(isHead) out = "<tr class='w3-light-grey fix'>";
-    else out = "<tr>";
+    if(isHead) out += "<thead><tr class='w3-light-grey fix'>";
+    else out += "<tr>";
 
     for (var i in obj) {
         out +=  "<td>\
@@ -78,21 +79,24 @@ function riga(obj, isHead) {
         </td>";
     }
     out += "</tr>";
+    if(isHead) out += "</thead>";
 
     return out;
 }
 
-function tabelize() {
+function t(obj) {
     var out = "";
 
     out += riga(head, true);
 
-    for (var i in json)
-        out += riga(json[i]);
+    out += "<tbody>";
+    for (var i in obj)
+        out += riga(obj[i]);
+    out += "</tbody>";
 
     return out;
 }
 
 /*----------------------------------------------------------------------------*/ // Fine
 
-app.listen(port, console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n' + White));
+app.listen(port, ()=>console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n' + White));

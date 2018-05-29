@@ -6,7 +6,7 @@
 
 .fix {
     position: sticky;
-    top: inherit;
+    top: 50px;
 }
 
 /* The Modal (background) */
