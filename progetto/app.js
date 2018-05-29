@@ -12,6 +12,23 @@ Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; B
 const port = 8080; // Porta di ascolto
 
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
+var json = [
+    {Id:"todo-1", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-2", Titolo:"Fare...", Status:"done", Descrizione:"consectetur adipiscing elit"},
+    {Id:"todo-3", Titolo:"Provare...", Status:"to do", Descrizione:"Sed eu dolor id nisi tempus"},
+    {Id:"todo-4", Titolo:"Asdfghjkl...", Status:"asd", Descrizione:"sagittis sed et ex"},
+    {Id:"todo-5", Titolo:"Boh, non lo so...", Status:"wip", Descrizione:"Fusce finibus libero risus"},
+    {Id:"todo-6", Titolo:"Insert catchy phrase here...", Status:"done", Descrizione:"semper metus ultrices nec"},
+    {Id:"todo-7", Titolo:"bla bla...", Status:"done", Descrizione:"Vestibulum sed placerat metus"},
+    {Id:"todo-8", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-9", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-10", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-11", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-12", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-13", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-14", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+    {Id:"todo-15", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
+];
 
 const username = 'mrcsossy';
 const password = 'Stage.2018';
@@ -26,8 +43,8 @@ const os = "os_authType=any"; // Per le autorizzazioni
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/json', (req, res) =>
-request({
+app.get('/json', (req, res) => res.send(tabelize())
+/*request({
     url: middle+"TODO-6",
     method: 'PUT',
     authorization: auth,
@@ -38,7 +55,7 @@ request({
     }, function(err, obj, body) {
         if (error) res.send(error);
         else res.send(response.statusCode, body);
-    }})
+    }})*/
 );
 
 app.get('/:error', (req, res) => {
@@ -52,7 +69,7 @@ function riga(obj, isHead) {
     if (isHead === undefined) isHead = false;
     var out;
 
-    if(isHead) out = "<tr class='w3-light-grey'>";
+    if(isHead) out = "<tr class='w3-light-grey fix'>";
     else out = "<tr>";
 
     for (var i in obj) {
@@ -69,6 +86,9 @@ function tabelize() {
     var out = "";
 
     out += riga(head, true);
+
+    for (var i in json)
+        out += riga(json[i]);
 
     return out;
 }

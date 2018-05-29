@@ -1,4 +1,4 @@
-//$(() => $("#out").load("/json")); // Al caricamento della pagina manda la richiesta al server
+$(() => $("#out").load("/json")); // Al caricamento della pagina manda la richiesta al server
 
 // Get the modal
 var modal = document.getElementById("myModal");

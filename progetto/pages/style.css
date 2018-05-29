@@ -4,6 +4,11 @@
     overflow-y: scroll;
 }
 
+.fix {
+    position: sticky;
+    top: inherit;
+}
+
 /* The Modal (background) */
 .modal {
     display: none; /* Hidden by default */
