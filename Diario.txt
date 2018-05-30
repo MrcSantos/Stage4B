@@ -120,6 +120,9 @@ Fatto:
 - Inizio creazione delle issues su Jira con dati statici;
 - Refactory medio sul codice, divisione in funzioni migliori;
 - Piccoli problemi riguardanti alla creazione delle issues su Jira;
--
+- Inizio "tabelizzazione" del Json ottenuto;
+- Presa di tutte le issues di un progetto;
+- Corretta "tabelizzazione" a causa del Json diverso;
+- 
 
 Da fare domani:

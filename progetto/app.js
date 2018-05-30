@@ -74,13 +74,13 @@ app.get('/get', (req, res) => { // Richiesta di tutte le issues - FUNZIONANTE
                 error();
             }
             else {
-                good(res, body);
+                good(out(res, body));
             }
         }
     )
 });
 
-app.get('/create', (req, res) => {
+app.get('/create', (req, res) => { // Creazione di una issue
     neutral("Inizio richiesta di creazione di una issue");
 
     request(
@@ -96,7 +96,7 @@ app.get('/create', (req, res) => {
                 error();
             }
             else {
-                good(res, body);
+                good(/*Funzione di callback*/);
             }
         }
     )
@@ -110,16 +110,17 @@ app.get('/:error', (req, res) => {
 /*----------------------------------------------------------------------------*/ // Funzioni varie
 
 /* Funzioni di output */
-function good(res, body) {
-    var got = JSON.parse(body);
-    out(res, got);
+function good(callback) {
     green("Richiesta andata a buon fine\n");
+    callback;
 }
 function error() {
     res.send("Siamo spiacenti ma si è verificato un errore" + home);
     red("Richiesta fallita; " + err + "\n");
 }
-function out(res, got) {
+function out(res, body) {
+    var got = JSON.parse(body);
+
     function extract(i) {
         if(got.issues[i].fields.description === null) got.issues[i].fields.description = 'Nessuna descrizione';
         var issue = {
