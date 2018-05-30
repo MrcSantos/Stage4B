@@ -7,11 +7,13 @@ app.use(express.static('pages'));
 
 /*----------------------------------------------------------------------------*/ // Variabili
 
+/* Variabili colori */
 Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; Blue = "\x1b[34m"; Magenta = "\x1b[35m"; Cyan = "\x1b[36m"; White = "\x1b[37m";
-const port = 8080; // Porta di ascolto
 
+/* Variabili statiche utili */
+const port = 8080; // Porta di ascolto
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
-var json = [
+const json = [
     {Id:"todo-1", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
     {Id:"todo-2", Titolo:"Fare...", Status:"done", Descrizione:"consectetur adipiscing elit"},
     {Id:"todo-3", Titolo:"Provare...", Status:"to do", Descrizione:"Sed eu dolor id nisi tempus"},
@@ -29,25 +31,25 @@ var json = [
     {Id:"todo-15", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
 ];
 const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
+
+/* Variabili autenticazione */
 const username = 'mrcsossy';
 const password = 'Stage.2018';
 const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
-var data = {
+const data = {
     "fields": {
        "project":
        {
-          "key": "TEST"
+          "key": "TODO"
        },
-       "summary": "REST ye merry gentlemen.",
-       "description": "Creating of an issue using project keys and issue type names using the REST API",
-       "issuetype": {
-          "name": "Bug"
-       }
+       "summary": "No REST for the Wicked.",
+       "description": "Creating of an issue using the REST API"
    }
 }
 
+/* Variabili URL */
 const host = "http://stage.gnet.it/"; // Inizio URL
-const path = "rest/api/latest/issue/"; // Metà dell'URL
+const path = "rest/api/latest/"; // Metà dell'URL
 const all = host + path; // Tutta la prima parte dell'URL
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
@@ -59,10 +61,10 @@ app.get('/get', (req, res) => {
 
     request(
         {
-            url: all+"TODO-6",
+            url: all+"search?jql=project=TODO&fields=id,summary,description,status",
             method: 'GET',
             headers: {
-                    'Authorization': auth
+                'Authorization': auth
             }
         }, function(err, obj, body) {
             if (err) {
@@ -85,7 +87,7 @@ app.get('/create', (req, res) => {
             headers: {
                     'Authorization': auth
             },
-            data: data
+            body: JSON.stringify(data)
         }, function(err, obj, body) {
             if (err) {
                 error();
@@ -105,25 +107,43 @@ app.get('/:error', (req, res) => {
 /*----------------------------------------------------------------------------*/ // Funzioni varie
 
 /* Funzioni di output */
-function out(res, got) {
-    res.send(got);
-}
-function error() {
-    res.send("Siamo spiacenti ma si è verificato un errore" + home);
-    red("Richiesta fallita; " + err + "\n");
-}
 function good(res, body) {
     var got = JSON.parse(body);
     out(res, got);
     green("Richiesta andata a buon fine\n");
 }
+function error() {
+    res.send("Siamo spiacenti ma si è verificato un errore" + home);
+    red("Richiesta fallita; " + err + "\n");
+}
+function out(res, got) {
+    function extract(i) {
+        if(got.issues[i].fields.description === null) got.issues[i].fields.description = 'Nessuna descrizione';
+        var issue = {
+            'key': got.issues[i].key,
+            'summary': got.issues[i].fields.summary,
+            'status': got.issues[i].fields.status.statusCategory.name,
+            'description': got.issues[i].fields.description
+        };
+        return issue;
+    }
+
+    function issues() {
+        var issues = [];
+        for (var i in got.issues)
+            issues.push(extract(i));
+        return issues;
+    }
+
+    res.send(tabelize(issues()));
+}
 
 /* Funzioni per il log colorato */
-function red(str) {
-    console.log(Red + str);
-}
 function green(str) {
     console.log(Green + str + Red);
+}
+function red(str) {
+    console.log(Red + str);
 }
 function neutral(str) {
     console.log(White + str + Red);
@@ -162,4 +182,5 @@ function tabelize(obj) {
 
 /*----------------------------------------------------------------------------*/ // Fine
 
+/* Scrive la stringa se va tutto bene */
 app.listen(port, green('\n[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));
