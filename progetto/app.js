@@ -50,18 +50,21 @@ const data = {
 /* Variabili URL */
 const host = "http://stage.gnet.it/"; // Inizio URL
 const path = "rest/api/latest/"; // Metà dell'URL
-const all = host + path; // Tutta la prima parte dell'URL
+const base = host + path; // Tutta la prima parte dell'URL
+const srcPro = "search?jql=project=";
+const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
+const fields = "fields=id,summary,description,status"; // Solo i campi interessati
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/get', (req, res) => {
+app.get('/get', (req, res) => { // Richiesta di tutte le issues - FUNZIONANTE
     neutral("Inizio richiesta di lettura");
 
     request(
         {
-            url: all+"search?jql=project=TODO&fields=id,summary,description,status",
+            url: base + srcPro + "TODO" + sort + "&" + fields,
             method: 'GET',
             headers: {
                 'Authorization': auth
@@ -82,7 +85,7 @@ app.get('/create', (req, res) => {
 
     request(
         {
-            url: all,
+            url: base,
             method: 'POST',
             headers: {
                     'Authorization': auth
