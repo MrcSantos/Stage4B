@@ -28,41 +28,108 @@ var json = [
     {Id:"todo-14", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
     {Id:"todo-15", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
 ];
-
+const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 const username = 'mrcsossy';
 const password = 'Stage.2018';
 const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
+var data = {
+    "fields": {
+       "project":
+       {
+          "key": "TEST"
+       },
+       "summary": "REST ye merry gentlemen.",
+       "description": "Creating of an issue using project keys and issue type names using the REST API",
+       "issuetype": {
+          "name": "Bug"
+       }
+   }
+}
 
-const base = "http://stage.gnet.it/"; // Inizio URL
-const middle = "rest/api/latest/issue/"; // Metà dell'URL
-const all = base + middle; // Tutta la prima parte dell'URL
+const host = "http://stage.gnet.it/"; // Inizio URL
+const path = "rest/api/latest/issue/"; // Metà dell'URL
+const all = host + path; // Tutta la prima parte dell'URL
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-app.get('/json', (req, res) => request({
-    url: all+"TODO-6",
-    method: 'GET',
-    headers: {
-            'Authorization': auth
-    }
-}, function(err, obj, body) {
-        if (err) res.send(err);
-        else {
-            var got = JSON.parse(body);
-            res.send(got);
+app.get('/get', (req, res) => {
+    neutral("Inizio richiesta di lettura");
+
+    request(
+        {
+            url: all+"TODO-6",
+            method: 'GET',
+            headers: {
+                    'Authorization': auth
+            }
+        }, function(err, obj, body) {
+            if (err) {
+                error();
+            }
+            else {
+                good(res, body);
+            }
         }
-    })
-);
+    )
+});
+
+app.get('/create', (req, res) => {
+    neutral("Inizio richiesta di creazione di una issue");
+
+    request(
+        {
+            url: all,
+            method: 'POST',
+            headers: {
+                    'Authorization': auth
+            },
+            data: data
+        }, function(err, obj, body) {
+            if (err) {
+                error();
+            }
+            else {
+                good(res, body);
+            }
+        }
+    )
+});
 
 app.get('/:error', (req, res) => {
-    res.send("<h1>Il link " + req.params.error + " non è valido, prego inserirne un altro - error 404</h1>");
-    console.log(Red + "Qualcuno ha ricevuto 404 all'indirizzo " + req.params.error + White);
+    res.send("<h1>Il link " + req.params.error + " non è valido - error 404</h1>" + home);
+    red("Qualcuno ha ricevuto 404 all'indirizzo " + req.params.error);
 });
 
 /*----------------------------------------------------------------------------*/ // Funzioni varie
 
+/* Funzioni di output */
+function out(res, got) {
+    res.send(got);
+}
+function error() {
+    res.send("Siamo spiacenti ma si è verificato un errore" + home);
+    red("Richiesta fallita; " + err + "\n");
+}
+function good(res, body) {
+    var got = JSON.parse(body);
+    out(res, got);
+    green("Richiesta andata a buon fine\n");
+}
+
+/* Funzioni per il log colorato */
+function red(str) {
+    console.log(Red + str);
+}
+function green(str) {
+    console.log(Green + str + Red);
+}
+function neutral(str) {
+    console.log(White + str + Red);
+}
+
+/* Funzioni per la paginazione */
 function riga(obj, isHead) {
     if (isHead === undefined) isHead = false;
     var out = "";
@@ -80,8 +147,7 @@ function riga(obj, isHead) {
 
     return out;
 }
-
-function t(obj) {
+function tabelize(obj) {
     var out = "";
 
     out += riga(head, true);
@@ -96,4 +162,4 @@ function t(obj) {
 
 /*----------------------------------------------------------------------------*/ // Fine
 
-app.listen(port, ()=>console.log('\n' + Green + '[ DONE ] Checks complete - server running, listening on port ' + port + '!\n' + White));
+app.listen(port, green('\n[ DONE ] Checks complete - server running, listening on port ' + port + '!\n'));

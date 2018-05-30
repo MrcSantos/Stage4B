@@ -111,3 +111,15 @@ Fatto:
 Da fare domani:
 - Impaginare correttamente il Json ricevuto nell'html;
 - (OPZIONALE) Iniziare la creazione di issues.
+
+/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+Aggiornamenti 30-5-2018
+Fatto:
+- Aggiornamenti minori su Trello;
+- Inizio creazione delle issues su Jira con dati statici;
+- Refactory medio sul codice, divisione in funzioni migliori;
+- Piccoli problemi riguardanti alla creazione delle issues su Jira;
+
+
+Da fare domani:
