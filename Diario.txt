@@ -138,4 +138,12 @@ Fatto:
 - Aggiunta funzioni dei pulsanti nel popup;
 - Problemi con la creazione e il passaggio di parametri;
 - Utilizzo metodo POST per passare i dati;
-- 
+- Creazione delle issues avvenuta con successo;
+- Moqup delle funzioni avanzate del sito (da finire);
+- Progettazione funzioni avanzate del sito (da finire).
+
+Da fare domani: (giornata agile)
+- Finire gli ultimi due punti;
+- Riprogettare meglio le issues;
+- Schematizzare un modo per visualizzare i dati (solo interessati) nella tabella;
+- Schematizzare un modo per visualizzare in un form tutte le info dettagliate di un issue. 
