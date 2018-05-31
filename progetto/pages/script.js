@@ -1,8 +1,15 @@
 $(() => $("#out").load("/get")); // Al caricamento della pagina manda la richiesta al server
 
-function pop() {
+function pop(id) {
     $("#block").toggle();
-    $("#popup").toggle(500);
+    if(id === undefined)
+        $("#details").toggle(500);
+    else
+        $("#crea").toggle(500);
+
+    if (id) {
+
+    }
 }
 
 function undo() {
@@ -19,19 +26,21 @@ function create() {
         if (!descrizione.length > 0) {
             descrizione = "";
         }
-        $.post("/create", {titolo: titolo, status:status, descrizione:descrizione});
+        $.post("/create", {"tit": titolo, "sta":status, "des":descrizione});
         undo();
         setTimeout(()=>$("#out").load("/get"), 100);
     }
     else {
-        if (titolo.length > 0) {
-
+        if (!titolo.length > 0) {
+            alert("Manca il titolo");
         }
-        if (status.length > 0) {
-
+        if (!status.length > 0) {
+            alert("Manca lo status");
         }
     }
 }
+
+setTimeout(()=>$("#out").load("/get"), 1000);
 
 // // Disable #x
 // $( "#x" ).prop( "disabled", true );

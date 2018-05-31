@@ -54,7 +54,7 @@ form {
     top: 50px;
 }
 
-/* Stile del popup */
+/* Stile dei popup */
 #block {
     display: none;
     position: fixed;
@@ -67,7 +67,8 @@ form {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
-#popup{
+#crea,
+#detail{
     display: none;
     background-color: #fefefe;
     position:fixed;
@@ -77,6 +78,7 @@ form {
     bottom: 105px;
 }
 .close {
+    font-family: Domotika;
     color: black;
     float: right;
     font-size: 35px;

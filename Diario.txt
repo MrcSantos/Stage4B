@@ -132,4 +132,10 @@ Da fare domani:
 
 Aggiornamenti 31-5-2018
 Fatto:
+- Implementazione del popup finita;
+- Implementazione del form nel popup finita;
+- Abbellimento estetica popup;
+- Aggiunta funzioni dei pulsanti nel popup;
+- Problemi con la creazione e il passaggio di parametri;
+- Utilizzo metodo POST per passare i dati;
 - 

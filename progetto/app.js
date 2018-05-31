@@ -2,6 +2,8 @@
 
 const express = require('express'); // Implementa Express
 const request = require('request'); // Implementa le chiamate
+const bodyParser = require('body-parser');
+const parseUrlencoded = bodyParser.urlencoded({ extended: false });
 const app = express();
 app.use(express.static('pages'));
 
@@ -13,23 +15,6 @@ Black = "\x1b[30m"; Red = "\x1b[31m"; Green = "\x1b[32m"; Yellow = "\x1b[33m"; B
 /* Variabili statiche utili */
 const port = 8080; // Porta di ascolto
 const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
-const json = [
-    {Id:"todo-1", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-2", Titolo:"Fare...", Status:"done", Descrizione:"consectetur adipiscing elit"},
-    {Id:"todo-3", Titolo:"Provare...", Status:"to do", Descrizione:"Sed eu dolor id nisi tempus"},
-    {Id:"todo-4", Titolo:"Asdfghjkl...", Status:"asd", Descrizione:"sagittis sed et ex"},
-    {Id:"todo-5", Titolo:"Boh, non lo so...", Status:"wip", Descrizione:"Fusce finibus libero risus"},
-    {Id:"todo-6", Titolo:"Insert catchy phrase here...", Status:"done", Descrizione:"semper metus ultrices nec"},
-    {Id:"todo-7", Titolo:"bla bla...", Status:"done", Descrizione:"Vestibulum sed placerat metus"},
-    {Id:"todo-8", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-9", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-10", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-11", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-12", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-13", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-14", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-    {Id:"todo-15", Titolo:"Iniziare...", Status:"wip", Descrizione:"Lorem ipsum dolor sit amet"},
-];
 const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
 /* Variabili autenticazione */
@@ -71,9 +56,8 @@ app.get('/get', (req, res) => { // Richiesta di tutte le issues - FUNZIONANTE
     )
 });
 
-app.get('/create', (req, res) => { // Creazione di una issue
+app.post('/create', parseUrlencoded, (req, res) => { // Creazione di una issue
     neutral("Inizio richiesta di creazione di una issue");
-    console.log(req.titolo);
 
     request(
         {
@@ -87,8 +71,8 @@ app.get('/create', (req, res) => { // Creazione di una issue
                     "project": {
                        "key": "TODO"
                     },
-                    "summary": req.titolo,
-                    "description": req.descrizione,
+                    "summary": req.body.tit,
+                    "description": req.body.des,
                     "issuetype": {
                        "name": "Task"
                     }
@@ -157,15 +141,16 @@ function neutral(str) {
 }
 
 /* Funzioni per la paginazione */
-function riga(obj, isHead) {
+function riga(id, obj, isHead) {
     if (isHead === undefined) isHead = false;
+    if (id === undefined) id = "";
     var out = "";
 
     if(isHead) out += "<thead><tr class='w3-light-grey fix'>";
-    else out += "<tr onclick='pop()'>";
+    else out += "<tr id='" + id + "'onclick='pop(" + id + ")'>";
 
     for (var i in obj) {
-        out +=  "<td>\
+        out +=  "<td class='" + i + "'>\
         " + obj[i] + "\
         </td>";
     }
@@ -177,11 +162,11 @@ function riga(obj, isHead) {
 function tabelize(obj) {
     var out = "";
 
-    out += riga(head, true);
+    out += riga(i, head, true);
 
     out += "<tbody>";
     for (var i in obj)
-        out += riga(obj[i]);
+        out += riga(i, obj[i]);
     out += "</tbody>";
 
     return out;
