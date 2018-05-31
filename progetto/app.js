@@ -1,7 +1,7 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione
 
 const express = require('express'); // Implementa Express
-const request = require('ajax-request'); // Implementa le chiamate
+const request = require('request'); // Implementa le chiamate
 const app = express();
 app.use(express.static('pages'));
 
@@ -36,21 +36,12 @@ const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per torn
 const username = 'mrcsossy';
 const password = 'Stage.2018';
 const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
-const data = {
-    "fields": {
-       "project":
-       {
-          "key": "TODO"
-       },
-       "summary": "No REST for the Wicked.",
-       "description": "Creating of an issue using the REST API"
-   }
-}
 
 /* Variabili URL */
 const host = "http://stage.gnet.it/"; // Inizio URL
 const path = "rest/api/latest/"; // Metà dell'URL
 const base = host + path; // Tutta la prima parte dell'URL
+const issueUrl = base + "issue";
 const srcPro = "search?jql=project=";
 const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const fields = "fields=id,summary,description,status"; // Solo i campi interessati
@@ -71,7 +62,7 @@ app.get('/get', (req, res) => { // Richiesta di tutte le issues - FUNZIONANTE
             }
         }, function(err, obj, body) {
             if (err) {
-                error();
+                error(err);
             }
             else {
                 good(out(res, body));
@@ -82,21 +73,33 @@ app.get('/get', (req, res) => { // Richiesta di tutte le issues - FUNZIONANTE
 
 app.get('/create', (req, res) => { // Creazione di una issue
     neutral("Inizio richiesta di creazione di una issue");
+    console.log(req.titolo);
 
     request(
         {
-            url: base,
+            url: issueUrl,
             method: 'POST',
             headers: {
                     'Authorization': auth
             },
-            body: JSON.stringify(data)
-        }, function(err, obj, body) {
+            json: {
+                "fields": {
+                    "project": {
+                       "key": "TODO"
+                    },
+                    "summary": req.titolo,
+                    "description": req.descrizione,
+                    "issuetype": {
+                       "name": "Task"
+                    }
+                }
+            }
+        }, function(err, res, body) {
             if (err) {
-                error();
+                error(err);
             }
             else {
-                good(/*Funzione di callback*/);
+                good();
             }
         }
     )
@@ -114,7 +117,7 @@ function good(callback) {
     green("Richiesta andata a buon fine\n");
     callback;
 }
-function error() {
+function error(err) {
     res.send("Siamo spiacenti ma si è verificato un errore" + home);
     red("Richiesta fallita; " + err + "\n");
 }

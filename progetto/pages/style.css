@@ -34,10 +34,25 @@ table {
 }
 
 /* Stile form */
-.descrizione {
-    
+form {
+    font-size: 25px;
+    margin-left: 20px;
+    margin-right: 20px;
 }
-
+.campo {
+    height: 50px;
+}
+.descrizione {
+    height: 200px;
+}
+.field {
+    margin-top: 50px;
+    text-align: center;
+}
+.bottoni {
+    position: relative;
+    top: 50px;
+}
 
 /* Stile del popup */
 #block {
