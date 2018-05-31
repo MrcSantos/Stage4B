@@ -159,7 +159,7 @@ function riga(obj, isHead) {
     var out = "";
 
     if(isHead) out += "<thead><tr class='w3-light-grey fix'>";
-    else out += "<tr>";
+    else out += "<tr onclick='pop()'>";
 
     for (var i in obj) {
         out +=  "<td>\

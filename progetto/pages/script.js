@@ -5,5 +5,6 @@ function create() {
 }
 
 function pop() {
+    $("#block").toggle();
     $("#popup").toggle(500);
 }

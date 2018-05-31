@@ -122,7 +122,14 @@ Fatto:
 - Piccoli problemi riguardanti alla creazione delle issues su Jira;
 - Inizio "tabelizzazione" del Json ottenuto;
 - Presa di tutte le issues di un progetto;
-- Corretta "tabelizzazione" a causa del Json diverso;
-- 
+- Corretta "tabelizzazione" a causa del Json diverso.
 
 Da fare domani:
+- Finire il popup;
+- Prendere i dati in input dal form nel popup.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 31-5-2018
+Fatto:
+- 
