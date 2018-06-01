@@ -146,4 +146,12 @@ Da fare domani: (giornata agile)
 - Finire gli ultimi due punti;
 - Riprogettare meglio le issues;
 - Schematizzare un modo per visualizzare i dati (solo interessati) nella tabella;
-- Schematizzare un modo per visualizzare in un form tutte le info dettagliate di un issue. 
+- Schematizzare un modo per visualizzare in un form tutte le info dettagliate di un issue.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 1-6-2018 (giornata agile)
+Fatto:
+- Moqup sito ultimata, inviata su Trello;
+- Deciso come svolgere le funzioni avanzate (filtri - commenti - impostazioni tabella) del progetto;
+- Ripianificazione del progetto;
