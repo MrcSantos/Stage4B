@@ -29,8 +29,6 @@ app.get('/:error', (req, res) => {
     col.r("Qualcuno ha ricevuto 404 all'indirizzo " + req.params.error);
 });
 
-/*----------------------------------------------------------------------------*/ // Funzioni varie
-
 /*----------------------------------------------------------------------------*/ // Fine
 
 /* Scrive la stringa se va tutto bene */
