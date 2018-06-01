@@ -1,10 +1,10 @@
-/* Font e scritte */
-@font-face { font-family: Domotika; src: url('fonts/Domotika.ttf'); }
-@font-face { font-family: Domotika; font-weight: bold; src: url('fonts/Domotika-bold.ttf'); }
-
 body {
     background-color: #fefefe;
 }
+
+/* Font e scritte */
+@font-face { font-family: Domotika; src: url('fonts/Domotika.ttf'); }
+@font-face { font-family: Domotika; font-weight: bold; src: url('fonts/Domotika-bold.ttf'); }
 
 h1 {
     font-family: Domotika;
@@ -14,48 +14,33 @@ h1 {
     word-spacing: 100px;
 }
 
-table {
-    text-transform: uppercase;
-    font-size: 25px;
-}
+/* Stile immagini */
 .logo {
     width:4%;
 }
 
 /* Stile tabella */
 .tab {
-    height: 700px;
+    text-transform: uppercase;
+    font-size: 25px;
+    height: 75vh;
     overflow-y: scroll;
 }
-
 .fix {
     position: sticky;
     top: 0px;
 }
 
-/* Stile form */
-form {
-    font-size: 25px;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-.campo {
+/* Stile box */
+.basso {
     height: 50px;
 }
-.descrizione {
+.alto {
     height: 200px;
-}
-.field {
-    margin-top: 50px;
-    text-align: center;
-}
-.bottoni {
-    position: relative;
-    top: 50px;
 }
 
 /* Stile dei popup */
-#block {
+.block {
     display: none;
     position: fixed;
     z-index: 1;
@@ -67,8 +52,7 @@ form {
     background-color: rgb(0,0,0);
     background-color: rgba(0,0,0,0.4);
 }
-#crea,
-#detail{
+.popup {
     display: none;
     background-color: #fefefe;
     position:fixed;
@@ -77,14 +61,12 @@ form {
     left: 100px;
     bottom: 105px;
 }
+
 .close {
-    font-family: Domotika;
     color: black;
     float: right;
     font-size: 35px;
-    font-weight: bold;
 }
-
 .close:hover,
 .close:focus {
     color: red;
