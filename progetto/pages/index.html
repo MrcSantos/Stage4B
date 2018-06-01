@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Stage</title>
+        <link rel="icon" href="img/icon.ico">
+        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css">
+        <script src="script.js"></script>
+    </head>
+    <body>
+        <div class="w3-container w3-center">
+            <img src="img/icon.ico" alt="Logo" class="logo w3-left w3-card w3-margin-top">
+            <h1>GESTISCI LE ISSUES</h1>
+        </div>
+        <div class="w3-container tab">
+            <table class="w3-table w3-card w3-hoverable w3-centered w3-bordered" id="out">
+            </table>
+        </div>
+        <div class="w3-display w3-margin-right">
+            <button onclick="pop()" id="butt" class="w3-button w3-round-large w3-mobile w3-card-4 w3-xlarge w3-margin w3-right w3-padding-large w3-light-green w3-hover-green w3-ripple">Nuova issue</button>
+        </div>
+        <div id="block">
+            <div id="crea">
+                <span onclick="undo()" class="close w3-margin-right">X</span> <!-- X che chiude il popup-->
+                <form onsubmit="return false;" id="form" class="w3-container w3-margin-top">
+                    <div class="w3-row-padding w3-margin-top">
+                        <div class="w3-half field">
+                            <label class="w3-margin-top">Titolo</label>
+                            <input id="titolo" class="w3-input w3-border w3-round-large w3-white campo" type="text" placeholder="Titolo">
+                        </div>
+                        <div class="w3-half field">
+                            <label class="w3-margin-top">Status</label>
+                            <input id="status" class="w3-input w3-border w3-round-large w3-white campo" type="text" value="To Do" placeholder="Status">
+                        </div>
+                    </div>
+                    <div class="w3-container field">
+                        <label class="w3-margin-top">Descrizione (opzionale)</label>
+                        <textarea id="descrizione" class="w3-input w3-border descrizione w3-round-large" type="text" placeholder="Descrizione"></textarea>
+                    </div>
+                    <div class="bottoni">
+                        <div class="w3-row-padding">
+                            <button onclick="create()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-light-green w3-hover-green w3-ripple">Conferma</button>
+                            <button onclick="undo()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-deep-orange w3-hover-red w3-ripple">Annulla</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="detail">
+                <span onclick="undo()" class="close w3-margin-right">X</span> <!-- X che chiude il popup-->
+                <form onsubmit="return false;" id="form" class="w3-container w3-margin-top">
+                    <div class="w3-row-padding w3-margin-top">
+                        <div class="w3-half field">
+                            <label class="w3-margin-top">Titolo</label>
+                            <input id="titolo" class="w3-input w3-border w3-round-large campo" type="text" placeholder="Titolo">
+                        </div>
+                        <div class="w3-half field">
+                            <label class="w3-margin-top">Status</label>
+                            <input id="status" class="w3-input w3-border w3-round-large campo" type="text" value="To Do" placeholder="Status">
+                        </div>
+                    </div>
+                    <div class="w3-container field">
+                        <label class="w3-margin-top">Descrizione (opzionale)</label>
+                        <textarea id="descrizione" class="w3-input w3-border descrizione w3-round-large" type="text" placeholder="Descrizione"></textarea>
+                    </div>
+                    <div class="bottoni">
+                        <div class="w3-row-padding">
+                            <button onclick="create()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-light-green w3-hover-green w3-ripple">Conferma</button>
+                            <button onclick="undo()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-deep-orange w3-hover-red w3-ripple">Annulla</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
