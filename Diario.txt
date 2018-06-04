@@ -155,3 +155,11 @@ Fatto:
 - Moqup sito ultimata, inviata su Trello;
 - Deciso come svolgere le funzioni avanzate (filtri - commenti - impostazioni tabella) del progetto;
 - Ripianificazione del progetto;
+- Refactory pesante iniziato;
+- Refactory parte server (funzioni migliori) finita;
+- Refactory parte server (exports e imports) finita;
+- Inizio refactory delle classi CSS iniziata con Less.
+
+Da fare domani:
+- Schematizzare un modo per visualizzare i dati (solo interessati) nella tabella;
+- Schematizzare un modo per visualizzare in un form tutte le info dettagliate di un issue.
