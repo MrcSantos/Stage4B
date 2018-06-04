@@ -1663,19 +1663,6 @@ h2 {
   position: sticky;
   top: 0px;
 }
-/* Stile box form */
-.create .small {
-  height: 5vh;
-  max-width: 50vw;
-}
-.create .big {
-  height: 20vh;
-  max-width: 50vw;
-}
-.create .field {
-  margin-top: 10vh;
-  font-size: 25px;
-}
 /* Stile dei popup */
 .block {
   display: none;
@@ -1693,10 +1680,10 @@ h2 {
   display: none;
   background-color: #fefefe;
   position: fixed;
-  top: 97px;
-  right: 100px;
-  left: 100px;
-  bottom: 105px;
+  top: 20vh;
+  right: 10vw;
+  left: 10vw;
+  bottom: 20vh;
 }
 .close {
   color: black;
@@ -1707,4 +1694,26 @@ h2 {
   color: red;
   text-decoration: none;
   cursor: pointer;
+}
+.reset:hover,
+.reset:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+/* Stile form popup */
+.create .small {
+  height: 5vh;
+  max-width: 50vw;
+}
+.create .big {
+  height: 20vh;
+  max-width: 50vw;
+}
+.create .field {
+  margin-top: 10vh;
+  font-size: 25px;
+}
+.center {
+  margin: auto;
 }
