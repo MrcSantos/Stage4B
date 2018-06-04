@@ -11,63 +11,39 @@
     <body>
         <div class="w3-container w3-center">
             <img src="img/icon.ico" alt="Logo" class="logo">
-            <h1 class="title">Gestisci le issues</h1>
+            <h1>Gestisci le issues</h1>
         </div>
         <div class="w3-container tab">
             <table class="w3-hoverable w3-centered w3-bordered" id="out">
             </table>
         </div>
-        <div class="w3-display w3-margin-right">
-            <button onclick="pop()" id="butt" class="w3-right w3-light-green w3-hover-green">Nuova issue</button>
+        <div class="w3-margin">
+            <button onclick="pop()" id="butt" class="w3-right green">Nuova issue</button>
         </div>
-        <div id="block">
-            <div id="crea">
-                <span onclick="undo()" class="close w3-margin-right">&times;</span> <!-- X che chiude il popup-->
-                <form onsubmit="return false;" id="form" class="w3-container w3-margin-top">
+        <div class="block">
+            <div class="create">
+                <div class="head">
+                    <h2>Crea issue</h2>
+                    <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
+                </div>
+                <form onsubmit="return false;">
+                    <div class="field">
+                        <label class="w3-margin-top">Titolo</label>
+                        <input id="titolo" class="small textField" type="text" placeholder="Titolo">
+                    </div>
                     <div class="w3-row-padding w3-margin-top">
-                        <div class="w3-half field">
-                            <label class="w3-margin-top">Titolo</label>
-                            <input id="titolo" class="w3-input w3-border w3-round-large w3-white campo" type="text" placeholder="Titolo">
+                        <div class="w3-half">
+                            <label class="field">Descrizione (opzionale)</label>
+                            <textarea id="descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
                         </div>
-                        <div class="w3-half field">
-                            <label class="w3-margin-top">Status</label>
-                            <input id="status" class="w3-input w3-border w3-round-large w3-white campo" type="text" value="To Do" placeholder="Status">
-                        </div>
-                    </div>
-                    <div class="w3-container field">
-                        <label class="w3-margin-top">Descrizione (opzionale)</label>
-                        <textarea id="descrizione" class="w3-input w3-border descrizione w3-round-large" type="text" placeholder="Descrizione"></textarea>
-                    </div>
-                    <div class="bottoni">
-                        <div class="w3-row-padding">
-                            <button onclick="create()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-light-green w3-hover-green w3-ripple">Conferma</button>
-                            <button onclick="undo()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-deep-orange w3-hover-red w3-ripple">Annulla</button>
+                        <div class="w3-half">
+                            <label class="field">Commento (opzionale)</label>
+                            <textarea id="commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
                         </div>
                     </div>
-                </form>
-            </div>
-            <div id="detail">
-                <span onclick="undo()" class="close w3-margin-right">X</span> <!-- X che chiude il popup-->
-                <form onsubmit="return false;" id="form" class="w3-container w3-margin-top">
-                    <div class="w3-row-padding w3-margin-top">
-                        <div class="w3-half field">
-                            <label class="w3-margin-top">Titolo</label>
-                            <input id="titolo" class="w3-input w3-border w3-round-large campo" type="text" placeholder="Titolo">
-                        </div>
-                        <div class="w3-half field">
-                            <label class="w3-margin-top">Status</label>
-                            <input id="status" class="w3-input w3-border w3-round-large campo" type="text" value="To Do" placeholder="Status">
-                        </div>
-                    </div>
-                    <div class="w3-container field">
-                        <label class="w3-margin-top">Descrizione (opzionale)</label>
-                        <textarea id="descrizione" class="w3-input w3-border descrizione w3-round-large" type="text" placeholder="Descrizione"></textarea>
-                    </div>
-                    <div class="bottoni">
-                        <div class="w3-row-padding">
-                            <button onclick="create()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-light-green w3-hover-green w3-ripple">Conferma</button>
-                            <button onclick="undo()" class="w3-but w3-right w3-round-large w3-card-4 w3-xlarge w3-margin w3-padding-large w3-deep-orange w3-hover-red w3-ripple">Annulla</button>
-                        </div>
+                    <div class="w3-margin">
+                        <button onclick="create()" class="green w3-right">Conferma</button>
+                        <button onclick="undo()" class="red w3-right">Annulla</button>
                     </div>
                 </form>
             </div>

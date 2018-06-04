@@ -1,15 +1,15 @@
 $(() => $("#out").load("/get")); // Al caricamento della pagina manda la richiesta al server
 
 function pop(id) {
-    $("#block").toggle();
-    if(id === undefined)
-        $("#details").toggle(500);
-    else
-        $("#crea").toggle(500);
-
-    if (id) {
-
-    }
+    $(".block").toggle();
+    $(".create").toggle(500);
+    // if(id === undefined)
+    //     $("#details").toggle(500);
+    // else
+    //
+    // if (id) {
+    //
+    // }
 }
 
 function undo() {
