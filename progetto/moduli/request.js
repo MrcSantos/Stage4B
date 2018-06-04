@@ -18,7 +18,7 @@ exports.getAll = function getAll(res) {
     col.w("Inizio richiesta di lettura progetto");
     request(
         {
-            url: base + srcPro + "TODO" + sort,
+            url: base + srcPro + "DEV" + sort,
             method: 'GET',
             headers: {
                 'Authorization': auth

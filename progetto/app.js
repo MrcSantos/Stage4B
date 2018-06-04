@@ -49,7 +49,7 @@ app.post('/create', parseUrlencoded, (req, res) => {
             json: {
                 "fields": {
                     "project": {
-                       "key": "TODO"
+                       "key": "DEV"
                     },
                     "summary": req.body.tit,
                     "description": req.body.des,

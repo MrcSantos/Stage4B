@@ -1137,7 +1137,8 @@ button {
   margin-bottom: 16px !important;
 }
 .w3-margin,
-button {
+button,
+.footer {
   margin: 16px !important;
 }
 .w3-margin-top,
@@ -1651,6 +1652,13 @@ h2 {
 .red:hover,
 .red:focus {
   background-color: red;
+}
+.blu {
+  background-color: #2196f3;
+}
+.blu:hover,
+.blu:focus {
+  background-color: #0050e3;
 }
 /* Stile tabella */
 .tab {
