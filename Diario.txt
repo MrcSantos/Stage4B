@@ -163,3 +163,16 @@ Fatto:
 Da fare domani:
 - Schematizzare un modo per visualizzare i dati (solo interessati) nella tabella;
 - Schematizzare un modo per visualizzare in un form tutte le info dettagliate di un issue.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 1-6-2018 (giornata agile)
+Fatto:
+- Finito tutto il refactory del CSS;
+- Finito il refactory del js lato client;
+- Migliorata la gestione dei popup (apertura e chiusura corretta);
+- Mergeato il branch del refactory;
+-
+
+Da fare domani:
+-

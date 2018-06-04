@@ -20,9 +20,9 @@ function undo() {
 }
 
 function create() {
-    var titolo = $("#titolo").val();
-    var descrizione = $("textarea#descrizione").val();
-    var commento = $("textarea#commento").val();
+    var titolo = $("#C-titolo").val();
+    var descrizione = $("textarea#C-descrizione").val();
+    var commento = $("textarea#C-commento").val();
 
     if (titolo.length > 0) {
         if (!descrizione.length > 0)
@@ -36,8 +36,14 @@ function create() {
         alert("Manca il titolo");
 }
 
-setInterval(() => $("#out").load("/get"), 2000); // Aggiorna la tabella ogni 2 secondi
+setInterval(() => $("#out").load("/get"), 5000); // Aggiorna la tabella ogni 5 secondi
+setInterval(myTimer, 1000);
 
+function myTimer() {
+    var d = new Date();
+    var t = d.toLocaleTimeString();
+    document.getElementById("date").innerHTML = t;
+}
 // // Disable #x
 // $( "#x" ).prop( "disabled", true );
 //

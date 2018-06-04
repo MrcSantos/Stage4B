@@ -9,9 +9,10 @@
         <script src="script.js"></script>
     </head>
     <body>
-        <div class="w3-container w3-center">
+        <div class="w3-container w3-center head">
             <img src="img/icon.ico" alt="Logo" class="logo">
             <h1>Gestisci le issues</h1>
+            <span class="w3-right" id="date"></span>
         </div>
         <div class="w3-container tab">
             <table class="w3-hoverable w3-centered w3-bordered" id="out">
@@ -29,16 +30,16 @@
                 <form onsubmit="return false;">
                     <div class="field">
                         <label class="w3-margin-top">Titolo</label>
-                        <input id="titolo" class="small textField center" type="text" placeholder="Titolo">
+                        <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
                     </div>
                     <div class="w3-row-padding w3-margin-top">
                         <div class="w3-half">
-                            <label class="field">Descrizione (opzionale)</label>
-                            <textarea id="descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
+                            <label>Descrizione (opzionale)</label>
+                            <textarea id="C-descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
                         </div>
                         <div class="w3-half">
-                            <label class="field">Commento (opzionale)</label>
-                            <textarea id="commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
+                            <label>Commento (opzionale)</label>
+                            <textarea id="C-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
                         </div>
                     </div>
                     <div class="w3-margin">
@@ -51,29 +52,10 @@
         <div class="blockD">
             <div class="details">
                 <div class="head">
-                    <h2>Descrizione issue N° </h2>
+                    <h2 id="key"></h2>
                     <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
                 </div>
-                <form onsubmit="return false;">
-                    <div class="field">
-                        <label class="w3-margin-top">Titolo</label>
-                        <input id="aaa" class="small textField center" type="text" placeholder="Titolo">
-                    </div>
-                    <div class="w3-row-padding w3-margin-top">
-                        <div class="w3-half">
-                            <label class="field">Descrizione (opzionale)</label>
-                            <textarea id="ccc" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
-                        </div>
-                        <div class="w3-half">
-                            <label class="field">Commento (opzionale)</label>
-                            <textarea id="bbb" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
-                        </div>
-                    </div>
-                    <div class="w3-margin">
-                        <button onclick="create()" class="green w3-right">Conferma</button>
-                        <button onclick="undo()" class="red w3-right">Annulla</button>
-                    </div>
-                </form>
+
             </div>
         </div>
     </body>
