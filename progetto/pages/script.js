@@ -1,32 +1,36 @@
 $(() => $("#out").load("/get")); // Al caricamento della pagina manda la richiesta al server
 
+var isDetails = false;
+
 function pop(id) {
-    $(".block").toggle();
-    $(".create").toggle(500);
-    // if(id === undefined)
-    //     $("#details").toggle(500);
-    // else
-    //
-    // if (id) {
-    //
-    // }
+    if (id === undefined && !isDetails) {
+        $(".blockC").toggle();
+        $(".create").toggle(500);
+    }
+    else {
+        isDetails = !isDetails;
+        $(".blockD").toggle();
+        $(".details").toggle(500);
+    }
 }
 
 function undo() {
     pop();
-    $("#form")[0].reset();
+    $("form")[0].reset();
 }
 
 function create() {
     var titolo = $("#titolo").val();
-    var status = $("#status").val();
-    var descrizione = $("textarea").val();
+    var descrizione = $("textarea#descrizione").val();
+    var commento = $("textarea#commento").val();
 
-    if (titolo.length > 0 && status.length > 0) {
-        if (!descrizione.length > 0) {
+
+    if (titolo.length > 0) {
+        if (!descrizione.length > 0)
             descrizione = "";
-        }
-        $.post("/create", {"tit": titolo, "sta":status, "des":descrizione});
+        if (!commento.length > 0)
+            commento = "";
+        $.post("/create", {"tit": titolo, "des":descrizione, "comm":commento});
         undo();
         setTimeout(()=>$("#out").load("/get"), 100);
     }

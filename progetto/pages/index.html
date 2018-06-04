@@ -20,7 +20,7 @@
         <div class="w3-margin">
             <button onclick="pop()" id="butt" class="w3-right green">Nuova issue</button>
         </div>
-        <div class="block">
+        <div class="blockC">
             <div class="create">
                 <div class="head">
                     <h2>Crea issue</h2>
@@ -39,6 +39,34 @@
                         <div class="w3-half">
                             <label class="field">Commento (opzionale)</label>
                             <textarea id="commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
+                        </div>
+                    </div>
+                    <div class="w3-margin">
+                        <button onclick="create()" class="green w3-right">Conferma</button>
+                        <button onclick="undo()" class="red w3-right">Annulla</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="blockD">
+            <div class="details">
+                <div class="head">
+                    <h2>Descrizione issue N° </h2>
+                    <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
+                </div>
+                <form onsubmit="return false;">
+                    <div class="field">
+                        <label class="w3-margin-top">Titolo</label>
+                        <input id="aaa" class="small textField center" type="text" placeholder="Titolo">
+                    </div>
+                    <div class="w3-row-padding w3-margin-top">
+                        <div class="w3-half">
+                            <label class="field">Descrizione (opzionale)</label>
+                            <textarea id="ccc" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
+                        </div>
+                        <div class="w3-half">
+                            <label class="field">Commento (opzionale)</label>
+                            <textarea id="bbb" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
                         </div>
                     </div>
                     <div class="w3-margin">
