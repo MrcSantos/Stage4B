@@ -1,9 +1,9 @@
 $(() => $("#out").load("/get")); // Al caricamento della pagina manda la richiesta al server
 
-var isDetails = false;
+var isDetails = true;
 
 function pop(id) {
-    if (id === undefined && !isDetails) {
+    if (id === undefined && isDetails) {
         $(".blockC").toggle();
         $(".create").toggle(500);
     }
@@ -24,7 +24,6 @@ function create() {
     var descrizione = $("textarea#descrizione").val();
     var commento = $("textarea#commento").val();
 
-
     if (titolo.length > 0) {
         if (!descrizione.length > 0)
             descrizione = "";
@@ -32,19 +31,12 @@ function create() {
             commento = "";
         $.post("/create", {"tit": titolo, "des":descrizione, "comm":commento});
         undo();
-        setTimeout(()=>$("#out").load("/get"), 100);
     }
-    else {
-        if (!titolo.length > 0) {
-            alert("Manca il titolo");
-        }
-        if (!status.length > 0) {
-            alert("Manca lo status");
-        }
-    }
+    else
+        alert("Manca il titolo");
 }
 
-setTimeout(()=>$("#out").load("/get"), 1000);
+setInterval(() => $("#out").load("/get"), 2000); // Aggiorna la tabella ogni 2 secondi
 
 // // Disable #x
 // $( "#x" ).prop( "disabled", true );
