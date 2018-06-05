@@ -7,7 +7,6 @@ const host = "http://stage.gnet.it/"; // Inizio URL
 const path = "rest/api/2/"; // Metà dell'URL
 const base = host + path; // Tutta la prima parte dell'URL
 const srcPro = "search?jql=project=";
-const pro = "DEV"
 const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 
 /* Variabili autenticazione */
@@ -19,52 +18,20 @@ exports.getAll = function getAll(res) {
     col.w("Inizio richiesta di lettura progetto");
     request(
         {
-            url: base + srcPro + pro,
+            url: base + "issue/DEV-6/comment",
             method: 'GET',
             headers: {
                 'Authorization': auth
             }
         }, function(err, obj, body) {
-            body = JSON.parse(body);
-            comments = [];
-
             if (err) {
                 out.err(err);
             }
             else {
+                data = JSON.parse(body)
+                console.log(data.comments[0].body);
                 col.g("Richiesta andata a buon fine\n");
-
-                // for (var i in body.issues) {
-                    request(
-                        {
-                            url: base + "issue/DEV-6",
-                            method: 'GET',
-                            headers: {
-                                'Authorization': auth
-                            }
-                        }, function(err, obj, body) {
-                            if (err) {
-                                out.err(err);
-                            }
-                            else {
-                                var comment = {
-                                    'name': [],
-                                    'date': [],
-                                    'body': []
-                                }
-                                console.log(body.comments);
-                                for (var j in body.comments) {
-                                    comment.name.push(body.comments[j].author.displayName);
-                                    comment.body.push(body.comments[j].body);
-                                    comment.date.push(body.comments[j].created);
-                                }
-                                console.log(comment);
-                                comments.push(comment);
-                            }
-                        }
-                    )
-                // }
-                out.all(res, body, comments);
+                out.all(res, body);
             }
         }
     )
