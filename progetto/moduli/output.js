@@ -2,32 +2,41 @@ const port = require('../app').port;
 
 const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
-exports.all = function all(res, obj) {
-    var got = JSON.parse(obj);
-
+exports.all = function all(res, obj, comments) {
     function extract(i) {
-        if(got.issues[i].fields.description === null) got.issues[i].fields.description = 'Nessuna descrizione';
+        if(obj.issues[i].fields.description === null) obj.issues[i].fields.description = 'Nessuna descrizione';
         var issue = {
-            'key': got.issues[i].key,
-            'summary': got.issues[i].fields.summary,
-            'status': got.issues[i].fields.status.statusCategory.name,
-            'description': got.issues[i].fields.description,
-            'priority': got.issues[i].fields.priority.name,
-            'assignee': got.issues[i].fields.assignee[0].name,
-            'comment author': got.issues[i].fields.comment.comments[0].author,
-            'comment body': got.issues[i].fields.comment.comments[0].body
+            'key': obj.issues[i].key,
+            'summary': obj.issues[i].fields.summary,
+            'status': obj.issues[i].fields.status.statusCategory.name,
+            'description': obj.issues[i].fields.description,
+            'priority': obj.issues[i].fields.priority.name,
+            'assignee': [],
+            'comment_author': [],
+            'comment_body': [],
+            'comment_date': [],
+            'date': obj.issues[i].fields.creator.created
         };
+        for (var x in obj.issues[i].fields.assignee) {
+            issue.assignee.push(obj.issues[i].fields.assignee[x].name);
+        }
+        for (var x in comments) {
+            issue.comment_author.push(comments[x].name);
+            issue.comment_body.push(comments[x].body);
+            issue.comment_date.push(comments[x].date);
+        }
+
         return issue;
     }
 
     function issues() {
         var issues = [];
-        for (var i in got.issues)
+        for (var i in obj.issues)
             issues.push(extract(i));
         return issues;
     }
 
-    res.send(got.issues);
+    res.send(issues());
 }
 
 exports.err = function error(error) {
