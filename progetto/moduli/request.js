@@ -18,7 +18,7 @@ exports.getAll = function getAll(res) {
     col.w("Inizio richiesta di lettura progetto");
     request(
         {
-            url: base + "issue/DEV-6/comment",
+            url: base + srcPro + "DEV" + "&fields=*all",
             method: 'GET',
             headers: {
                 'Authorization': auth
@@ -28,10 +28,9 @@ exports.getAll = function getAll(res) {
                 out.err(err);
             }
             else {
-                data = JSON.parse(body)
-                console.log(data.comments[0].body);
+                data = JSON.parse(body);
                 col.g("Richiesta andata a buon fine\n");
-                out.all(res, body);
+                out.all(res, data);
             }
         }
     )
