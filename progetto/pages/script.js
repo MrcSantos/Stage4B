@@ -1,13 +1,24 @@
-$(() => $("#out").load("/get")); // Al caricamento della pagina manda la richiesta al server
+$(() => $.get("/get", (data, status) => init(data))); // Al caricamento della pagina manda la richiesta al server
 
+var tab = [];
 var isDetails = true;
 
+function init(data) {
+    var asd = JSON.parse(data);
+    tab.push(asd.key);
+    tab.push(asd.summary);
+    tab.push(asd.status);
+    tab.push(asd.description);
+    console.log(data);
+    $.get("/get", (data, status) => $("#out").html(tabelize(tab)));
+}
+
 function pop(id) {
-    if (id === undefined && isDetails) { // Apertura del popup di creazione di una issue
+    if (id === undefined && isDetails) {
         $(".blockC").toggle();
         $(".create").toggle(500);
     }
-    else { // Apertura del popup di dettaglio di una issue
+    else {
         isDetails = !isDetails;
         $(".blockD").toggle();
         $(".details").toggle(500);
@@ -20,16 +31,15 @@ function undo() {
 }
 
 function create() {
-    var titolo = $("#C-titolo").val();
-    var descrizione = $("textarea#C-descrizione").val();
-    var commento = $("textarea#C-commento").val();
+    var titolo = $("#titolo").val();
+    var descrizione = $("textarea#descrizione").val();
+    var commento = $("textarea#commento").val();
 
     if (titolo.length > 0) {
         if (!descrizione.length > 0)
             descrizione = "";
         if (!commento.length > 0)
             commento = "";
-
         $.post("/create", {"tit": titolo, "des":descrizione, "comm":commento});
         undo();
     }
@@ -71,8 +81,7 @@ function tabelize(obj) {
     return out;
 }
 
-
-// setInterval(() => $("#out").load("/get"), 5000); // Aggiorna la tabella ogni 5 secondi
+setInterval(() => $.get("/get", (data, status) => $("#out").html(tabelize(tab))), 5000); // Aggiorna la tabella ogni 5 secondi
 
 // // Disable #x
 // $( "#x" ).prop( "disabled", true );

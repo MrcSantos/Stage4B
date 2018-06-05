@@ -5,12 +5,15 @@ const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per torn
 exports.all = function all(res, obj) {
     function extract(i) {
         if(obj.issues[i].fields.description === null) obj.issues[i].fields.description = 'Nessuna descrizione';
+        var created = new Date(obj.issues[i].fields.created);
+
         var issue = {
             'key': obj.issues[i].key,
             'summary': obj.issues[i].fields.summary,
             'status': obj.issues[i].fields.status.statusCategory.name,
             'description': obj.issues[i].fields.description,
             'priority': obj.issues[i].fields.priority.name,
+            'date': created.toLocaleDateString() + " - " + created.toLocaleTimeString(),
             'assignee': [],
             'comment_author': [],
             'comment_body': [],
@@ -37,7 +40,7 @@ exports.all = function all(res, obj) {
         return issues;
     }
 
-    res.send(tabelize(issues()));
+    res.send(issues());
 }
 
 function tabelize(obj) {
