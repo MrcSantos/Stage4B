@@ -1,27 +1,62 @@
 $(() => $.get("/get", (data, status) => init(data))); // Al caricamento della pagina manda la richiesta al server
 
+var allIssuesFields = [];
 var tab = [];
-var isDetails = true;
+var isDetails = false; // Quando il popup dei dettagli è aperto la variabile cambia stato
 
 function init(data) {
-    var asd = JSON.parse(data);
-    tab.push(asd.key);
-    tab.push(asd.summary);
-    tab.push(asd.status);
-    tab.push(asd.description);
-    console.log(data);
+    assign(data);
+
+    for (var i in data) {
+        var riga = {}
+
+        /* Controllo delle impostazioni della tabella qui */
+        riga.key = data[i].key;
+        riga.summary = data[i].summary;
+        riga.status = data[i].status;
+        riga.description = data[i].description;
+
+        tab.push(riga);
+    }
+
     $.get("/get", (data, status) => $("#out").html(tabelize(tab)));
 }
+function assign(data) {
+    for (var i in data) {
+        if (data[i].description == null) {
+            data[i].description = "Nessuna descrizione";
+        }
+        if (data[i].assignee) {
+            data[i].assignee = "Nessuno assegnato";
+        }
+        if (data[i].comments.length == 0) {
+            data[i].comments = ["Nessun commento"];
+        }
+    }
 
+    allIssuesFields = data;
+}
 function pop(id) {
-    if (id === undefined && isDetails) {
+    if (id === undefined && !isDetails) { // Si apre il popup per creare una issue
         $(".blockC").toggle();
         $(".create").toggle(500);
     }
-    else {
+    else { // Si apre il popup per vedere i dettagli
         isDetails = !isDetails;
         $(".blockD").toggle();
         $(".details").toggle(500);
+
+        // Prendo tutti i campi del popup
+        $("#key").text("Issue n." + allIssuesFields[Math.floor(id)].key);
+        $("#summary").text(allIssuesFields[Math.floor(id)].summary);
+        $("#status").text(allIssuesFields[Math.floor(id)].status);
+        $("#description").text(allIssuesFields[Math.floor(id)].description);
+        $("#priority").text(allIssuesFields[Math.floor(id)].priority);
+        $("#date").text(allIssuesFields[Math.floor(id)].date);
+        $("#assignee").text(allIssuesFields[Math.floor(id)].assignee);
+        $("#comments").text(allIssuesFields[Math.floor(id)].comments);
+
+        var userComment = $("textarea#userComment").val();
     }
 }
 

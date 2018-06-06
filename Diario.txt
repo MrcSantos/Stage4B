@@ -166,13 +166,35 @@ Da fare domani:
 
 /*----------------------------------------------------------------------------*/
 
-Aggiornamenti 1-6-2018 (giornata agile)
+Aggiornamenti 4-6-2018
 Fatto:
 - Finito tutto il refactory del CSS;
 - Finito il refactory del js lato client;
 - Migliorata la gestione dei popup (apertura e chiusura corretta);
 - Mergeato il branch del refactory;
--
+- Creato il branch Popup.
 
 Da fare domani:
--
+- Prendere i commenti;
+- Iniziare a fare il popup con le informazioni per ogni riga.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 5-6-2018
+Fatto:
+- Gestione migliore delle funzioni del popup;
+- Creazioni richieste personalizzate per i commenti;
+- Presa di tutti i campi delle issues con i commenti;
+- Inizio implementazione delle informazioni lato client.
+
+Da fare domani:
+- Mettere tutti i dettagli nel popup;
+- Iniziare i filtri.
+
+USCITA ANTICIPATA ALLE 13
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 6-6-2018
+Fatto:
+- 

@@ -15,19 +15,22 @@ exports.all = function all(res, obj) {
             'priority': obj.issues[i].fields.priority.name,
             'date': created.toLocaleDateString() + " - " + created.toLocaleTimeString(),
             'assignee': [],
-            'comment_author': [],
-            'comment_body': [],
-            'comment_date': []
+            'comments': []
         };
 
         for (var x in obj.issues[i].fields.assignee) {
              issue.assignee.push(obj.issues[i].fields.assignee[x].name);
          }
          for (var x in obj.issues[i].fields.comment.comments) {
-             issue.comment_author.push(obj.issues[i].fields.comment.comments[x].author.displayName);
-             issue.comment_body.push(obj.issues[i].fields.comment.comments[x].body);
              var date = new Date(obj.issues[i].fields.comment.comments[x].created)
-             issue.comment_date.push(date.toLocaleDateString() + " - " + date.toLocaleTimeString());
+
+             comment = {
+                 'name': obj.issues[i].fields.comment.comments[x].author.displayName,
+                 'body': obj.issues[i].fields.comment.comments[x].body,
+                 'date': date.toLocaleDateString() + " - " + date.toLocaleTimeString()
+             }
+
+             issue.comments.push(comment);
          }
 
         return issue;

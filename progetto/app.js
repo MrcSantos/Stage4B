@@ -23,6 +23,7 @@ const base = host + path; // Tutta la prima parte dell'URL
 const srcPro = "search?jql=project=";
 const sort = "+order+by+key"; // Ordina per titolo nella richiesta
 const issueUrl = base + "issue";
+const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
 /* Variabili autenticazione */
 const username = 'mrcsossy';
