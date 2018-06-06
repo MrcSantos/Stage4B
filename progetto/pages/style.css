@@ -370,7 +370,7 @@ button {
   transition: opacity 0s;
 }
 .w3-input,
-.create .textField {
+.textField {
   padding: 8px;
   display: block;
   border: none;
@@ -859,13 +859,14 @@ h2 {
 }
 .w3-round-large,
 button,
-.create .textField {
+.textField {
   border-radius: 8px;
 }
 .w3-round-xlarge {
   border-radius: 16px;
 }
-.w3-round-xxlarge {
+.w3-round-xxlarge,
+.logo {
   border-radius: 32px;
 }
 .w3-row-padding,
@@ -1097,14 +1098,14 @@ button {
   text-align: justify !important;
 }
 .w3-center,
-.create .field {
+.fields {
   text-align: center !important;
 }
 .w3-border-0 {
   border: 0 !important;
 }
 .w3-border,
-.create .textField {
+.textField {
   border: 1px solid #ccc !important;
 }
 .w3-border-top {
@@ -1314,7 +1315,7 @@ button {
 }
 .w3-white,
 .w3-hover-white:hover,
-.create .textField {
+.textField {
   color: #000!important;
   background-color: #fff !important;
 }
@@ -1671,6 +1672,9 @@ h2 {
   position: sticky;
   top: 0px;
 }
+.head {
+  font-size: 35px;
+}
 /* Stile dei popup */
 .blockC,
 .blockD {
@@ -1685,8 +1689,7 @@ h2 {
   background-color: #000000;
   background-color: rgba(0, 0, 0, 0.4);
 }
-.create,
-.details {
+.create {
   display: none;
   background-color: #fefefe;
   position: fixed;
@@ -1694,6 +1697,15 @@ h2 {
   right: 10vw;
   left: 10vw;
   bottom: 20vh;
+}
+.details {
+  display: none;
+  background-color: #fefefe;
+  position: fixed;
+  top: 10vh;
+  right: 10vw;
+  left: 10vw;
+  bottom: 10vh;
 }
 .close {
   color: black;
@@ -1720,9 +1732,12 @@ h2 {
   height: 20vh;
   max-width: 50vw;
 }
-.create .field {
+.fields {
   margin-top: 10vh;
   font-size: 25px;
+}
+.field {
+  margin-top: 5vh;
 }
 .center {
   margin: auto;

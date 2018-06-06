@@ -4,7 +4,6 @@ const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per torn
 
 exports.all = function all(res, obj) {
     function extract(i) {
-        if(obj.issues[i].fields.description === null) obj.issues[i].fields.description = 'Nessuna descrizione';
         var created = new Date(obj.issues[i].fields.created);
 
         var issue = {
@@ -14,13 +13,11 @@ exports.all = function all(res, obj) {
             'description': obj.issues[i].fields.description,
             'priority': obj.issues[i].fields.priority.name,
             'date': created.toLocaleDateString() + " - " + created.toLocaleTimeString(),
-            'assignee': [],
             'comments': []
         };
-
-        for (var x in obj.issues[i].fields.assignee) {
-             issue.assignee.push(obj.issues[i].fields.assignee[x].name);
-         }
+        if (obj.issues[i].fields.assignee != null) {
+            issue.assignee = obj.issues[i].fields.assignee.name + " - " + obj.issues[i].fields.assignee.displayName;
+        }
          for (var x in obj.issues[i].fields.comment.comments) {
              var date = new Date(obj.issues[i].fields.comment.comments[x].created)
 
@@ -45,41 +42,6 @@ exports.all = function all(res, obj) {
 
     res.send(issues());
 }
-
-function tabelize(obj) {
-    const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
-
-    function riga(id, obj, isHead) {
-        if (isHead === undefined) isHead = false;
-        if (id === undefined) id = "";
-        var out = "";
-
-        if(isHead) out += "<thead class='head'><tr class='w3-light-grey fix'>";
-        else out += "<tr onclick='pop(" + id + ")'>";
-
-        for (var i in obj) {
-            out +=  "<td>\
-            " + obj[i] + "\
-            </td>";
-        }
-        out += "</tr>";
-        if(isHead) out += "</thead>";
-
-        return out;
-    }
-
-    var out = "";
-
-    out += riga(i, head, true);
-
-    out += "<tbody>";
-    for (var i in obj)
-        out += riga(i, obj[i]);
-    out += "</tbody>";
-
-    return out;
-}
-
 
 exports.err = function error(error) {
     res.send("Siamo spiacenti ma si è verificato un errore" + home);

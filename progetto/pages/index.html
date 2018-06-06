@@ -30,24 +30,26 @@
                     <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
                 </div>
                 <form onsubmit="return false;">
-                    <div class="field">
-                        <label class="w3-margin-top">Titolo</label>
-                        <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
-                    </div>
+                    <div class="fields">
+                        <div>
+                            <label class="w3-margin-top">Titolo</label>
+                            <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
+                        </div>
 
-                    <div class="w3-row-padding w3-margin-top">
-                        <div class="w3-half">
-                            <label>Descrizione (opzionale)</label>
-                            <textarea id="C-descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
+                        <div class="w3-row-padding w3-margin-top field">
+                            <div class="w3-half">
+                                <label>Descrizione (opzionale)</label>
+                                <textarea id="C-descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
+                            </div>
+                            <div class="w3-half">
+                                <label>Commento (opzionale)</label>
+                                <textarea id="C-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
+                            </div>
                         </div>
-                        <div class="w3-half">
-                            <label>Commento (opzionale)</label>
-                            <textarea id="C-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
+                        <div class="w3-margin">
+                            <button onclick="create()" class="green w3-right">Conferma</button>
+                            <button onclick="undo()" class="red w3-right">Annulla</button>
                         </div>
-                    </div>
-                    <div class="w3-margin">
-                        <button onclick="create()" class="green w3-right">Conferma</button>
-                        <button onclick="undo()" class="red w3-right">Annulla</button>
                     </div>
                 </form>
             </div>
@@ -57,15 +59,22 @@
                 <div class="head">
                     <h2 id="key"></h2>
                     <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
-                    <p id="summary"></p>
-                    <p id="status"></p>
-                    <p id="description"></p>
-                    <p id="priority"></p>
-                    <p id="date"></p>
-                    <p id="assignee"></p>
-                    <p id="comments"></p>
                 </div>
-
+                <div class="fields">
+                    <div class="w3-row-padding w3-margin-top field">
+                        <div class="w3-half">
+                            <p id="summary"></p>
+                            <p id="description"></p>
+                            <table id="comments"></table>
+                        </div>
+                        <div class="w3-half">
+                            <p id="status"></p>
+                            <p id="priority"></p>
+                            <p id="assignee"></p>
+                            <p id="date"></p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </body>

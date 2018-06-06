@@ -21,7 +21,7 @@ const host = "http://stage.gnet.it/"; // Inizio URL
 const path = "rest/api/2/"; // Metà dell'URL
 const base = host + path; // Tutta la prima parte dell'URL
 const srcPro = "search?jql=project=";
-const sort = "+order+by+key"; // Ordina per titolo nella richiesta
+const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const issueUrl = base + "issue";
 const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
@@ -35,7 +35,6 @@ const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64')
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
 app.get('/get', (req, res) => requ.getAll(res)); // Richiesta di tutte le issues - FUNZIONANTE
-app.get('/get/:numero', (req, res) => req.getIssue(res, requ.params.numero)); // Richiesta di tutte le issues - FUNZIONANTE
 
 app.post('/create', parseUrlencoded, (req, res) => {
     col.w("Inizio richiesta di creazione di una issue");
@@ -59,18 +58,35 @@ app.post('/create', parseUrlencoded, (req, res) => {
                     }
                 }
             }
-        }, function(err, res, body) {
+        }, function(err, obj, body) {
             if (err) {
                 out.err(err);
             }
         }
     )
-}); // Creazione di una issue
+    console.log(req.body.comm + req.body.tit);
+    if (req.body.comm != "") {
+        col.w("Inizio richiesta di creazione di un commento");
 
-app.get('/:error', (req, res) => {
-    res.send("<h1>Il link " + req.params.error + " non è valido - error 404</h1>" + home);
-    col.r("Qualcuno ha ricevuto 404 all'indirizzo " + req.params.error);
-});
+        request(
+            {
+                url: base + "issue/" + req.body.tit + "/comment",
+                method: 'POST',
+                headers: {
+                        'Authorization': auth
+                },
+                'body': req.body.comm
+            }, function(err, obj, body) {
+                if (err) {
+                    col.r(err);
+                }
+                else {
+                    col.g("Commento creato con successo");
+                }
+            }
+        )
+    }
+}); // Creazione di una issue
 
 /*----------------------------------------------------------------------------*/ // Fine
 

@@ -18,39 +18,19 @@ exports.getAll = function getAll(res) {
     col.w("Inizio richiesta di lettura progetto");
     request(
         {
-            url: base + srcPro + "DEV" + "&fields=*all",
+            url: base + srcPro + "DEV" + sort + "&fields=*all",
             method: 'GET',
             headers: {
                 'Authorization': auth
             }
         }, function(err, obj, body) {
             if (err) {
-                out.err(err);
+                col.r(err);
             }
             else {
                 data = JSON.parse(body);
-                col.g("Richiesta andata a buon fine\n");
+                col.g("Lettura andata a buon fine\n");
                 out.all(res, data);
-            }
-        }
-    )
-}
-exports.getIssue = function getIssue(res, num) {
-    col.w("Inizio richiesta di lettura issue N° " + num);
-    request(
-        {
-            url: issueUrl + "/" + num,
-            method: 'GET',
-            headers: {
-                'Authorization': auth
-            }
-        }, function(err, obj, body) {
-            if (err) {
-                out.err(err);
-            }
-            else {
-                col.g("Richiesta andata a buon fine\n");
-                res.send(body);
             }
         }
     )

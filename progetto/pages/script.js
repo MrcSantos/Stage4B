@@ -1,11 +1,12 @@
 $(() => $.get("/get", (data, status) => init(data))); // Al caricamento della pagina manda la richiesta al server
 
 var allIssuesFields = [];
-var tab = [];
 var isDetails = false; // Quando il popup dei dettagli è aperto la variabile cambia stato
 
 function init(data) {
     assign(data);
+    var tab = [];
+    var newTab = [];
 
     for (var i in data) {
         var riga = {}
@@ -16,17 +17,18 @@ function init(data) {
         riga.status = data[i].status;
         riga.description = data[i].description;
 
-        tab.push(riga);
+        newTab.push(riga);
     }
-
+    tab = newTab;
     $.get("/get", (data, status) => $("#out").html(tabelize(tab)));
 }
+
 function assign(data) {
     for (var i in data) {
         if (data[i].description == null) {
             data[i].description = "Nessuna descrizione";
         }
-        if (data[i].assignee) {
+        if (!data[i].assignee) {
             data[i].assignee = "Nessuno assegnato";
         }
         if (data[i].comments.length == 0) {
@@ -36,6 +38,7 @@ function assign(data) {
 
     allIssuesFields = data;
 }
+
 function pop(id) {
     if (id === undefined && !isDetails) { // Si apre il popup per creare una issue
         $(".blockC").toggle();
@@ -47,14 +50,14 @@ function pop(id) {
         $(".details").toggle(500);
 
         // Prendo tutti i campi del popup
-        $("#key").text("Issue n." + allIssuesFields[Math.floor(id)].key);
-        $("#summary").text(allIssuesFields[Math.floor(id)].summary);
-        $("#status").text(allIssuesFields[Math.floor(id)].status);
-        $("#description").text(allIssuesFields[Math.floor(id)].description);
-        $("#priority").text(allIssuesFields[Math.floor(id)].priority);
-        $("#date").text(allIssuesFields[Math.floor(id)].date);
-        $("#assignee").text(allIssuesFields[Math.floor(id)].assignee);
-        $("#comments").text(allIssuesFields[Math.floor(id)].comments);
+        $("#key").text("Issue " + allIssuesFields[Math.floor(id)].key);
+        $("#summary").text("Titolo: " + allIssuesFields[Math.floor(id)].summary);
+        $("#status").text("Status: " + allIssuesFields[Math.floor(id)].status);
+        $("#description").text("Descrizione: " + allIssuesFields[Math.floor(id)].description);
+        $("#priority").text("Priorità: " + allIssuesFields[Math.floor(id)].priority);
+        $("#date").text("Creata il: " + allIssuesFields[Math.floor(id)].date);
+        $("#assignee").text("Assegnati: " + allIssuesFields[Math.floor(id)].assignee);
+        $("#comments").text("Commenti: " + allIssuesFields[Math.floor(id)].comments);
 
         var userComment = $("textarea#userComment").val();
     }
@@ -66,11 +69,14 @@ function undo() {
 }
 
 function create() {
-    var titolo = $("#titolo").val();
-    var descrizione = $("textarea#descrizione").val();
-    var commento = $("textarea#commento").val();
+    var titolo = $("#C-titolo").val();
+    var descrizione = $("textarea#C-descrizione").val();
+    var commento = $("textarea#C-commento").val();
 
     if (titolo.length > 0) {
+        // Converte il titolo in formato univoco per tutte le issues
+        titolo = titolo.slice(0, 1).toUpperCase() + titolo.slice(1);
+
         if (!descrizione.length > 0)
             descrizione = "";
         if (!commento.length > 0)
@@ -116,7 +122,7 @@ function tabelize(obj) {
     return out;
 }
 
-setInterval(() => $.get("/get", (data, status) => $("#out").html(tabelize(tab))), 5000); // Aggiorna la tabella ogni 5 secondi
+setInterval(() => $.get("/get", (data, status) => init(data)), 2000); // Aggiorna la tabella ogni 5 secondi
 
 // // Disable #x
 // $( "#x" ).prop( "disabled", true );
