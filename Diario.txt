@@ -197,4 +197,12 @@ USCITA ANTICIPATA ALLE 13
 
 Aggiornamenti 6-6-2018
 Fatto:
-- 
+- Progettato il popup;
+- Messo le info nel popup;
+- Ricevuti correttamente i commenti;
+- Molti problemi con la scrittura di un commento;
+- Miglioramento estetico dei popup.
+
+Da fare domani:
+- Scrivere i commenti;
+- Iniziare le impostazioni della tabella.
