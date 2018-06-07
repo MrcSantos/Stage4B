@@ -1669,6 +1669,13 @@ p {
   background-color: #0050e3;
 }
 /* Stile tabella */
+tr {
+  height: 3vh;
+  overflow: scroll;
+}
+td {
+  padding: 0.5vw;
+}
 .header {
   color: #707070;
 }
@@ -1676,20 +1683,18 @@ p {
   border-bottom: 1px solid grey;
 }
 .commTab {
-  overflow: scroll;
+  max-height: 45vh;
+  overflow-y: scroll;
 }
 .mainTab {
   text-transform: uppercase;
-  font-size: 25px;
+  font-size: 3vh;
   height: 75vh;
   overflow-y: scroll;
 }
 .fix {
   position: sticky;
   top: 0px;
-}
-.head {
-  font-size: 35px;
 }
 /* Stile dei popup */
 .blockC,

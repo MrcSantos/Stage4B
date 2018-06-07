@@ -67,23 +67,24 @@ function pop(id) {
         isDetails = !isDetails;
         $(".blockD").toggle();
         $(".details").toggle(500);
-
-        // Prendo tutti i campi del popup
-        $("#key").text("Issue " + allIssuesFields[Math.floor(id)].key);
-        $("#summary").text("Titolo: " + allIssuesFields[Math.floor(id)].summary);
-        $("#status").text("Status: " + allIssuesFields[Math.floor(id)].status);
-        $("#description").text("Descrizione: " + allIssuesFields[Math.floor(id)].description);
-        $("#priority").text("Priorità: " + allIssuesFields[Math.floor(id)].priority);
-        $("#date").text("Creata il: " + allIssuesFields[Math.floor(id)].date);
-        $("#assignee").text("Assegnati: " + allIssuesFields[Math.floor(id)].assignee);
-        $("#comments").html(getCommentsHtml(id));
+        if (isDetails) {
+            // Prendo tutti i campi del popup
+            $("#key").text(allIssuesFields[Math.floor(id)].key);
+            $("#summary").text("Titolo: " + allIssuesFields[Math.floor(id)].summary);
+            $("#status").text("Status: " + allIssuesFields[Math.floor(id)].status);
+            $("#description").text("Descrizione: " + allIssuesFields[Math.floor(id)].description);
+            $("#priority").text("Priorità: " + allIssuesFields[Math.floor(id)].priority);
+            $("#date").text("Creata il: " + allIssuesFields[Math.floor(id)].date);
+            $("#assignee").text("Assegnati: " + allIssuesFields[Math.floor(id)].assignee);
+            $("#comments").html(getCommentsHtml(id));
+        }
     }
 }
 
 function undo() {
-    pop();
+    $('#D-commento').val('');
     $("form")[0].reset();
-    document.getElementById("textarea#D-commento").innerHTML = "";
+    pop();
 }
 
 function create() {
@@ -102,16 +103,21 @@ function create() {
         undo();
     }
     else
-        alert("Manca il titolo");
+        alert("Il titolo non può essere vuoto");
 }
 
 function comment() {
-    var titolo = $("#summary").val();
+    var key = $("#key").text();
     var userComment = $("textarea#D-commento").val();
 
-    $.post("/comment", {'tit': titolo, 'comm': userComment});
-
-    undo();
+    if (userComment != "") {
+        alert("Sto creando il commento");
+        $.post("/comment", {'key': key, 'comm': userComment});
+        undo();
+    }
+    else {
+        alert("Il commento non può essere vuoto");
+    }
 }
 
 function tabelize(obj) {

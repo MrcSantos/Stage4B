@@ -70,19 +70,25 @@ app.post('/create', parseUrlencoded, (req, res) => {
     )
 }); // Creazione di una issue
 
-app.post('/create', parseUrlencoded, (req, res) => comment());
+app.post('/comment', parseUrlencoded, (req, res) => {
+    comment(req.body.key, req.body.comm);
+});
 
-function comment(req) {
+
+function comment(key, comment) {
     col.w("Inizio richiesta di creazione di un commento");
 
     request(
         {
-            url: base + "issue/" + req.body.tit + "/comment",
+            url: base + "issue/" + key + "/comment",
             method: 'POST',
             headers: {
-                    'Authorization': auth
+                'Content-Type':'application/json',
+                'Authorization': auth
             },
-            'body': req.body.comm
+            json: {
+                'body': comment
+            }
         }, function(err, obj, body) {
             if (err) {
                 col.r(err);

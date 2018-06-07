@@ -13,18 +13,18 @@
             <img src="img/icon.ico" alt="Logo" class="logo">
             <h1>Gestisci le issues</h1>
         </div>
-        <div class="w3-container tab">
+        <div class="w3-container mainTab">
             <table class="w3-hoverable w3-centered w3-bordered mainTab" id="out">
             </table>
         </div>
-        <div class="footer">
+        <div class="footer w3-mobile">
             <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Filtri</button>
             <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Impostazioni</button>
 
             <button onclick="pop()" id="butt" class="w3-right green">Nuova issue</button>
         </div>
         <div class="blockC">
-            <div class="create">
+            <div class="create w3-responsive">
                 <div class="head">
                     <h2>Crea issue</h2>
                     <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
@@ -54,8 +54,8 @@
                 </form>
             </div>
         </div>
-        <div class="blockD w3-responsive">
-            <div class="details">
+        <div class="blockD">
+            <div class="details w3-responsive">
                 <div class="head">
                     <h2 id="key"></h2>
                     <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
@@ -65,8 +65,10 @@
                         <div class="w3-half">
                             <p id="summary"></p>
                             <p id="description"></p>
-                            <span>Commenti:</span>
-                            <table id="comments" class="w3-hoverable w3-border w3-card commTab"></table>
+                            <div class="commTab">
+                                <span>Commenti:</span>
+                                <table id="comments" class="w3-hoverable w3-border w3-card"></table>
+                            </div>
                         </div>
                         <div class="w3-half">
                             <p id="status"></p>
