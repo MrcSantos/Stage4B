@@ -51,8 +51,8 @@ app.post('/create', parseUrlencoded, (req, res) => {
                     "project": {
                        "key": "DEV"
                     },
-                    "summary": req.body.tit,
-                    "description": req.body.des,
+                    "summary": req.body.summary,
+                    "description": req.body.description,
                     "issuetype": {
                        "name": "Task"
                     }
@@ -62,16 +62,16 @@ app.post('/create', parseUrlencoded, (req, res) => {
             if (err) {
                 out.err(err);
             }
-
-            if (req.body.comm != "") {
-                comment(req);
+            console.log(JSON.stringify(obj));
+            if (req.body.comment != "") {
+                comment(obj.body.id, req.body.comment);
             }
         }
     )
 }); // Creazione di una issue
 
 app.post('/comment', parseUrlencoded, (req, res) => {
-    comment(req.body.key, req.body.comm);
+    comment(req.body.key, req.body.comment);
 });
 
 

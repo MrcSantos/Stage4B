@@ -1693,6 +1693,7 @@ td {
   overflow-y: scroll;
 }
 .fix {
+  font-size: 4vh;
   position: sticky;
   top: 0px;
 }

@@ -1,74 +1,63 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
-$(() => $.get("/get", (data, status) => setData(data))); // Al caricamento della pagina manda la richiesta al server
-setInterval(() => $.get("/get", (data, status) => setData(data)), 5000); // Aggiorna la tabella ogni 5 secondi
+$(() => $.get("/get", (data, status) => setDataInPlace(data))); // Al caricamento della pagina manda la richiesta al server
+setInterval(() => $.get("/get", (data, status) => setDataInPlace(data)), 5000); // Aggiorna la tabella ogni 5 secondi
 
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
 
-/*----------------------------------------------------------------------------*/ // Gestione delle issues
-
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
-function setData(data) {
+function setDataInPlace(data) {
     allIssuesFields = emptyFieldsHandler(data); // Corregge i campi e assegna tutte le issues ricavate a allIssuesFields
 
     var table = []; // Contiene gli elementi della tabella principale
 
-    for (var i in data) {
+    for (var i in data) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
         table.push(tableSettings(data[i]));
     }
 
+    // Fa la richiesta di tutte le issues, le "tabelizza" e le mette nella tabella
     $.get("/get", (data, status) => $("#out").html(tabelize(table)));
 }
 
-// Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
-function emptyFieldsHandler(data) {
-    for (var i in data) {
-        if (data[i].description == null) {
-            data[i].description = "Nessuna descrizione";
-        }
-        if (!data[i].assignee) {
-            data[i].assignee = "Nessuno assegnato";
-        }
-        if (data[i].comments.length == 0) {
-            data[i].comments = ["Nessun commento"];
-        }
-    }
+/*----------------------------------------------------------------------------*/ // Gestione delle issues
 
-    return data; // Assegno i dati validi a allIssuesFields
-}
-
+// Permette di creare una issue quando tutti i campi sono corretti
 function createIssue() {
-    var titolo = $("#C-titolo").val();
-    var descrizione = $("textarea#C-descrizione").val();
-    var commento = $("textarea#C-commento").val();
-    if (titolo.length > 0) {
-        // Converte il titolo in formato univoco per tutte le issues
-        titolo = titolo.slice(0, 1).toUpperCase() + titolo.slice(1);
+    // Prendo tutti i valori necessari dal popup
+    var summary = $("#C-titolo").val();
+    var description = $("textarea#C-descrizione").val();
+    var comment = $("textarea#C-commento").val();
 
-        if (!descrizione.length > 0)
-            descrizione = "";
-        if (!commento.length > 0)
-            commento = "";
-        $.post("/create", {"tit": titolo, "des":descrizione, "comm":commento});
-        refresh();
+    // Controllo della presenza del titolo (Obbligatorio per creare una issue)
+    if (summary.length > 0) {
+        // Converte il titolo in formato univoco per tutte le issues
+        summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
+
+        // Mando la richiesta al server con tutti i dati
+        $.post("/create", {"summary": summary, "description":description, "comment":comment});
+
+        // Chiudo il popup e resetto i campi
         toggleCreate();
     }
-    else
+    else // Se manca il titolo viene segnalato l'errore tramite alert
         alert("Il titolo non può essere vuoto");
 }
 
-function comment() {
+// Permette di creare un commento quando tutti i campi sono corretti
+function commentIssue() {
+    // Prendo tutti i valori necessari dal popup
     var key = $("#key").text();
     var userComment = $("textarea#D-commento").val();
 
+    // Controllo della presenza del commento
     if (userComment != "") {
-        $.post("/comment", {'key': key, 'comm': userComment});
-        refresh();
+        // Mando la richiesta al server con tutti i dati
+        $.post("/comment", {'key': key, 'comment': userComment});
+        // Chiudo il popup e resetto i campi
         toggleDetails();
     }
-    else {
+    else // Se manca il commento viene segnalato l'errore tramite alert
         alert("Il commento non può essere vuoto");
-    }
 }
 
 /*----------------------------------------------------------------------------*/ // Gestione dei popup
@@ -178,4 +167,21 @@ function tableSettings(data) {
     row.description = data.description;
 
     return row;
+}
+
+// Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
+function emptyFieldsHandler(data) {
+    for (var i in data) {
+        if (data[i].description == null) {
+            data[i].description = "Nessuna descrizione";
+        }
+        if (!data[i].assignee) {
+            data[i].assignee = "Nessuno assegnato";
+        }
+        if (data[i].comments.length == 0) {
+            data[i].comments = ["Nessun commento"];
+        }
+    }
+
+    return data; // Assegno i dati validi a allIssuesFields
 }
