@@ -14,7 +14,7 @@
             <h1>Gestisci le issues</h1>
         </div>
         <div class="w3-container tab">
-            <table class="w3-hoverable w3-centered w3-bordered" id="out">
+            <table class="w3-hoverable w3-centered w3-bordered mainTab" id="out">
             </table>
         </div>
         <div class="footer">
@@ -54,7 +54,7 @@
                 </form>
             </div>
         </div>
-        <div class="blockD">
+        <div class="blockD w3-responsive">
             <div class="details">
                 <div class="head">
                     <h2 id="key"></h2>
@@ -65,13 +65,19 @@
                         <div class="w3-half">
                             <p id="summary"></p>
                             <p id="description"></p>
-                            <table id="comments"></table>
+                            <span>Commenti:</span>
+                            <table id="comments" class="w3-hoverable w3-border w3-card commTab"></table>
                         </div>
                         <div class="w3-half">
                             <p id="status"></p>
                             <p id="priority"></p>
                             <p id="assignee"></p>
                             <p id="date"></p>
+                            <form onsubmit="return false;">
+                                <span>Commenta l'issue</span>
+                                <textarea id="D-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
+                                <button class="blu" onclick="comment()">Commenta</button>
+                            </form>
                         </div>
                     </div>
                 </div>

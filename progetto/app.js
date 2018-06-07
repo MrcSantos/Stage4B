@@ -62,31 +62,37 @@ app.post('/create', parseUrlencoded, (req, res) => {
             if (err) {
                 out.err(err);
             }
+
+            if (req.body.comm != "") {
+                comment(req);
+            }
         }
     )
-    console.log(req.body.comm + req.body.tit);
-    if (req.body.comm != "") {
-        col.w("Inizio richiesta di creazione di un commento");
-
-        request(
-            {
-                url: base + "issue/" + req.body.tit + "/comment",
-                method: 'POST',
-                headers: {
-                        'Authorization': auth
-                },
-                'body': req.body.comm
-            }, function(err, obj, body) {
-                if (err) {
-                    col.r(err);
-                }
-                else {
-                    col.g("Commento creato con successo");
-                }
-            }
-        )
-    }
 }); // Creazione di una issue
+
+app.post('/create', parseUrlencoded, (req, res) => comment());
+
+function comment(req) {
+    col.w("Inizio richiesta di creazione di un commento");
+
+    request(
+        {
+            url: base + "issue/" + req.body.tit + "/comment",
+            method: 'POST',
+            headers: {
+                    'Authorization': auth
+            },
+            'body': req.body.comm
+        }, function(err, obj, body) {
+            if (err) {
+                col.r(err);
+            }
+            else {
+                col.g("Commento creato con successo");
+            }
+        }
+    )
+}
 
 /*----------------------------------------------------------------------------*/ // Fine
 

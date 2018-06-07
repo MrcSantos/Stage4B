@@ -39,6 +39,25 @@ function assign(data) {
     allIssuesFields = data;
 }
 
+function getCommentsHtml(id) {
+    var out = "";
+    if (allIssuesFields[id].comments != "Nessun commento") {
+        for (var i in allIssuesFields[id].comments) {
+            out += "<tr class='header'>";
+            out += "<td>" + allIssuesFields[Math.floor(id)].comments[i].name;
+            out += "<td>" + allIssuesFields[Math.floor(id)].comments[i].date;
+            out += "</tr>";
+            out += "<tr class='border'>";
+            out += "<td colspan='2'>" + allIssuesFields[Math.floor(id)].comments[i].body;
+            out += "</tr>";
+        }
+    }
+    else {
+        out = "Nessun commento";
+    }
+    return out;
+}
+
 function pop(id) {
     if (id === undefined && !isDetails) { // Si apre il popup per creare una issue
         $(".blockC").toggle();
@@ -57,22 +76,20 @@ function pop(id) {
         $("#priority").text("Priorità: " + allIssuesFields[Math.floor(id)].priority);
         $("#date").text("Creata il: " + allIssuesFields[Math.floor(id)].date);
         $("#assignee").text("Assegnati: " + allIssuesFields[Math.floor(id)].assignee);
-        $("#comments").text("Commenti: " + allIssuesFields[Math.floor(id)].comments);
-
-        var userComment = $("textarea#userComment").val();
+        $("#comments").html(getCommentsHtml(id));
     }
 }
 
 function undo() {
     pop();
     $("form")[0].reset();
+    document.getElementById("textarea#D-commento").innerHTML = "";
 }
 
 function create() {
     var titolo = $("#C-titolo").val();
     var descrizione = $("textarea#C-descrizione").val();
     var commento = $("textarea#C-commento").val();
-
     if (titolo.length > 0) {
         // Converte il titolo in formato univoco per tutte le issues
         titolo = titolo.slice(0, 1).toUpperCase() + titolo.slice(1);
@@ -86,6 +103,15 @@ function create() {
     }
     else
         alert("Manca il titolo");
+}
+
+function comment() {
+    var titolo = $("#summary").val();
+    var userComment = $("textarea#D-commento").val();
+
+    $.post("/comment", {'tit': titolo, 'comm': userComment});
+
+    undo();
 }
 
 function tabelize(obj) {

@@ -7,24 +7,29 @@ body {
 }
 
 /* Font e scritte */
+@font-face { font-family: Helvetica; src: url('fonts/Helvetica.ttf'); }
 @font-face { font-family: Domotika; src: url('fonts/Domotika.ttf'); }
 @font-face { font-family: Domotika; font-weight: bold; src: url('fonts/Domotika-bold.ttf'); }
 
 .h {
-    font-family: Domotika;
     text-transform: uppercase;
 }
 h1 {
+    font-family: Domotika;
     &:extend(.h);
     font-size: 4vw;
     letter-spacing: 10px;
     word-spacing: 100px;
 }
 h2 {
+    font-family: Helvetica;
     &:extend(.h, .w3-display-topmiddle);
     font-size: 3vw;
     letter-spacing: 5px;
     word-spacing: 50px;
+}
+p {
+    font-family: Helvetica;
 }
 
 /* Stile immagini */
@@ -63,10 +68,19 @@ button {
 }
 
 /* Stile tabella */
-#out {
-    &:extend(.w3-table, .w3-card);
+table {
+    &:extend(.w3-table);
 }
-.tab {
+.header {
+    color: #707070;
+}
+.border {
+    border-bottom: 1px solid grey;
+}
+.commTab {
+    overflow: scroll;
+}
+.mainTab {
     text-transform: uppercase;
     font-size: 25px;
     height: 75vh;

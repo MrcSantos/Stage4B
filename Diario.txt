@@ -206,3 +206,10 @@ Fatto:
 Da fare domani:
 - Scrivere i commenti;
 - Iniziare le impostazioni della tabella.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 7-6-2018
+- Sparita tutta la roba di Github fatta ieri;
+- Rifaccio tutto a mano;
+- Iniziata la parte client del commento su una issue già fatta;
