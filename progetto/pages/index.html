@@ -21,13 +21,13 @@
             <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Filtri</button>
             <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Impostazioni</button>
 
-            <button onclick="pop()" id="butt" class="w3-right green">Nuova issue</button>
+            <button onclick="toggleCreate()" class="w3-right green">Nuova issue</button>
         </div>
         <div class="blockC">
             <div class="create w3-responsive">
                 <div class="head">
                     <h2>Crea issue</h2>
-                    <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
+                    <span onclick="toggleCreate()" class="close">&times;</span> <!-- X che chiude il popup-->
                 </div>
                 <form onsubmit="return false;">
                     <div class="fields">
@@ -47,8 +47,8 @@
                             </div>
                         </div>
                         <div class="w3-margin">
-                            <button onclick="create()" class="green w3-right">Conferma</button>
-                            <button onclick="undo()" class="red w3-right">Annulla</button>
+                            <button onclick="createIssue()" class="green w3-right">Conferma</button>
+                            <button onclick="toggleCreate()" class="red w3-right">Annulla</button>
                         </div>
                     </div>
                 </form>
@@ -58,15 +58,15 @@
             <div class="details w3-responsive">
                 <div class="head">
                     <h2 id="key"></h2>
-                    <span onclick="undo()" class="close">&times;</span> <!-- X che chiude il popup-->
+                    <span onclick="toggleDetails()" class="close">&times;</span> <!-- X che chiude il popup-->
                 </div>
                 <div class="fields">
                     <div class="w3-row-padding w3-margin-top field">
                         <div class="w3-half">
                             <p id="summary"></p>
                             <p id="description"></p>
+                            <span>Commenti:</span>
                             <div class="commTab">
-                                <span>Commenti:</span>
                                 <table id="comments" class="w3-hoverable w3-border w3-card"></table>
                             </div>
                         </div>

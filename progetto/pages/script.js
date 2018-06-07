@@ -1,29 +1,27 @@
-$(() => $.get("/get", (data, status) => init(data))); // Al caricamento della pagina manda la richiesta al server
+/*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
-var allIssuesFields = [];
-var isDetails = false; // Quando il popup dei dettagli è aperto la variabile cambia stato
+$(() => $.get("/get", (data, status) => setData(data))); // Al caricamento della pagina manda la richiesta al server
+setInterval(() => $.get("/get", (data, status) => setData(data)), 5000); // Aggiorna la tabella ogni 5 secondi
 
-function init(data) {
-    assign(data);
-    var tab = [];
-    var newTab = [];
+var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
+
+/*----------------------------------------------------------------------------*/ // Gestione delle issues
+
+// Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
+function setData(data) {
+    allIssuesFields = emptyFieldsHandler(data); // Corregge i campi e assegna tutte le issues ricavate a allIssuesFields
+
+    var table = []; // Contiene gli elementi della tabella principale
 
     for (var i in data) {
-        var riga = {}
-
-        /* Controllo delle impostazioni della tabella qui */
-        riga.key = data[i].key;
-        riga.summary = data[i].summary;
-        riga.status = data[i].status;
-        riga.description = data[i].description;
-
-        newTab.push(riga);
+        table.push(tableSettings(data[i]));
     }
-    tab = newTab;
-    $.get("/get", (data, status) => $("#out").html(tabelize(tab)));
+
+    $.get("/get", (data, status) => $("#out").html(tabelize(table)));
 }
 
-function assign(data) {
+// Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
+function emptyFieldsHandler(data) {
     for (var i in data) {
         if (data[i].description == null) {
             data[i].description = "Nessuna descrizione";
@@ -36,58 +34,10 @@ function assign(data) {
         }
     }
 
-    allIssuesFields = data;
+    return data; // Assegno i dati validi a allIssuesFields
 }
 
-function getCommentsHtml(id) {
-    var out = "";
-    if (allIssuesFields[id].comments != "Nessun commento") {
-        for (var i in allIssuesFields[id].comments) {
-            out += "<tr class='header'>";
-            out += "<td>" + allIssuesFields[Math.floor(id)].comments[i].name;
-            out += "<td>" + allIssuesFields[Math.floor(id)].comments[i].date;
-            out += "</tr>";
-            out += "<tr class='border'>";
-            out += "<td colspan='2'>" + allIssuesFields[Math.floor(id)].comments[i].body;
-            out += "</tr>";
-        }
-    }
-    else {
-        out = "Nessun commento";
-    }
-    return out;
-}
-
-function pop(id) {
-    if (id === undefined && !isDetails) { // Si apre il popup per creare una issue
-        $(".blockC").toggle();
-        $(".create").toggle(500);
-    }
-    else { // Si apre il popup per vedere i dettagli
-        isDetails = !isDetails;
-        $(".blockD").toggle();
-        $(".details").toggle(500);
-        if (isDetails) {
-            // Prendo tutti i campi del popup
-            $("#key").text(allIssuesFields[Math.floor(id)].key);
-            $("#summary").text("Titolo: " + allIssuesFields[Math.floor(id)].summary);
-            $("#status").text("Status: " + allIssuesFields[Math.floor(id)].status);
-            $("#description").text("Descrizione: " + allIssuesFields[Math.floor(id)].description);
-            $("#priority").text("Priorità: " + allIssuesFields[Math.floor(id)].priority);
-            $("#date").text("Creata il: " + allIssuesFields[Math.floor(id)].date);
-            $("#assignee").text("Assegnati: " + allIssuesFields[Math.floor(id)].assignee);
-            $("#comments").html(getCommentsHtml(id));
-        }
-    }
-}
-
-function undo() {
-    $('#D-commento').val('');
-    $("form")[0].reset();
-    pop();
-}
-
-function create() {
+function createIssue() {
     var titolo = $("#C-titolo").val();
     var descrizione = $("textarea#C-descrizione").val();
     var commento = $("textarea#C-commento").val();
@@ -100,7 +50,8 @@ function create() {
         if (!commento.length > 0)
             commento = "";
         $.post("/create", {"tit": titolo, "des":descrizione, "comm":commento});
-        undo();
+        refresh();
+        toggleCreate();
     }
     else
         alert("Il titolo non può essere vuoto");
@@ -111,25 +62,88 @@ function comment() {
     var userComment = $("textarea#D-commento").val();
 
     if (userComment != "") {
-        alert("Sto creando il commento");
         $.post("/comment", {'key': key, 'comm': userComment});
-        undo();
+        refresh();
+        toggleDetails();
     }
     else {
         alert("Il commento non può essere vuoto");
     }
 }
 
+/*----------------------------------------------------------------------------*/ // Gestione dei popup
+
+// Apre e chiude il modal per creare una nuova issue
+function toggleCreate() {
+    $(".blockC").toggle();
+    $(".create").toggle(500);
+    refresh();
+}
+
+// Apre e chiude il modal per vedere i dettagli di una issue
+function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
+    $(".blockD").toggle();
+    $(".details").toggle();
+    refresh();
+
+    assignPopupValues(id); // Assegno i valori nel popup tramite l'id
+}
+
+// Assegno i valori nel popup tramite l'id
+function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
+    var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
+
+    // Prendo tutti i campi del popup leggendoli dalla variabile master
+    $("#key").text(currentIssue.key);
+    $("#summary").text("Titolo: " + currentIssue.summary);
+    $("#status").text("Status: " + currentIssue.status);
+    $("#description").text("Descrizione: " + currentIssue.description);
+    $("#priority").text("Priorità: " + currentIssue.priority);
+    $("#date").text("Creata il: " + currentIssue.date);
+    $("#assignee").text("Assegnati: " + currentIssue.assignee);
+    $("#comments").html(getCommentsHtml(id)); // Faccio costruire la tabella dei commenti
+}
+
+// Restituisce la tabella in html dei commenti
+function getCommentsHtml(id) {
+    var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
+
+    var out = "";
+    if (currentIssue.comments != "Nessun commento") {
+        for (var i in currentIssue.comments) {
+            out += "<tr class='header'>";
+            out += "<td>" + currentIssue.comments[i].name;
+            out += "<td>" + currentIssue.comments[i].date;
+            out += "</tr>";
+            out += "<tr class='border'>";
+            out += "<td colspan='2'>" + currentIssue.comments[i].body;
+            out += "</tr>";
+        }
+    }
+    else {
+        out = "Nessun commento";
+    }
+    return out;
+}
+
+// Azzero tutti i campi di input dei popup
+function refresh() {
+    $("form")[0].reset(); // Resetta tutto il form dentro al popup di creazione di una issue
+    $('#D-commento').val(''); // Resetta dentro al commento nei dettagli
+}
+
+/*----------------------------------------------------------------------------*/ // Funzioni tabella principale
+
+// Restituisce l'html necessario per costruire la tabella principale
 function tabelize(obj) {
     const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
 
-    function riga(id, obj, isHead) {
-        if (isHead === undefined) isHead = false;
-        if (id === undefined) id = "";
+    // Costruisce una sola riga della tabella
+    function newRow(id, obj, isHeader) { // id = numero della riga da passare a pop(); obj = oggetto in una riga; isHeader = controllo per l'header della tabella
         var out = "";
 
-        if(isHead) out += "<thead class='head'><tr class='w3-light-grey fix'>";
-        else out += "<tr onclick='pop(" + id + ")'>";
+        if(isHeader) out += "<thead class='head'><tr class='w3-light-grey fix'>";
+        else out += "<tr onclick='toggleDetails(" + id + ")'>";
 
         for (var i in obj) {
             out +=  "<td>\
@@ -137,27 +151,31 @@ function tabelize(obj) {
             </td>";
         }
         out += "</tr>";
-        if(isHead) out += "</thead>";
+        if(isHeader) out += "</thead>";
 
         return out;
     }
 
     var out = "";
 
-    out += riga(i, head, true);
+    out += newRow(i, head, true);
 
     out += "<tbody>";
     for (var i in obj)
-        out += riga(i, obj[i]);
+        out += newRow(i, obj[i]);
     out += "</tbody>";
 
     return out;
 }
 
-setInterval(() => $.get("/get", (data, status) => init(data)), 2000); // Aggiorna la tabella ogni 5 secondi
+// Controllo delle impostazioni della tabella in modo da dare i campi interessati
+function tableSettings(data) {
+    var row = {}
 
-// // Disable #x
-// $( "#x" ).prop( "disabled", true );
-//
-// // Enable #x
-// $( "#x" ).prop( "disabled", false );
+    row.key = data.key;
+    row.summary = data.summary;
+    row.status = data.status;
+    row.description = data.description;
+
+    return row;
+}
