@@ -99,6 +99,7 @@ function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga
     assignPopupValues(id); // Assegno i valori nel popup tramite l'id
 }
 
+// Apre e chiude il modal per vedere le impostazioni della tabella
 function toggleSettings() {
     $("#settings").toggle();
 }
@@ -142,8 +143,15 @@ function getCommentsHtml(id) {
 
 // Azzero tutti i campi di input dei popup
 function refresh() {
-    $("form")[0].reset(); // Resetta tutto il form dentro al popup di creazione di una issue
+    $('#C-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
+    $('#C-descrizione').val('');
+    $('#C-commento').val('');
     $('#D-commento').val(''); // Resetta dentro al commento nei dettagli
+}
+
+// Resetta le impostazioni della tabella
+function resetSettings() {
+    $("form")[0].reset();
 }
 
 /*----------------------------------------------------------------------------*/ // Funzioni tabella principale
