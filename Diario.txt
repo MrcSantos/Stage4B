@@ -227,7 +227,10 @@ Da fare domani:
 
 Aggiornamenti 8-6-2018
 Fatto:
-- 
+- Creato il popup per la gestione delle impostazioni;
+- Creata funzione che riceva le impostazioni;
+- Impostazioni tabella ultimate;
+- Miglioramento estetica popup impostazioni e tabella;
 
 Da fare domani:
-- 
+-

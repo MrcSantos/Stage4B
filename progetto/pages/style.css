@@ -1637,7 +1637,7 @@ h1 {
 }
 h2 {
   font-family: Helvetica;
-  font-size: 3vw;
+  font-size: 2vw;
   letter-spacing: 5px;
   word-spacing: 50px;
 }
@@ -1683,31 +1683,33 @@ td {
 }
 .commTab {
   max-height: 40vh;
+  font-size: 1.5vw;
   overflow-y: scroll;
 }
 .mainTab {
   text-transform: uppercase;
-  font-size: 3vh;
+  font-size: 2vw;
   height: 75vh;
   overflow-y: scroll;
+  cursor: pointer;
 }
 .fix {
-  font-size: 4vh;
+  font-size: 2.5vw;
   position: sticky;
   top: 0px;
 }
 /* Stile dei popup */
 #settings {
   color: white;
-  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
-  font-size: 2vh;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+  font-size: 2vw;
   display: none;
   z-index: 1;
   position: fixed;
   bottom: 12vh;
-  left: 14.5vw;
-  max-width: 15vw;
-  background-color: rgba(0, 0, 0, 0.4);
+  left: 13vw;
+  max-width: 18vw;
+  background-color: rgba(0, 0, 0, 0.9);
 }
 .blockC,
 .blockD {
@@ -1742,7 +1744,7 @@ td {
 }
 .close {
   color: black;
-  font-size: 35px;
+  font-size: 3vw;
 }
 .close:hover {
   color: red;
@@ -1765,7 +1767,7 @@ td {
 }
 .fields {
   margin-top: 10vh;
-  font-size: 25px;
+  font-size: 2vw;
 }
 .field {
   margin-top: 5vh;

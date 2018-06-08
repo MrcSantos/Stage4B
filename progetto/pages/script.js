@@ -1,8 +1,9 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
 $(getIssues()); // Al caricamento della pagina manda la richiesta al server
-setInterval(getIssues(), 5000); // Aggiorna la tabella ogni 5 secondi
-setInterval(() => $("#out").html(setDataInPlace()), 1000);
+setInterval(() => getIssues(), 5000); // Aggiorna la tabella ogni 5 secondi
+setInterval(() => setDataInPlace(), 1000);
+
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
 
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
@@ -14,7 +15,7 @@ function setDataInPlace() {
     }
 
     // "Tabelizza" tutte le issues e le returna
-    return tabelize(table);
+    $("#out").html(getTableHtml(table));
 }
 
 // Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
@@ -38,6 +39,7 @@ function emptyFieldsHandler(data) {
 
 /*----------------------------------------------------------------------------*/ // Gestione delle issues
 
+// Effettua la richiesta di visualizzare le issues e le mette in allIssuesFields
 function getIssues() {
     $.get("/get", (data, status) => allIssuesFields = emptyFieldsHandler(data));
 }
@@ -55,7 +57,7 @@ function createIssue() {
         summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
 
         // Mando la richiesta al server con tutti i dati
-        $.post("/create", {"summary": summary, "description":description, "comment":comment});
+        $.post("/create", {"summary": summary, "description":description, "comment":comment}, () => getIssues());
 
         // Chiudo il popup e resetto i campi
         toggleCreate();
@@ -73,7 +75,7 @@ function commentIssue() {
     // Controllo della presenza del commento
     if (userComment != "") {
         // Mando la richiesta al server con tutti i dati
-        $.post("/comment", {'key': key, 'comment': userComment});
+        $.post("/comment", {'key': key, 'comment': userComment}, () => getIssues());
         // Chiudo il popup e resetto i campi
         toggleDetails();
     }
@@ -87,14 +89,14 @@ function commentIssue() {
 function toggleCreate() {
     $(".blockC").toggle();
     $(".create").toggle(500);
-    refresh();
+    resetFields();
 }
 
 // Apre e chiude il modal per vedere i dettagli di una issue
 function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
     $(".blockD").toggle();
     $(".details").toggle();
-    refresh();
+    resetFields();
 
     assignPopupValues(id); // Assegno i valori nel popup tramite l'id
 }
@@ -142,7 +144,7 @@ function getCommentsHtml(id) {
 }
 
 // Azzero tutti i campi di input dei popup
-function refresh() {
+function resetFields() {
     $('#C-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
     $('#C-descrizione').val('');
     $('#C-commento').val('');
@@ -157,7 +159,7 @@ function resetSettings() {
 /*----------------------------------------------------------------------------*/ // Funzioni tabella principale
 
 // Restituisce l'html necessario per costruire la tabella principale
-function tabelize(obj) {
+function getTableHtml(data) {
     const head = {key: 'chiave', summary: 'titolo', status: 'status', description: 'descrizione', priority: 'priorità', date: 'data', assignee: 'assegnato'};
 
     // Costruisce una sola riga della tabella
@@ -180,11 +182,11 @@ function tabelize(obj) {
 
     var out = "";
 
-    out += newRow(i, tableSettings(head), true);
+    out += newRow(null, tableSettings(head), true);
 
     out += "<tbody>";
-    for (var i in obj)
-        out += newRow(i, obj[i]);
+    for (var i in data)
+        out += newRow(i, data[i], false);
     out += "</tbody>";
 
     return out;

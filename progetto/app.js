@@ -64,9 +64,10 @@ app.post('/create', parseUrlencoded, (req, res) => {
 				out.err(err);
 			}
 			else {
-				if (req.body.comment != "") {
+				res.send(200);
+				col.g("Issue creata con successo");
+				if (req.body.comment != "")
 					comment(obj.body.id, req.body.comment);
-				}
 			}
 		}
 	)
@@ -96,6 +97,7 @@ function comment(key, comment) {
 				col.r(err);
 			}
 			else {
+				res.send(200);
 				col.g("Commento creato con successo");
 			}
 		}

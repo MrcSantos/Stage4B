@@ -23,16 +23,16 @@
 
             <button onclick="toggleCreate()" class="w3-right green">Nuova issue</button>
         </div>
-        <div id="settings">
+        <div id="settings" class="w3-responsive">
             <form onsubmit="return false;">
                 <input type="checkbox" class="settings"> Chiave<br>
                 <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
-                <input type="checkbox" class="settings"> Status<br>
-                <input type="checkbox" class="settings"> Descrizione<br>
+                <input checked="true" type="checkbox" class="settings"> Status<br>
+                <input checked="true" type="checkbox" class="settings"> Descrizione<br>
                 <input type="checkbox" class="settings"> Priorità<br>
                 <input type="checkbox" class="settings"> Data<br>
                 <input type="checkbox" class="settings"> Assegnati<br>
-                <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Azzera</button>
+                <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Default</button>
             </form>
         </div>
         <div class="blockC">
