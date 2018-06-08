@@ -862,7 +862,8 @@ button,
 .textField {
   border-radius: 8px;
 }
-.w3-round-xlarge {
+.w3-round-xlarge,
+#settings {
   border-radius: 16px;
 }
 .w3-round-xxlarge,
@@ -1162,7 +1163,8 @@ button,
   padding: 8px 16px !important;
 }
 .w3-padding-large,
-button {
+button,
+#settings {
   padding: 12px 24px !important;
 }
 .w3-padding-16 {
@@ -1653,19 +1655,16 @@ p {
 .red {
   background-color: #ff4400;
 }
-.green:hover,
-.green:focus {
+.green:hover {
   background-color: #0ea500;
 }
-.red:hover,
-.red:focus {
+.red:hover {
   background-color: red;
 }
 .blu {
   background-color: #2196f3;
 }
-.blu:hover,
-.blu:focus {
+.blu:hover {
   background-color: #0050e3;
 }
 /* Stile tabella */
@@ -1683,7 +1682,7 @@ td {
   border-bottom: 1px solid grey;
 }
 .commTab {
-  max-height: 45vh;
+  max-height: 40vh;
   overflow-y: scroll;
 }
 .mainTab {
@@ -1698,11 +1697,23 @@ td {
   top: 0px;
 }
 /* Stile dei popup */
+#settings {
+  color: white;
+  text-shadow: -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
+  font-size: 2vh;
+  display: none;
+  z-index: 1;
+  position: fixed;
+  bottom: 12vh;
+  left: 15vw;
+  max-width: 15vw;
+  background-color: rgba(0, 0, 0, 0.4);
+}
 .blockC,
 .blockD {
   display: none;
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   left: 0;
   top: 0;
   width: 100%;
@@ -1733,14 +1744,12 @@ td {
   color: black;
   font-size: 35px;
 }
-.close:hover,
-.close:focus {
+.close:hover {
   color: red;
   text-decoration: none;
   cursor: pointer;
 }
-.reset:hover,
-.reset:focus {
+.reset:hover {
   color: red;
   text-decoration: none;
   cursor: pointer;
@@ -1750,7 +1759,7 @@ td {
   height: 5vh;
   max-width: 50vw;
 }
-.create .big {
+.big {
   height: 20vh;
   max-width: 50vw;
 }

@@ -15,7 +15,6 @@ const password = 'Stage.2018';
 const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
 
 exports.getAll = function getAll(res) {
-    col.w("Inizio richiesta di lettura progetto");
     request(
         {
             url: base + srcPro + "DEV" + sort + "&fields=*all",
@@ -29,7 +28,6 @@ exports.getAll = function getAll(res) {
             }
             else {
                 data = JSON.parse(body);
-                col.g("Lettura andata a buon fine\n");
                 out.all(res, data);
             }
         }

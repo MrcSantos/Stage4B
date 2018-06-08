@@ -19,9 +19,20 @@
         </div>
         <div class="footer w3-mobile">
             <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Filtri</button>
-            <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Impostazioni</button>
+            <button class="w3-left blu" onclick="toggleSettings()">Impostazioni</button>
 
             <button onclick="toggleCreate()" class="w3-right green">Nuova issue</button>
+        </div>
+        <div id="settings">
+            <form onsubmit="return false;">
+                <input type="checkbox" class="settings"> Chiave<br>
+                <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
+                <input type="checkbox" class="settings"> Status<br>
+                <input type="checkbox" class="settings"> Descrizione<br>
+                <input type="checkbox" class="settings"> Priorità<br>
+                <input type="checkbox" class="settings"> Data<br>
+                <input type="checkbox" class="settings"> Assegnati<br>
+            </form>
         </div>
         <div class="blockC">
             <div class="create w3-responsive">

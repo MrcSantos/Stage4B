@@ -210,6 +210,24 @@ Da fare domani:
 /*----------------------------------------------------------------------------*/
 
 Aggiornamenti 7-6-2018
+Fatto:
 - Sparita tutta la roba di Github fatta ieri;
 - Rifaccio tutto a mano;
 - Iniziata la parte client del commento su una issue già fatta;
+- Implementazione commenti finita;
+- Non commenta quando creo una nuova issue;
+- Corretto tutti i problemi relativi ai commenti;
+- Refactorizzato completamente la parte client.
+
+Da fare domani:
+- Provare ad implementare le impostazioni tabella;
+- (OPZIONALE) Refactory della parte server.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 8-6-2018
+Fatto:
+- 
+
+Da fare domani:
+- 

@@ -1,25 +1,46 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
-$(() => $.get("/get", (data, status) => setDataInPlace(data))); // Al caricamento della pagina manda la richiesta al server
-setInterval(() => $.get("/get", (data, status) => setDataInPlace(data)), 5000); // Aggiorna la tabella ogni 5 secondi
-
+$(getIssues()); // Al caricamento della pagina manda la richiesta al server
+setInterval(getIssues(), 5000); // Aggiorna la tabella ogni 5 secondi
+setInterval(() => $("#out").html(setDataInPlace()), 1000);
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
 
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
-function setDataInPlace(data) {
-    allIssuesFields = emptyFieldsHandler(data); // Corregge i campi e assegna tutte le issues ricavate a allIssuesFields
-
+function setDataInPlace() {
     var table = []; // Contiene gli elementi della tabella principale
 
-    for (var i in data) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
-        table.push(tableSettings(data[i]));
+    for (var i in allIssuesFields) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
+        table.push(tableSettings(allIssuesFields[i]));
     }
 
-    // Fa la richiesta di tutte le issues, le "tabelizza" e le mette nella tabella
-    $.get("/get", (data, status) => $("#out").html(tabelize(table)));
+    // "Tabelizza" tutte le issues e le returna
+    return tabelize(table);
+}
+
+// Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
+function emptyFieldsHandler(data) {
+    for (var i in data) {
+        var current = data[i]; // Dati della issue corrente
+
+        if (current.description == null) {
+            current.description = "Nessuna descrizione";
+        }
+        if (!current.assignee) {
+            current.assignee = "Nessuno assegnato";
+        }
+        if (current.comments.length == 0) {
+            current.comments = ["Nessun commento"];
+        }
+    }
+
+    return data; // Returna i dati validi per assegnarli a allIssuesFields
 }
 
 /*----------------------------------------------------------------------------*/ // Gestione delle issues
+
+function getIssues() {
+    $.get("/get", (data, status) => allIssuesFields = emptyFieldsHandler(data));
+}
 
 // Permette di creare una issue quando tutti i campi sono corretti
 function createIssue() {
@@ -78,6 +99,10 @@ function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga
     assignPopupValues(id); // Assegno i valori nel popup tramite l'id
 }
 
+function toggleSettings() {
+    $("#settings").toggle();
+}
+
 // Assegno i valori nel popup tramite l'id
 function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
     var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
@@ -125,7 +150,7 @@ function refresh() {
 
 // Restituisce l'html necessario per costruire la tabella principale
 function tabelize(obj) {
-    const head = {Id:"ID", Titolo:"TITOLO", Status:"STATUS", Descrizione:"DESCRIZIONE"};
+    const head = {key: 'chiave', summary: 'titolo', status: 'status', description: 'descrizione', priority: 'priorità', date: 'data', assignee: 'assegnato'};
 
     // Costruisce una sola riga della tabella
     function newRow(id, obj, isHeader) { // id = numero della riga da passare a pop(); obj = oggetto in una riga; isHeader = controllo per l'header della tabella
@@ -147,7 +172,7 @@ function tabelize(obj) {
 
     var out = "";
 
-    out += newRow(i, head, true);
+    out += newRow(i, tableSettings(head), true);
 
     out += "<tbody>";
     for (var i in obj)
@@ -159,29 +184,31 @@ function tabelize(obj) {
 
 // Controllo delle impostazioni della tabella in modo da dare i campi interessati
 function tableSettings(data) {
-    var row = {}
+    var settings = getSettings();
+    var row = [];
+    const rowFields = [row.key, row.summary, row.status, row.description, row.priority, row.date, row.assignee];
+    const dataFields = [data.key, data.summary, data.status, data.description, data.priority, data.date, data.assignee];
 
-    row.key = data.key;
-    row.summary = data.summary;
-    row.status = data.status;
-    row.description = data.description;
+    for (var i in settings) {
+        if (settings[i]) {
+            rowFields[i] = dataFields[i];
+            row.push(rowFields[i]);
+        }
+    }
 
     return row;
 }
 
-// Intercetta e "corregge" i campi non obbligatori vuoti che trova nelle issues ricevute
-function emptyFieldsHandler(data) {
-    for (var i in data) {
-        if (data[i].description == null) {
-            data[i].description = "Nessuna descrizione";
-        }
-        if (!data[i].assignee) {
-            data[i].assignee = "Nessuno assegnato";
-        }
-        if (data[i].comments.length == 0) {
-            data[i].comments = ["Nessun commento"];
-        }
+// Returna tutte le opzioni della checkbox in un array
+function getSettings() {
+    var allOptions = $(".settings"); // Prende Tutti gli elementi della checkbox
+    var options = [];
+
+    for (var i = 0; i < allOptions.length; i++) { // Costruisco l'array di booleani per ogni opzione
+        // Ordine checkbox: key - summary - status - description - priority - date - assignee
+        options.push(allOptions[i].checked);
     }
 
-    return data; // Assegno i dati validi a allIssuesFields
+    // Returna l'array di booleani
+    return options;
 }
