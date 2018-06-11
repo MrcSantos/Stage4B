@@ -14,7 +14,7 @@ app.use(express.static('pages'));
 /*----------------------------------------------------------------------------*/ // Variabili
 
 /* Variabili statiche utili */
-const port = 8080; // Porta di ascolto
+const port = 5000; // Porta di ascolto
 exports.port = port;
 
 /* Variabili URL */
@@ -24,7 +24,6 @@ const base = host + path; // Tutta la prima parte dell'URL
 const srcPro = "search?jql=project=";
 const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const issueUrl = base + "issue";
-const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
 /* Variabili autenticazione */
 var username;
@@ -32,12 +31,9 @@ var password;
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
-app.get('/', (req, res) => res.render('login')); // Fornisce l'index
+app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
 app.post("/login", parseUrlencoded, (req, res) => {
-	console.log("loginning...");
-	console.log(req.body.user);
-	console.log(req.body.pass);
 	username = req.body.user;
 	password = req.body.pass;
 	var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
@@ -52,10 +48,8 @@ app.post("/login", parseUrlencoded, (req, res) => {
 	}, 	function(err, obj, body) {
 		if(err) res.send(401);
 		if (obj.statusCode == 200) {
-			console.log('succesfully logged in');
 			res.send(200);
 		} else {
-			console.log("Login failed :(");
 			res.send(400);
 		}
 	})

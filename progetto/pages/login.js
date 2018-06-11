@@ -1,4 +1,4 @@
-// $(, ()=>window.location.href = 'asd.html')); // Al caricamento della pagina manda la richiesta al server
+var tentativi = 0;
 
 function login() {
     var user = $("#user").val();
@@ -9,7 +9,23 @@ function login() {
     }
     else {
         $.post("/login", {user: user, pass: pass})
-        .done(()=>alert("success"));
-        .fail(()=>alert("fail"));
+        .done((res) => success(user))
+        .fail((res) => fail())
+    }
+}
+
+function success(user) {
+    alert("Login eseguito con successo, benvenuto " + user);
+    window.location.href = 'app.html';
+}
+function fail() {
+    tentativi ++;
+    alert("Login errato, " + parseInt(3-tentativi) + " tentativi rimasti");
+
+    if (tentativi == 3) {
+        tentativi = 0;
+        alert("Tentativi esauriti, attendere 5 secondi");
+        $("#button").hide();
+        setTimeout(()=> $("#button").show(), 5000);
     }
 }
