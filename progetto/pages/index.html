@@ -1,101 +1,35 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Stage</title>
-        <link rel="icon" href="logo.ico">
-        <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="style.css">
-        <script src="script.js"></script>
-    </head>
-    <body>
-        <div class="w3-container w3-center head">
-            <img src="logo.ico" alt="Logo" class="logo">
-            <h1>Gestisci le issues</h1>
-        </div>
-        <div class="w3-container mainTab">
-            <table class="w3-hoverable w3-centered w3-bordered mainTab" id="out">
-            </table>
-        </div>
-        <div class="footer w3-mobile">
-            <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Filtri</button>
-            <button class="w3-left blu" onclick="toggleSettings()">Impostazioni</button>
+<head>
+    <title>Stage</title>
+    <link rel="icon" href="logo.ico">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <link rel="stylesheet" type="text/css" href="style.css"> -->
+    <script src="login.js"></script>
+</head>
 
-            <button onclick="toggleCreate()" class="w3-right green">Nuova issue</button>
+<body>
+    <div class="w3-display-middle" style="height: 50vh; width: 50vw;">
+        <div class="w3-container w3-blue">
+            <h2>Login Jira Issue Table</h2>
         </div>
-        <div id="settings" class="w3-responsive">
-            <form onsubmit="return false;">
-                <input type="checkbox" class="settings"> Chiave<br>
-                <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
-                <input checked="true" type="checkbox" class="settings"> Status<br>
-                <input checked="true" type="checkbox" class="settings"> Descrizione<br>
-                <input type="checkbox" class="settings"> Priorità<br>
-                <input type="checkbox" class="settings"> Data<br>
-                <input type="checkbox" class="settings"> Assegnati<br>
-                <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Default</button>
-            </form>
-        </div>
-        <div class="blockC">
-            <div class="create w3-responsive">
-                <div class="head">
-                    <h2>Crea issue</h2>
-                    <span onclick="toggleCreate()" class="close">&times;</span> <!-- X che chiude il popup-->
-                </div>
-                <form onsubmit="return false;">
-                    <div class="fields">
-                        <div>
-                            <label class="w3-margin-top">Titolo</label>
-                            <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
-                        </div>
 
-                        <div class="w3-row-padding w3-margin-top field">
-                            <div class="w3-half">
-                                <label>Descrizione (opzionale)</label>
-                                <textarea id="C-descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
-                            </div>
-                            <div class="w3-half">
-                                <label>Commento (opzionale)</label>
-                                <textarea id="C-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
-                            </div>
-                        </div>
-                        <div class="w3-margin">
-                            <button onclick="createIssue()" class="green w3-right">Conferma</button>
-                            <button onclick="toggleCreate()" class="red w3-right">Annulla</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div class="blockD">
-            <div class="details w3-responsive">
-                <div class="head">
-                    <h2 id="key"></h2>
-                    <span onclick="toggleDetails()" class="close">&times;</span> <!-- X che chiude il popup-->
-                </div>
-                <div class="fields">
-                    <div class="w3-row-padding w3-margin-top field">
-                        <div class="w3-half">
-                            <p id="summary"></p>
-                            <p id="description"></p>
-                            <span>Commenti:</span>
-                            <div class="commTab">
-                                <table id="comments" class="w3-hoverable w3-border w3-card"></table>
-                            </div>
-                        </div>
-                        <div class="w3-half">
-                            <p id="status"></p>
-                            <p id="priority"></p>
-                            <p id="assignee"></p>
-                            <p id="date"></p>
-                            <form onsubmit="return false;">
-                                <span>Commenta l'issue</span>
-                                <textarea id="D-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
-                                <button class="blu" onclick="commentIssue()">Commenta</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </body>
+        <form class="w3-container">
+            <p>
+                <label>Utente</label>
+                <input class="w3-input w3-animate-input" type="text">
+            </p>
+            <p>
+                <label>Password</label>
+                <input class="w3-input w3-animate-input" type="password">
+            </p>
+            <!-- <p>
+                <label>Email</label>
+                <input class="w3-input w3-animate-input" type="text">
+            </p> -->
+            <button type="button" name="button" class="w3-button w3-margin-top w3-blue w3-padding-large w3-card w3-round-xlarge w3-ripple">Login</button>
+        </form>
+    </div>
+</body>
 </html>

@@ -1,8 +1,7 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
 $(getIssues()); // Al caricamento della pagina manda la richiesta al server
-setInterval(() => getIssues(), 5000); // Aggiorna la tabella ogni 5 secondi
-setInterval(() => setDataInPlace(), 1000);
+setInterval(() => getIssues(), 5000); // Aggiorna i dati ogni 5 secondi
 
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
 
@@ -41,8 +40,11 @@ function emptyFieldsHandler(data) {
 
 // Effettua la richiesta di visualizzare le issues e le mette in allIssuesFields
 function getIssues() {
-    $.get("/get", (data, status) => allIssuesFields = emptyFieldsHandler(data));
-}
+    $.get("/get", (data, status) => {
+        allIssuesFields = emptyFieldsHandler(data);
+        setDataInPlace();
+    });
+};
 
 // Permette di creare una issue quando tutti i campi sono corretti
 function createIssue() {
@@ -75,9 +77,12 @@ function commentIssue() {
     // Controllo della presenza del commento
     if (userComment != "") {
         // Mando la richiesta al server con tutti i dati
-        $.post("/comment", {'key': key, 'comment': userComment}, () => getIssues());
+        $.post("/comment", {'key': key, 'comment': userComment}, () => {
+            getIssues();
+            assignPopupValues();
+        });
         // Chiudo il popup e resetto i campi
-        toggleDetails();
+        // toggleDetails();
     }
     else // Se manca il commento viene segnalato l'errore tramite alert
         alert("Il commento non può essere vuoto");

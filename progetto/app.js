@@ -27,13 +27,38 @@ const issueUrl = base + "issue";
 const home = "<br><a = href='http://localhost:" + port + "/'>Clicca qui per tornare alla home</a>";
 
 /* Variabili autenticazione */
-const username = 'mrcsossy';
-const password = 'Stage.2018';
-const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
+var username;
+var password;
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
-app.get('/', (req, res) => res.render('index')); // Fornisce l'index
+app.get('/', (req, res) => res.render('login')); // Fornisce l'index
+
+app.post("/login", parseUrlencoded, (req, res) => {
+	console.log("loginning...");
+	console.log(req.body.user);
+	console.log(req.body.pass);
+	username = req.body.user;
+	password = req.body.pass;
+	var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
+
+	request({
+		url: base + "issue/createmeta",
+		method: 'GET',
+		headers: {
+			'Content-Type':'application/json',
+			'Authorization': auth
+		}
+	}, 	function(err, obj, body) {
+		if (obj.statusCode == 200) {
+			console.log('succesfully logged in');
+			res.send(200);
+		} else {
+			console.log("Login failed :(");
+			res.send(401);
+		}
+	})
+});
 
 app.get('/get', (req, res) => requ.getAll(res)); // Richiesta di tutte le issues - FUNZIONANTE
 
@@ -67,19 +92,25 @@ app.post('/create', parseUrlencoded, (req, res) => {
 				res.send(200);
 				col.g("Issue creata con successo");
 				if (req.body.comment != "")
-					comment(obj.body.id, req.body.comment);
+					comment(res, obj.body.id, req.body.comment);
 			}
 		}
 	)
 }); // Creazione di una issue
 
 app.post('/comment', parseUrlencoded, (req, res) => {
-	comment(req.body.key, req.body.comment);
+	comment(res, req.body.key, req.body.comment);
 });
 
 
-function comment(key, comment) {
+function comment(res, key, comment) {
 	col.w("Inizio richiesta di creazione di un commento");
+
+	// var url = base + "issue/" + key;
+	// var url = ;
+	// var url = ;
+
+	// requests()
 
 	request(
 		{
@@ -103,6 +134,31 @@ function comment(key, comment) {
 		}
 	)
 }
+
+function requests(url, method, authorization, data) {
+	request({
+		url: url,
+		method: method,
+		headers: {
+			'Content-Type':'application/json',
+			'Authorization': authorization
+		},
+		json: data
+	}, 	function(err, obj, body) {
+		if (err) {
+			col.r(err);
+		}
+		else {
+			res.send(200);
+		}
+	})
+}
+
+
+
+
+/*-------------------------------------//-------------------------------------*/
+
 
 /*----------------------------------------------------------------------------*/ // Fine
 
