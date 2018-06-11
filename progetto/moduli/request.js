@@ -13,23 +13,3 @@ const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const username = 'mrcsossy';
 const password = 'Stage.2018';
 const auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
-
-exports.getAll = function getAll(res) {
-    request(
-        {
-            url: base + srcPro + "DEV" + sort + "&fields=*all",
-            method: 'GET',
-            headers: {
-                'Authorization': auth
-            }
-        }, function(err, obj, body) {
-            if (err) {
-                col.r(err);
-            }
-            else {
-                data = JSON.parse(body);
-                out.all(res, data);
-            }
-        }
-    )
-}

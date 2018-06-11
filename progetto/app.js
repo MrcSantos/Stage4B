@@ -5,6 +5,7 @@ const requ = require('./moduli/request'); // Implementa le chiamate personalizza
 const request = require('request');
 const col = require('./moduli/colori');
 const routes = require('./routes');
+const out = require('./moduli/output');
 
 const bodyParser = require('body-parser');
 const parseUrlencoded = bodyParser.urlencoded({ extended: false });
@@ -29,6 +30,10 @@ const issueUrl = base + "issue";
 var username;
 var password;
 
+function auth() {
+	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
+}
+
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 app.get('/', (req, res) => res.render('index')); // Fornisce l'index
@@ -36,14 +41,13 @@ app.get('/', (req, res) => res.render('index')); // Fornisce l'index
 app.post("/login", parseUrlencoded, (req, res) => {
 	username = req.body.user;
 	password = req.body.pass;
-	var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
 
 	request({
 		url: base + "issue/createmeta",
 		method: 'GET',
 		headers: {
 			'Content-Type':'application/json',
-			'Authorization': auth
+			'Authorization': auth()
 		}
 	}, 	function(err, obj, body) {
 		if(err) res.send(401);
@@ -55,7 +59,25 @@ app.post("/login", parseUrlencoded, (req, res) => {
 	})
 });
 
-app.get('/get', (req, res) => requ.getAll(res)); // Richiesta di tutte le issues - FUNZIONANTE
+app.get('/get', (req, res) => {
+    request(
+        {
+            url: base + srcPro + "DEV" + sort + "&fields=*all",
+            method: 'GET',
+            headers: {
+                'Authorization': auth()
+            }
+        }, function(err, obj, body) {
+            if (err) {
+                col.r(err);
+            }
+            else {
+                data = JSON.parse(body);
+                out.all(res, data);
+            }
+        }
+    )
+}); // Richiesta di tutte le issues - FUNZIONANTE
 
 app.post('/create', parseUrlencoded, (req, res) => {
 	col.w("Inizio richiesta di creazione di una issue");
@@ -65,7 +87,7 @@ app.post('/create', parseUrlencoded, (req, res) => {
 			url: issueUrl,
 			method: 'POST',
 			headers: {
-					'Authorization': auth
+					'Authorization': auth()
 			},
 			json: {
 				"fields": {
@@ -113,7 +135,7 @@ function comment(res, key, comment) {
 			method: 'POST',
 			headers: {
 				'Content-Type':'application/json',
-				'Authorization': auth
+				'Authorization': auth()
 			},
 			json: {
 				'body': comment
