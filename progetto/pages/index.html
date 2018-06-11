@@ -15,20 +15,20 @@
             <h2>Login Jira Issue Table</h2>
         </div>
 
-        <form class="w3-container">
+        <form onsubmit="return false;" class="w3-container">
             <p>
                 <label>Utente</label>
-                <input class="w3-input w3-animate-input" type="text">
+                <input id="user" class="w3-input w3-animate-input" type="text">
             </p>
             <p>
                 <label>Password</label>
-                <input class="w3-input w3-animate-input" type="password">
+                <input id="pass" class="w3-input w3-animate-input" type="password">
             </p>
             <!-- <p>
                 <label>Email</label>
                 <input class="w3-input w3-animate-input" type="text">
             </p> -->
-            <button type="button" name="button" class="w3-button w3-margin-top w3-blue w3-padding-large w3-card w3-round-xlarge w3-ripple">Login</button>
+            <button onclick="login()" type="button" name="button" class="w3-button w3-margin-top w3-blue w3-padding-large w3-card w3-round-xlarge w3-ripple">Login</button>
         </form>
     </div>
 </body>

@@ -50,12 +50,13 @@ app.post("/login", parseUrlencoded, (req, res) => {
 			'Authorization': auth
 		}
 	}, 	function(err, obj, body) {
+		if(err) res.send(401);
 		if (obj.statusCode == 200) {
 			console.log('succesfully logged in');
 			res.send(200);
 		} else {
 			console.log("Login failed :(");
-			res.send(401);
+			res.send(400);
 		}
 	})
 });
