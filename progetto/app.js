@@ -1,7 +1,6 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione
 
 const express = require('express'); // Implementa Express
-const requ = require('./moduli/request'); // Implementa le chiamate personalizzate
 const request = require('request');
 const col = require('./moduli/colori');
 const routes = require('./routes');
@@ -26,9 +25,11 @@ const srcPro = "search?jql=project=";
 const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const issueUrl = base + "issue";
 
+var currentFilter = "filter=-4";
+
 /* Variabili autenticazione */
-var username;
-var password;
+var username = "mrcsossy";
+var password = "Stage.2018";
 
 function auth() {
 	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
@@ -60,24 +61,33 @@ app.post("/login", parseUrlencoded, (req, res) => {
 });
 
 app.get('/get', (req, res) => {
-    request(
-        {
-            url: base + srcPro + "DEV" + sort + "&fields=*all",
-            method: 'GET',
-            headers: {
-                'Authorization': auth()
-            }
-        }, function(err, obj, body) {
-            if (err) {
-                col.r(err);
-            }
-            else {
-                data = JSON.parse(body);
-                out.all(res, data);
-            }
-        }
-    )
+	request(
+		{
+			url: base + "search?jql=project=DEV+order+by+summary&fields=*all",
+			method: 'GET',
+			headers: {
+				'Content-Type':'application/json',
+				'Authorization': auth()
+			}
+		}, function(err, obj, body) {
+			if (err) {
+				col.r(err);
+			}
+			else {
+				// console.log(body);
+				data = JSON.parse(body);
+				out.all(res, data);
+			}
+		}
+	)
 }); // Richiesta di tutte le issues - FUNZIONANTE
+
+app.post('/filter', parseUrlencoded, (req, res) => {
+	var filterNumbers = ["-4", "-5", "-9", "-1"];
+	currentFilter = "filter=" + filterNumbers[req.body.filter]
+	res.send(200);
+})
+
 
 app.post('/create', parseUrlencoded, (req, res) => {
 	col.w("Inizio richiesta di creazione di una issue");
@@ -87,17 +97,17 @@ app.post('/create', parseUrlencoded, (req, res) => {
 			url: issueUrl,
 			method: 'POST',
 			headers: {
-					'Authorization': auth()
+				'Authorization': auth()
 			},
 			json: {
 				"fields": {
 					"project": {
-					   "key": "DEV"
+						"key": "DEV"
 					},
 					"summary": req.body.summary,
 					"description": req.body.description,
 					"issuetype": {
-					   "name": "Task"
+						"name": "Task"
 					}
 				}
 			}
@@ -109,7 +119,7 @@ app.post('/create', parseUrlencoded, (req, res) => {
 				res.send(200);
 				col.g("Issue creata con successo");
 				if (req.body.comment != "")
-					comment(res, obj.body.id, req.body.comment);
+				comment(res, obj.body.id, req.body.comment);
 			}
 		}
 	)
@@ -152,21 +162,30 @@ function comment(res, key, comment) {
 	)
 }
 
-function requests(url, method, authorization, data) {
-	request({
-		url: url,
-		method: method,
-		headers: {
-			'Content-Type':'application/json',
-			'Authorization': authorization
-		},
-		json: data
-	}, 	function(err, obj, body) {
+function lowLevelRequest(url, method, authorization, data, callback) {
+	if (url && method && authorization) {
+		var requestData = {
+			url: url,
+			method: method,
+			headers: {
+				'Content-Type':'application/json',
+				'Authorization': authorization
+			}
+		};
+
+		if (data)	requestData.json = data;
+	}
+	else throw "Parameters error";
+
+	request(requestData, function(err, obj, body) {
 		if (err) {
-			col.r(err);
+			res.send(400)
 		}
 		else {
 			res.send(200);
+			if (callback && typeof(callback) === "function") {
+				callback();
+			}
 		}
 	})
 }

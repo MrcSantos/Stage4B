@@ -18,7 +18,7 @@
             </table>
         </div>
         <div class="footer w3-mobile">
-            <button class="w3-left blu" onclick="alert('Funzione non ancora supportata')">Filtri</button>
+            <button class="w3-left blu" onclick="toggleFilters()">Filtri</button>
             <button class="w3-left blu" onclick="toggleSettings()">Impostazioni</button>
 
             <button onclick="toggleCreate()" class="w3-right green">Nuova issue</button>
@@ -29,10 +29,19 @@
                 <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
                 <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Status<br>
                 <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Descrizione<br>
+                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Tipo issue<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Priorità<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Data<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Assegnati<br>
-                <button onclick="resetSettings(); setDataInPlace()" class="w3-tiny blu" type="button" name="button">Default</button>
+                <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Default</button>
+            </form>
+        </div>
+        <div id="filters" class="w3-responsive">
+            <form onsubmit="return false;">
+                <input type="radio" class="filters" onclick="setFilter()" name="filters" checked> Tutte le issues<br>
+                <input type="radio" class="filters" onclick="setFilter()" name="filters"> Solo issue aperte<br>
+                <input type="radio" class="filters" onclick="setFilter()" name="filters"> Solo issue chiuse<br>
+                <input type="radio" class="filters" onclick="setFilter()" name="filters"> Solo issues in cui sono assegnato<br>
             </form>
         </div>
         <div class="blockC">
@@ -44,16 +53,18 @@
                 <form onsubmit="return false;">
                     <div class="fields">
                         <div>
-                            <label class="w3-margin-top">Titolo</label>
-                            <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
                         </div>
 
                         <div class="w3-row-padding w3-margin-top field">
                             <div class="w3-half">
+                                <label class="w3-margin-top">Titolo</label>
+                                <input id="C-titolo" class="small textField center" type="text" placeholder="Titolo">
                                 <label>Descrizione (opzionale)</label>
                                 <textarea id="C-descrizione" class="big textField" type="text" placeholder="Inserisci qui una descrizione accattivante dell'issue"></textarea>
                             </div>
                             <div class="w3-half">
+                                <label class="w3-margin-top">Tipo issue</label>
+                                <input id="C-tipo" class="small textField center" type="text" placeholder="Titolo">
                                 <label>Commento (opzionale)</label>
                                 <textarea id="C-commento" class="big textField" type="text" placeholder="Commenta subito questa issue!"></textarea>
                             </div>
@@ -84,6 +95,7 @@
                         </div>
                         <div class="w3-half">
                             <p id="status"></p>
+                            <p id="type"></p>
                             <p id="priority"></p>
                             <p id="assignee"></p>
                             <p id="date"></p>

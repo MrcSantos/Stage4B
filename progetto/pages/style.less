@@ -100,18 +100,24 @@ td {
 }
 
 /* Stile dei popup */
-#settings {
+#settings,
+#filters {
+    &:extend(.w3-round-xlarge, .w3-padding-large);
     color: white;
-    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, -2px 0 black, 0 2px black, 2px 0 black, 0 -2px black;
     font-size: 2vw;
     display: none;
     z-index: 1;
     position: fixed;
+    background-color: rgba(0,0,0,0.9);
+}
+
+#settings {
     bottom: 12vh;
     left: 13vw;
-    max-width: 18vw;
-    background-color: rgba(0,0,0,0.9);
-    &:extend(.w3-round-xlarge, .w3-padding-large);
+}
+#filters {
+    bottom: 12vh;
+    left: 5vw;
 }
 
 .blockC,

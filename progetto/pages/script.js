@@ -50,11 +50,12 @@ function getIssues() {
 function createIssue() {
     // Prendo tutti i valori necessari dal popup
     var summary = $("#C-titolo").val();
+    var type = $("#C-tipo").val();
     var description = $("textarea#C-descrizione").val();
     var comment = $("textarea#C-commento").val();
 
     // Controllo della presenza del titolo (Obbligatorio per creare una issue)
-    if (summary.length > 0) {
+    if (summary.length > 0 && type.length > 0) {
         // Converte il titolo in formato univoco per tutte le issues
         summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
 
@@ -65,7 +66,7 @@ function createIssue() {
         toggleCreate();
     }
     else // Se manca il titolo viene segnalato l'errore tramite alert
-        alert("Il titolo non può essere vuoto");
+        alert("Il titolo e il tipo di issue non possono essere vuoti");
 }
 
 // Permette di creare un commento quando tutti i campi sono corretti
@@ -111,6 +112,26 @@ function toggleSettings() {
     $("#settings").toggle();
 }
 
+// Apre e chiude il modal per vedere i filtri delle issues
+function toggleFilters() {
+    $("#filters").toggle();
+}
+
+function setFilter() {
+    $.post("/filter", { "filter": getFilter() })
+    .done(getIssues());
+}
+
+function getFilter() {
+    filters = $(".filters");
+
+    for (var i = 0; i < filters.length; i++) {
+        if (filters[i].checked) {
+            return i;
+        }
+    }
+}
+
 // Assegno i valori nel popup tramite l'id
 function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
     var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
@@ -119,6 +140,7 @@ function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/
     $("#key").text(currentIssue.key);
     $("#summary").text("Titolo: " + currentIssue.summary);
     $("#status").text("Status: " + currentIssue.status);
+    $("#type").text("Tipo issue: " + currentIssue.type);
     $("#description").text("Descrizione: " + currentIssue.description);
     $("#priority").text("Priorità: " + currentIssue.priority);
     $("#date").text("Creata il: " + currentIssue.date);
@@ -159,13 +181,14 @@ function resetFields() {
 // Resetta le impostazioni della tabella
 function resetSettings() {
     $("form")[0].reset();
+    setDataInPlace();
 }
 
 /*----------------------------------------------------------------------------*/ // Funzioni tabella principale
 
 // Restituisce l'html necessario per costruire la tabella principale
 function getTableHtml(data) {
-    const head = {key: 'chiave', summary: 'titolo', status: 'status', description: 'descrizione', priority: 'priorità', date: 'data', assignee: 'assegnato'};
+    const head = {key: 'chiave', summary: 'titolo', status: 'status', description: 'descrizione', type:"Tipo", priority: 'priorità', date: 'data', assignee: 'assegnato'};
 
     // Costruisce una sola riga della tabella
     function newRow(id, obj, isHeader) { // id = numero della riga da passare a pop(); obj = oggetto in una riga; isHeader = controllo per l'header della tabella
@@ -201,8 +224,8 @@ function getTableHtml(data) {
 function tableSettings(data) {
     var settings = getSettings();
     var row = [];
-    const rowFields = [row.key, row.summary, row.status, row.description, row.priority, row.date, row.assignee];
-    const dataFields = [data.key, data.summary, data.status, data.description, data.priority, data.date, data.assignee];
+    const rowFields = [row.key, row.summary, row.status, row.description, row.type, row.priority, row.date, row.assignee];
+    const dataFields = [data.key, data.summary, data.status, data.description, data.type, data.priority, data.date, data.assignee];
 
     for (var i in settings) {
         if (settings[i]) {
@@ -220,7 +243,7 @@ function getSettings() {
     var options = [];
 
     for (var i = 0; i < allOptions.length; i++) { // Costruisco l'array di booleani per ogni opzione
-        // Ordine checkbox: key - summary - status - description - priority - date - assignee
+        // Ordine checkbox: key - summary - status - description - issuetype - priority - date - assignee
         options.push(allOptions[i].checked);
     }
 
