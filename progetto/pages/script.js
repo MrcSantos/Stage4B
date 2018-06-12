@@ -10,7 +10,7 @@ function setDataInPlace() {
     var table = []; // Contiene gli elementi della tabella principale
 
     for (var i in allIssuesFields) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
-        table.push(tableSettings(allIssuesFields[i]));
+        table.push(buildRowFromSettings(allIssuesFields[i]));
     }
 
     // "Tabelizza" tutte le issues e le returna
@@ -60,7 +60,7 @@ function createIssue() {
         summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
 
         // Mando la richiesta al server con tutti i dati
-        $.post("/create", {"summary": summary, "description":description, "comment":comment}, () => getIssues());
+        $.post("/create", {"summary": summary, "type": type, "description":description, "comment":comment}, () => getIssues());
 
         // Chiudo il popup e resetto i campi
         toggleCreate();
@@ -117,11 +117,13 @@ function toggleFilters() {
     $("#filters").toggle();
 }
 
+// Manda al server il numero di filtro e aggiorna i dati
 function setFilter() {
     $.post("/filter", { "filter": getFilter() })
     .done(getIssues());
 }
 
+// Returna il numero di riga checkato nel form
 function getFilter() {
     filters = $(".filters");
 
@@ -210,7 +212,7 @@ function getTableHtml(data) {
 
     var out = "";
 
-    out += newRow(null, tableSettings(head), true);
+    out += newRow(null, buildRowFromSettings(head), true);
 
     out += "<tbody>";
     for (var i in data)
@@ -221,12 +223,13 @@ function getTableHtml(data) {
 }
 
 // Controllo delle impostazioni della tabella in modo da dare i campi interessati
-function tableSettings(data) {
-    var settings = getSettings();
+function buildRowFromSettings(data) {
     var row = [];
+    var settings = getSettings();
     const rowFields = [row.key, row.summary, row.status, row.description, row.type, row.priority, row.date, row.assignee];
     const dataFields = [data.key, data.summary, data.status, data.description, data.type, data.priority, data.date, data.assignee];
 
+    // Costruisce la riga pushando solo se la checkbox corrispondente è selezionata
     for (var i in settings) {
         if (settings[i]) {
             rowFields[i] = dataFields[i];

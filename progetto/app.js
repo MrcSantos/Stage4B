@@ -25,7 +25,7 @@ const srcPro = "search?jql=project=";
 const sort = "+order+by+summary"; // Ordina per titolo nella richiesta
 const issueUrl = base + "issue";
 
-var currentFilter = "filter=-4";
+var currentFilter = "";
 
 /* Variabili autenticazione */
 var username = "mrcsossy";
@@ -63,7 +63,7 @@ app.post("/login", parseUrlencoded, (req, res) => {
 app.get('/get', (req, res) => {
 	request(
 		{
-			url: base + "search?jql=project=DEV+order+by+summary&fields=*all",
+			url: base + "search?jql=project=DEV" + getFilter() + "+order+by+summary&fields=*all",
 			method: 'GET',
 			headers: {
 				'Content-Type':'application/json',
@@ -83,8 +83,8 @@ app.get('/get', (req, res) => {
 }); // Richiesta di tutte le issues - FUNZIONANTE
 
 app.post('/filter', parseUrlencoded, (req, res) => {
-	var filterNumbers = ["-4", "-5", "-9", "-1"];
-	currentFilter = "filter=" + filterNumbers[req.body.filter]
+	var filters = ["", "resolution=Unresolved", "statusCategory=Done", "assignee=currentUser()+and+resolution=Unresolved"];
+	currentFilter = filters[req.body.filter]
 	res.send(200);
 })
 
@@ -107,7 +107,7 @@ app.post('/create', parseUrlencoded, (req, res) => {
 					"summary": req.body.summary,
 					"description": req.body.description,
 					"issuetype": {
-						"name": "Task"
+						"name": req.body.type
 					}
 				}
 			}
@@ -172,8 +172,7 @@ function lowLevelRequest(url, method, authorization, data, callback) {
 				'Authorization': authorization
 			}
 		};
-
-		if (data)	requestData.json = data;
+		if (data) { requestData.json = data; }
 	}
 	else throw "Parameters error";
 
@@ -191,7 +190,14 @@ function lowLevelRequest(url, method, authorization, data, callback) {
 }
 
 
-
+function getFilter() {
+	if (currentFilter == "") {
+		return "";
+	}
+	else {
+		return "+and+" + currentFilter;
+	}
+}
 
 /*-------------------------------------//-------------------------------------*/
 
