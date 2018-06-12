@@ -1,3 +1,7 @@
+/*----------------------------------------------------------------------------*/ // Moduli
+
+/*----------------------------------------------------------------------------*/ // Moduli
+
 exports.all = function all(res, obj) {
     function extract(i) {
         var created = new Date(obj.issues[i].fields.created);
