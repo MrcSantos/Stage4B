@@ -231,6 +231,40 @@ Fatto:
 - Creata funzione che riceva le impostazioni;
 - Impostazioni tabella ultimate;
 - Miglioramento estetica popup impostazioni e tabella;
+- Iniziata funzione separata per le request a Jira;
+- Inizio login.
 
 Da fare domani:
--
+- Finire il login;
+- (OPZIONALE) Fare i filtri.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 9-6-2018
+Fatto:
+- Creato l'html del login;
+- Messo a posto il login all'index;
+- Login statico funzionante;
+- Il login ora prende i dati dal form;
+- Login finito ma non salva user e pass;
+- Messo il progetto sulla macchina per la produzione.
+
+Da fare domani:
+- Fare i filtri;
+- (OPZIONALE) Refactorizzare parte server;
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 9-6-2018
+Fatto:
+- Creato popup per i filtri;
+- Migliorata l'estetica del popup;
+- Blocco questione filtri, chiesti chiarimenti;
+- Presa parametro issuetype;
+- Implementazione in tutta la tabella e in tutti i popup (Non crea ancora le issue con il tipo specificato);
+- Utilizzo JQL per filtrare le issues;
+- Utilizzo delle Routes invece di avere le chiamate in app.js.
+
+Da fare domani:
+- Finire refactory completo parte server;
+- Chiedere i campi da mettere in tabella e quali nel popup dei dettagli.
