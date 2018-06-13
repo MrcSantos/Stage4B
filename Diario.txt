@@ -268,3 +268,22 @@ Fatto:
 Da fare domani:
 - Finire refactory completo parte server;
 - Chiedere i campi da mettere in tabella e quali nel popup dei dettagli.
+
+/*----------------------------------------------------------------------------*/
+
+Aggiornamenti 13-6-2018
+Fatto:
+- Login con i cookies effettuato;
+- Problemi con le autorizzazioni multipiattaforma;
+- Inizio refactory parte server;
+- Finita funzione per le richieste con i parametri;
+- Login sistemato e testato multipiattaforma;
+- Finita prima release da mettere sul server, tutto funzionante.
+
+Da fare domani:
+- Aggiornare burocrazia;
+- Aggiornamento automatico dei commenti nel popup dopo la creazione;
+- Finire la To Do list fatta con Ilaria;
+- Presentare tutto il progetto;
+- Creare un moqup da far approvare a Paolo con la grafica definitiva;
+- Finire refactory parte server;
