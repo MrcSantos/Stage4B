@@ -18,7 +18,7 @@ function success(user, pass) {
     setCookie("jit_user", user);
     setCookie("jit_pass", pass);
     alert("Login eseguito con successo, benvenuto " + user);
-    window.location.href = 'index.html';
+    window.location.href = '../index.html';
 }
 
 function fail() {
@@ -35,7 +35,10 @@ function fail() {
 
 function setCookie(name, value) {
     var expDate = new Date();
+
+    // Mette la scadenza a 12h dalla creazione
     expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
     var expires = "expires="+expDate.toUTCString();
+
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }

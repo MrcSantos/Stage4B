@@ -8,9 +8,10 @@ const out = require('./output');
 
 /*----------------------------------------------------------------------------*/ // Inizializzazione Express
 
-const bodyParser = bp.urlencoded({ extended: false });
 const routes = express();
 routes.use(express.static('pages'));
+
+const bodyParser = bp.urlencoded({ extended: false }); // Utilizzato per leggere i dati passati dal client
 
 /*----------------------------------------------------------------------------*/ // Variabili
 
@@ -19,75 +20,124 @@ const host = "http://stage.gnet.it/"; // Inizio URL
 const path = "rest/api/2/"; // Metà dell'URL
 const base = host + path; // Tutta la prima parte dell'URL
 
-var currentFilter = "";
+/* Variabile filtro */
+var currentFilter = ""; // Filtro corrente, se vuoto prende tutte le issues
 
 /* Variabili autenticazione */
 var username = "";
 var password = "";
 
+/*----------------------------------------------------------------------------*/ // Funzioni
+
+// Returna la stringa di autenticazione per l'header delle richieste utilizzando le var di autenticazione globali
 function auth() {
-	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Richiesta basic
+	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Stringa richiesta basic
+}
+
+// Returna la stringa necessaria per l'url prendendo la var del filtro per costruirla
+function getFilter() {
+	if (currentFilter == "") { // Prende tutte le issue non aggiungendo i filtri
+		return "";
+	}
+	else {
+		return "+and+" + currentFilter; // Aggiunge il filtro alla ricerca nell'url
+	}
+}
+
+// Effettua una richiesta a Jira chiedendo tutti i parametri necessari
+function lowLevelRequest(res, url, method, authorization, data, callback) {
+	if (res && url && method && authorization) { // Controllo delle variabili fondamentali per una richiesta
+		// Costruisco l'oggetto con i dati per la richiesta
+		var requestData = {
+			url: url,
+			method: method,
+			headers: {
+				'Content-Type':'application/json',
+				'Authorization': authorization
+			}
+		};
+		// Se ci sono dei dati allora li metto dentro alla voce json
+		if (data) { requestData.json = data; }
+	}
+	else throw "Parameters error"; // Lancia un errore se non ci sono tutti i dati richiesti
+
+	// Effettua la richiesta con tutti i dati validati e spedisce al client la risposta del server Jira
+	request(requestData, function(error, response, body) {
+		if (callback && typeof(callback) === "function") {
+			callback(error, response, body);
+		}
+	})
+}
+
+// Effettua una richiesta per commentare
+function comment(res, key, commentBody) {
+	var url = base + "issue/" + key + "/comment";
+	var method = 'POST';
+	var authorization = auth();
+	var data = { 'body': commentBody };
+
+	lowLevelRequest(res, url, method, authorization, data, (error, response, body) => res.send(response.statusCode));
+}
+
+// Effettua una richiesta per controllare le credenziali
+function checkCredentials(res, user, pass) {
+	username = user;
+	password = pass;
+
+	var url = base + "issue/createmeta";
+	var method = 'GET';
+	var authorization = auth();
+
+	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => res.send(response.statusCode));
+}
+
+//
+function getAllIssues(res, projectName, sortType) {
+	// Controlla se viene specificato il nome progetto
+	function checkProj(project) {
+		if (project) { return "project=" + project; }
+		else { return "" }
+	}
+
+	// Controlla se viene specificato il tipo di ordinamento
+	function checkSort(sort) {
+		if (sort) { return "+order+by+" + sort; }
+		else { return "" }
+	}
+
+	// Variabili url locali
+	var jql = "search?jql=";
+	var project = checkProj(projectName);
+	var sort = checkSort(sortType);
+	var fields = "&fields=*all";
+
+	// Variabili per la richiesta
+	var url = base + jql + project + sort + fields;
+	var method = 'GET';
+	var authorization = auth();
+	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => {
+		if (username && password) {
+			var data = JSON.parse(body);
+			out.all(res, data);
+		}
+	});
 }
 
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 routes.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
-routes.post("/login", bodyParser, (req, res) => {
-	username = req.body.user;
-	password = req.body.pass;
+routes.post("/login", bodyParser, (req, res) => checkCredentials(res, req.body.user, req.body.pass));
 
-	request({
-		url: base + "issue/createmeta",
-		method: 'GET',
-		headers: {
-			'Content-Type':'application/json',
-			'Authorization': auth()
-		}
-	}, 	function(err, obj, body) {
-		if(err) res.send(401);
-		if (obj.statusCode == 200) {
-			res.send(200);
-		} else {
-			res.send(400);
-		}
-	})
-});
-
-routes.get('/get', (req, res) => {
-	request(
-		{
-			url: base + "search?jql=project=DEV" + getFilter() + "+order+by+summary&fields=*all",
-			method: 'GET',
-			headers: {
-				'Content-Type':'application/json',
-				'Authorization': auth()
-			}
-		}, function(err, obj, body) {
-			if (err) {
-				// col.red(err);
-			}
-			else {
-				if (username && password) {
-					// console.log(body);
-					data = JSON.parse(body);
-					out.all(res, data);
-				}
-			}
-		}
-	)
-}); // Richiesta di tutte le issues - FUNZIONANTE
+routes.get('/get', (req, res) => getAllIssues(res, "DEV", "key+desc"));
 
 routes.post('/filter', bodyParser, (req, res) => {
 	var filters = ["", "resolution=Unresolved", "statusCategory=Done", "assignee=currentUser()+and+resolution=Unresolved"];
 	currentFilter = filters[req.body.filter]
 	res.send(200);
-})
-
+});
 
 routes.post('/create', bodyParser, (req, res) => {
-	// col.white("Inizio richiesta di creazione di una issue");
-
 	request(
 		{
 			url: base + "issue",
@@ -113,7 +163,6 @@ routes.post('/create', bodyParser, (req, res) => {
 			}
 			else {
 				res.send(200);
-				// col.green("Issue creata con successo");
 				if (req.body.comment != "")
 				comment(res, obj.body.id, req.body.comment);
 			}
@@ -124,73 +173,5 @@ routes.post('/create', bodyParser, (req, res) => {
 routes.post('/comment', bodyParser, (req, res) => {
 	comment(res, req.body.key, req.body.comment);
 });
-
-
-function comment(res, key, comment) {
-	// col.white("Inizio richiesta di creazione di un commento");
-
-	// var url = base + "issue/" + key;
-	// var url = ;
-	// var url = ;
-
-	// requests()
-
-	request(
-		{
-			url: base + "issue/" + key + "/comment",
-			method: 'POST',
-			headers: {
-				'Content-Type':'application/json',
-				'Authorization': auth()
-			},
-			json: {
-				'body': comment
-			}
-		}, function(err, obj, body) {
-			if (err) {
-				// col.red(err);
-			}
-			else {
-				res.send(200);
-				// col.green("Commento creato con successo");
-			}
-		}
-	)
-}
-
-function lowLevelRequest(url, method, authorization, data, callback) {
-	if (url && method && authorization) {
-		var requestData = {
-			url: url,
-			method: method,
-			headers: {
-				'Content-Type':'application/json',
-				'Authorization': authorization
-			}
-		};
-		if (data) { requestData.json = data; }
-	}
-	else throw "Parameters error";
-
-	request(requestData, function(err, response, body) {
-		if (response.statusCode == 200) {
-			if (callback && typeof(callback) === "function") {
-				callback();
-			}
-		}
-
-		res.send(response.statusCode);
-	});
-}
-
-
-function getFilter() {
-	if (currentFilter == "") {
-		return "";
-	}
-	else {
-		return "+and+" + currentFilter;
-	}
-}
 
 module.exports = routes;

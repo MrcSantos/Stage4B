@@ -4,6 +4,7 @@ $(checkLogin()); // Al caricamento della pagina manda la richiesta al server
 setInterval(() => checkLogin(), 10000); // Aggiorna i dati ogni 5 secondi
 
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
+var currentDetailsId;
 
 function checkLogin() {
     var user = getCookie("jit_user");
@@ -17,7 +18,7 @@ function checkLogin() {
     }
     else {
         alert("Effettua il login per continuare");
-        window.location.href = 'login.html';
+        window.location.href = 'login/login.html';
     }
 }
 
@@ -60,7 +61,6 @@ function setDataInPlace() {
     for (var i in allIssuesFields) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
         table.push(buildRowFromSettings(allIssuesFields[i]));
     }
-
     // "Tabelizza" tutte le issues e le returna
     $("#out").html(getTableHtml(table));
 }
@@ -120,18 +120,16 @@ function createIssue() {
 // Permette di creare un commento quando tutti i campi sono corretti
 function commentIssue() {
     // Prendo tutti i valori necessari dal popup
-    var key = $("#key").text();
     var userComment = $("textarea#D-commento").val();
 
     // Controllo della presenza del commento
     if (userComment != "") {
+        resetFields();
+
         // Mando la richiesta al server con tutti i dati
-        $.post("/comment", {'key': key, 'comment': userComment}, () => {
+        $.post("/comment", {'key': allIssuesFields[currentDetailsId].key, 'comment': userComment}, () => {
             checkLogin();
-            assignPopupValues();
         });
-        // Chiudo il popup e resetto i campi
-        // toggleDetails();
     }
     else // Se manca il commento viene segnalato l'errore tramite alert
         alert("Il commento non può essere vuoto");
@@ -152,7 +150,9 @@ function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga
     $(".details").toggle();
     resetFields();
 
-    assignPopupValues(id); // Assegno i valori nel popup tramite l'id
+    currentDetailsId = id;
+
+    assignPopupValues(); // Assegno i valori nel popup tramite l'id
 }
 
 // Apre e chiude il modal per vedere le impostazioni della tabella
@@ -183,8 +183,8 @@ function getFilter() {
 }
 
 // Assegno i valori nel popup tramite l'id
-function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/riga (in locale)
-    var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
+function assignPopupValues() { // L'id passato rappresenta il numero di issue/riga (in locale)
+    var currentIssue = allIssuesFields[Math.floor(currentDetailsId)]; // Controllo solo l'issue corrente
 
     // Prendo tutti i campi del popup leggendoli dalla variabile master
     $("#key").text(currentIssue.key);
@@ -195,12 +195,12 @@ function assignPopupValues(id) { // L'id passato rappresenta il numero di issue/
     $("#priority").text("Priorità: " + currentIssue.priority);
     $("#date").text("Creata il: " + currentIssue.date);
     $("#assignee").text("Assegnati: " + currentIssue.assignee);
-    $("#comments").html(getCommentsHtml(id)); // Faccio costruire la tabella dei commenti
+    $("#comments").html(getCommentsHtml()); // Faccio costruire la tabella dei commenti
 }
 
 // Restituisce la tabella in html dei commenti
-function getCommentsHtml(id) {
-    var currentIssue = allIssuesFields[Math.floor(id)]; // Controllo solo l'issue corrente
+function getCommentsHtml() {
+    var currentIssue = allIssuesFields[Math.floor(currentDetailsId)]; // Controllo solo l'issue corrente
 
     var out = "";
     if (currentIssue.comments != "Nessun commento") {
