@@ -9,15 +9,18 @@ function login() {
     }
     else {
         $.post("/login", {user: user, pass: pass})
-        .done((res) => success(user))
+        .done((res) => success(user, pass))
         .fail((res) => fail())
     }
 }
 
-function success(user) {
+function success(user, pass) {
+    setCookie("jit_user", user);
+    setCookie("jit_pass", pass);
     alert("Login eseguito con successo, benvenuto " + user);
-    window.location.href = 'app.html';
+    window.location.href = 'index.html';
 }
+
 function fail() {
     tentativi ++;
     alert("Login errato, " + parseInt(3-tentativi) + " tentativi rimasti");
@@ -28,4 +31,11 @@ function fail() {
         $("#button").hide();
         setTimeout(()=> $("#button").show(), 5000);
     }
+}
+
+function setCookie(name, value) {
+    var expDate = new Date();
+    expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
+    var expires = "expires="+expDate.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }

@@ -240,7 +240,7 @@ Da fare domani:
 
 /*----------------------------------------------------------------------------*/
 
-Aggiornamenti 9-6-2018
+Aggiornamenti 11-6-2018
 Fatto:
 - Creato l'html del login;
 - Messo a posto il login all'index;
@@ -251,11 +251,11 @@ Fatto:
 
 Da fare domani:
 - Fare i filtri;
-- (OPZIONALE) Refactorizzare parte server;
+- (OPZIONALE) Refactorizzare parte server.
 
 /*----------------------------------------------------------------------------*/
 
-Aggiornamenti 9-6-2018
+Aggiornamenti 12-6-2018
 Fatto:
 - Creato popup per i filtri;
 - Migliorata l'estetica del popup;

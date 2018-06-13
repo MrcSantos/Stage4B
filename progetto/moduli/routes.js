@@ -65,7 +65,7 @@ routes.get('/get', (req, res) => {
 			}
 		}, function(err, obj, body) {
 			if (err) {
-				col.r(err);
+				// col.red(err);
 			}
 			else {
 				if (username && password) {
@@ -86,11 +86,11 @@ routes.post('/filter', bodyParser, (req, res) => {
 
 
 routes.post('/create', bodyParser, (req, res) => {
-	col.w("Inizio richiesta di creazione di una issue");
+	// col.white("Inizio richiesta di creazione di una issue");
 
 	request(
 		{
-			url: issueUrl,
+			url: base + "issue",
 			method: 'POST',
 			headers: {
 				'Authorization': auth()
@@ -113,7 +113,7 @@ routes.post('/create', bodyParser, (req, res) => {
 			}
 			else {
 				res.send(200);
-				col.g("Issue creata con successo");
+				// col.green("Issue creata con successo");
 				if (req.body.comment != "")
 				comment(res, obj.body.id, req.body.comment);
 			}
@@ -127,7 +127,7 @@ routes.post('/comment', bodyParser, (req, res) => {
 
 
 function comment(res, key, comment) {
-	col.w("Inizio richiesta di creazione di un commento");
+	// col.white("Inizio richiesta di creazione di un commento");
 
 	// var url = base + "issue/" + key;
 	// var url = ;
@@ -148,11 +148,11 @@ function comment(res, key, comment) {
 			}
 		}, function(err, obj, body) {
 			if (err) {
-				col.r(err);
+				// col.red(err);
 			}
 			else {
 				res.send(200);
-				col.g("Commento creato con successo");
+				// col.green("Commento creato con successo");
 			}
 		}
 	)

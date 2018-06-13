@@ -1,9 +1,57 @@
 /*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
 
-$(getIssues()); // Al caricamento della pagina manda la richiesta al server
-setInterval(() => getIssues(), 5000); // Aggiorna i dati ogni 5 secondi
+$(checkLogin()); // Al caricamento della pagina manda la richiesta al server
+setInterval(() => checkLogin(), 10000); // Aggiorna i dati ogni 5 secondi
 
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
+
+function checkLogin() {
+    var user = getCookie("jit_user");
+    var pass = getCookie("jit_pass");
+
+    if (user != "" && pass != "") {
+        $.post("/login", {user: user, pass: pass})
+        .done(() => {
+            getIssues();
+        });
+    }
+    else {
+        alert("Effettua il login per continuare");
+        window.location.href = 'login.html';
+    }
+}
+
+function logOut() {
+    deleteCookies("jit_user");
+    deleteCookies("jit_pass");
+    checkLogin();
+}
+
+function deleteCookies(name) {
+    setCookie(name, "");
+}
+
+function setCookie(name, value) {
+    var expDate = new Date();
+    expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
+    var expires = "expires="+expDate.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
 
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
 function setDataInPlace() {
@@ -60,7 +108,7 @@ function createIssue() {
         summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
 
         // Mando la richiesta al server con tutti i dati
-        $.post("/create", {"summary": summary, "type": type, "description":description, "comment":comment}, () => getIssues());
+        $.post("/create", {"summary": summary, "type": type, "description":description, "comment":comment}, () => checkLogin());
 
         // Chiudo il popup e resetto i campi
         toggleCreate();
@@ -79,7 +127,7 @@ function commentIssue() {
     if (userComment != "") {
         // Mando la richiesta al server con tutti i dati
         $.post("/comment", {'key': key, 'comment': userComment}, () => {
-            getIssues();
+            checkLogin();
             assignPopupValues();
         });
         // Chiudo il popup e resetto i campi
@@ -120,7 +168,7 @@ function toggleFilters() {
 // Manda al server il numero di filtro e aggiorna i dati
 function setFilter() {
     $.post("/filter", { "filter": getFilter() })
-    .done(getIssues());
+    .done(checkLogin());
 }
 
 // Returna il numero di riga checkato nel form

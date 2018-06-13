@@ -9,7 +9,7 @@ exports.all = function all(res, obj) {
         var issue = {
             'key': obj.issues[i].key,
             'summary': obj.issues[i].fields.summary,
-            'status': obj.issues[i].fields.status.statusCategory.name,
+            'status': obj.issues[i].fields.status.name,
             'description': obj.issues[i].fields.description,
             'priority': obj.issues[i].fields.priority.name,
             'date': created.toLocaleDateString() + " - " + created.toLocaleTimeString(),
