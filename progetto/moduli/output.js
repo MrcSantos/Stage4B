@@ -17,7 +17,7 @@ exports.all = function all(res, obj) {
             'comments': []
         };
         if (obj.issues[i].fields.assignee != null) {
-            issue.assignee = obj.issues[i].fields.assignee.name + " - " + obj.issues[i].fields.assignee.displayName;
+            issue.assignee = obj.issues[i].fields.assignee.displayName;
         }
         for (var x in obj.issues[i].fields.comment.comments) {
             var date = new Date(obj.issues[i].fields.comment.comments[x].created)

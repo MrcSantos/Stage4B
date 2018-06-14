@@ -9,12 +9,13 @@ var currentDetailsId = 0; // L'id del popup dei dettagli aperto al momento (util
 // Controlla i cookies e, nel caso non ci sia un login valido, richiede l'accesso
 function checkLogin() {
     // Prendo i cookies
-    var user = getCookie("jit_user");
-    var pass = getCookie("jit_pass");
+    var user = localStorage.getItem("jit_user");
+    var pass = localStorage.getItem("jit_pass");
+    var host = localStorage.getItem("jit_host");
 
     // Controllo esistenza cookies
-    if (user != "" && pass != "") {
-        $.post("/login", {user: user, pass: pass})
+    if (user != "" && pass != "" && host != "") {
+        $.post("/login", { user: user, pass: pass, host: host })
         .done(getIssues()) // Credenziali corrette
         .fail(() => window.location.href = 'login/login.html'); // Credenziali errate (reindirizza al login)
     }
@@ -26,38 +27,12 @@ function checkLogin() {
 // Effettua il logout cancellando i cookies
 function logOut() {
     // Cancello i cookies
-    deleteCookies("jit_user");
-    deleteCookies("jit_pass");
+    localStorage.removeItem("jit_user");
+    localStorage.removeItem("jit_pass");
+    localStorage.removeItem("jit_host");
 
     // Ricontrollo il login che farà ri inserire i dati richiesti
     checkLogin();
-}
-
-// Funzione che cancella i cookies
-function deleteCookies(name) {
-    setCookie(name, "");
-}
-
-function setCookie(name, value) {
-    var expDate = new Date();
-    expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
-    var expires = "expires="+expDate.toUTCString();
-    document.cookie = name + "=" + value + ";" + expires + ";path=/";
-}
-
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
 }
 
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
@@ -104,10 +79,10 @@ function getIssues() {
 // Permette di creare una issue quando tutti i campi sono corretti
 function createIssue() {
     // Prendo tutti i valori necessari dal popup
-    var summary = $("#currentCookieElement-titolo").val();
-    var type = $("#currentCookieElement-tipo").val();
-    var description = $("textarea#currentCookieElement-descrizione").val();
-    var comment = $("textarea#currentCookieElement-commento").val();
+    var summary = $("#C-titolo").val();
+    var type = $("#C-tipo").val();
+    var description = $("textarea#C-descrizione").val();
+    var comment = $("textarea#C-commento").val();
 
     // Controllo della presenza del titolo (Obbligatorio per creare una issue)
     if (summary.length > 0 && type.length > 0) {
@@ -229,9 +204,9 @@ function getCommentsHtml() {
 
 // Azzero tutti i campi di input dei popup
 function resetFields() {
-    $('#currentCookieElement-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
-    $('#currentCookieElement-descrizione').val('');
-    $('#currentCookieElement-commento').val('');
+    $('#C-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
+    $('#C-descrizione').val('');
+    $('#C-commento').val('');
     $('#D-commento').val(''); // Resetta dentro al commento nei dettagli
 }
 
@@ -282,13 +257,23 @@ function getTableHtml(data) {
 function buildRowFromSettings(data) {
     var row = [];
     var settings = getSettings();
+    var maxChar = 0;
+
     const rowFields = [row.key, row.summary, row.status, row.description, row.type, row.priority, row.date, row.assignee];
     const dataFields = [data.key, data.summary, data.status, data.description, data.type, data.priority, data.date, data.assignee];
 
     // Costruisce la riga pushando solo se la checkbox corrispondente è selezionata
+    for (var i in settings) { if (settings[i] == true) { maxChar ++; } }
+
     for (var i in settings) {
-        if (settings[i]) {
-            rowFields[i] = dataFields[i];
+        if (settings[i] == true) {
+            if (dataFields[i].length >= 120 / maxChar) {
+                rowFields[i] = dataFields[i].slice(0, (120 / maxChar) - 3) + "...";
+            }
+            else {
+                rowFields[i] = dataFields[i];
+            }
+
             row.push(rowFields[i]);
         }
     }

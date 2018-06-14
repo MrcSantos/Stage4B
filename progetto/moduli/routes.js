@@ -13,14 +13,10 @@ routes.use(express.static('pages'));
 
 const bodyParser = bp.urlencoded({ extended: false }); // Utilizzato per leggere i dati passati dal client
 
-/*----------------------------------------------------------------------------*/ // Variabili
+/*----------------------------------------------------------------------------*/ // Variabili globali
 
-/* Variabili URL */
-const host = "http://stage.gnet.it/"; // Inizio URL
-const path = "rest/api/2/"; // Metà dell'URL
-const base = host + path; // Tutta la prima parte dell'URL
+var host = ""; // Host da Inizializzare
 
-/* Variabile filtro */
 var currentFilter = ""; // Filtro corrente, se vuoto prende tutte le issues
 
 /* Variabili autenticazione */
@@ -28,6 +24,12 @@ var username = "";
 var password = "";
 
 /*----------------------------------------------------------------------------*/ // Funzioni
+
+// Returna tutta la prima parte dell'URL
+function getBaseUrl() {
+	const path = "/rest/api/2/";
+	return host + path;
+}
 
 // Returna la stringa di autenticazione per l'header delle richieste utilizzando le var di autenticazione globali
 function auth() {
@@ -67,11 +69,12 @@ function lowLevelRequest(res, url, method, authorization, data, callback) {
 }
 
 // Effettua una richiesta per controllare le credenziali
-function checkCredentials(res, user, pass) {
+function checkCredentials(res, user, pass, hostNet) {
 	username = user;
 	password = pass;
+	host = hostNet;
 
-	var url = base + "issue/createmeta";
+	var url = getBaseUrl() + "issue/createmeta";
 	var method = 'GET';
 	var authorization = auth();
 
@@ -109,7 +112,7 @@ function getAllIssues(res, projectName, sortType) {
 	var fields = "&fields=*all";
 
 	// Variabili per la richiesta
-	var url = base + jql + project + filter + sort + fields;
+	var url = getBaseUrl() + jql + project + filter + sort + fields;
 	var method = 'GET';
 	var authorization = auth();
 	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => {
@@ -122,7 +125,7 @@ function getAllIssues(res, projectName, sortType) {
 
 // Effettua una richiesta per creare una issue
 function createIssue(res, project, summary, type, description, comment) {
-	var url = base + "issue/";
+	var url = getBaseUrl() + "issue/";
 	var method = 'POST';
 	var authorization = auth();
 	var data = {
@@ -140,13 +143,13 @@ function createIssue(res, project, summary, type, description, comment) {
 
 	lowLevelRequest(res, url, method, authorization, data, (error, response, body) => {
 		res.send(200);
-		if (req.body.comment != "") { commentIssue(res, obj.body.id, req.body.comment) }
+		if (comment != "") { commentIssue(res, response.body.id, comment) }
 	});
 }
 
 // Effettua una richiesta per commentare
-function commentIssue(res, key, commentBody) {
-	var url = base + "issue/" + key + "/comment";
+function commentIssue(res, idIssue, commentBody) {
+	var url = getBaseUrl() + "issue/" + idIssue + "/comment";
 	var method = 'POST';
 	var authorization = auth();
 	var data = { 'body': commentBody };
@@ -159,7 +162,7 @@ function commentIssue(res, key, commentBody) {
 routes.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
 // Richieste che modificano i dati globali
-routes.post("/login", bodyParser, (req, res) => checkCredentials(res, req.body.user, req.body.pass));
+routes.post("/login", bodyParser, (req, res) => checkCredentials(res, req.body.user, req.body.pass, req.body.host));
 routes.post('/filter', bodyParser, (req, res) => setFilter(res, req.body.filter));
 
 // Richieste per la modifica delle issues
