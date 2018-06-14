@@ -11,10 +11,10 @@
     <body>
         <div class="w3-container w3-center head">
             <img src="logo.ico" alt="Logo" class="logo">
-            <h1>Jira Issues Table</h1>
+            <h1 class="title">Jira Issues Table</h1>
         </div>
         <div class="w3-container mainTab">
-            <table class="w3-hoverable w3-centered w3-bordered mainTab" id="out">
+            <table class="w3-hoverable w3-bordered mainTab" id="out">
             </table>
         </div>
         <div class="footer w3-mobile">
@@ -26,14 +26,14 @@
         </div>
         <div id="settings" class="w3-responsive">
             <form onsubmit="return false;">
-                <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()" disabled> Chiave<br>
-                <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
-                <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Status<br>
-                <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Descrizione<br>
-                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Tipo issue<br>
-                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Priorità<br>
-                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Data creazione<br>
-                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Assegnati<br>
+                <input checked="true"   type="checkbox" class="settings" disabled> Chiave<br>
+                <input checked="true"   type="checkbox" class="settings" disabled> Titolo<br>
+                <input checked="true"   type="checkbox" class="settings" onclick="setDataInPlace()"> Status<br>
+                <input checked="true"   type="checkbox" class="settings" onclick="setDataInPlace()"> Descrizione<br>
+                <input                  type="checkbox" class="settings" onclick="setDataInPlace()"> Tipo issue<br>
+                <input                  type="checkbox" class="settings" onclick="setDataInPlace()"> Priorità<br>
+                <input                  type="checkbox" class="settings" onclick="setDataInPlace()"> Data creazione<br>
+                <input                  type="checkbox" class="settings" onclick="setDataInPlace()"> Assegnati<br>
                 <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Default</button>
             </form>
         </div>

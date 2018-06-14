@@ -34,14 +34,11 @@ function auth() {
 	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Stringa richiesta basic
 }
 
-// Returna la stringa necessaria per l'url prendendo la var del filtro per costruirla
-function getFilter() {
-	if (currentFilter == "") { // Prende tutte le issue non aggiungendo i filtri
-		return "";
-	}
-	else {
-		return "+and+" + currentFilter; // Aggiunge il filtro alla ricerca nell'url
-	}
+// Imposta il filtro corrente
+function setFilter(res, filterNumber) {
+	var filters = ["", "resolution=Unresolved", "statusCategory=Done", "assignee=currentUser()+and+resolution=Unresolved"];
+	currentFilter = filters[filterNumber];
+	res.send(200);
 }
 
 // Effettua una richiesta a Jira chiedendo tutti i parametri necessari
@@ -69,16 +66,6 @@ function lowLevelRequest(res, url, method, authorization, data, callback) {
 	})
 }
 
-// Effettua una richiesta per commentare
-function comment(res, key, commentBody) {
-	var url = base + "issue/" + key + "/comment";
-	var method = 'POST';
-	var authorization = auth();
-	var data = { 'body': commentBody };
-
-	lowLevelRequest(res, url, method, authorization, data, (error, response, body) => res.send(response.statusCode));
-}
-
 // Effettua una richiesta per controllare le credenziali
 function checkCredentials(res, user, pass) {
 	username = user;
@@ -91,28 +78,38 @@ function checkCredentials(res, user, pass) {
 	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => res.send(response.statusCode));
 }
 
-//
+// Effettua una richiesta per ricevere tutte le issues
 function getAllIssues(res, projectName, sortType) {
 	// Controlla se viene specificato il nome progetto
-	function checkProj(project) {
-		if (project) { return "project=" + project; }
+	function checkProj() {
+		if (projectName) { return "project=" + projectName; }
 		else { return "" }
 	}
 
 	// Controlla se viene specificato il tipo di ordinamento
-	function checkSort(sort) {
-		if (sort) { return "+order+by+" + sort; }
+	function checkSort() {
+		if (sortType) { return "+order+by+" + sortType; }
 		else { return "" }
+	}
+
+	// Controlla se viene specificato il filtro
+	function checkFilter() {
+		if (currentFilter) {
+			if (projectName) { return "+and+" + currentFilter; }
+			else { return currentFilter; }
+		}
+		else { return ""; }
 	}
 
 	// Variabili url locali
 	var jql = "search?jql=";
-	var project = checkProj(projectName);
-	var sort = checkSort(sortType);
+	var project = checkProj();
+	var filter = checkFilter();
+	var sort = checkSort();
 	var fields = "&fields=*all";
 
 	// Variabili per la richiesta
-	var url = base + jql + project + sort + fields;
+	var url = base + jql + project + filter + sort + fields;
 	var method = 'GET';
 	var authorization = auth();
 	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => {
@@ -123,55 +120,51 @@ function getAllIssues(res, projectName, sortType) {
 	});
 }
 
+// Effettua una richiesta per creare una issue
+function createIssue(res, project, summary, type, description, comment) {
+	var url = base + "issue/";
+	var method = 'POST';
+	var authorization = auth();
+	var data = {
+		"fields": {
+			"project": {
+				"key": project
+			},
+			"summary": summary,
+			"description": description,
+			"issuetype": {
+				"name": type
+			}
+		}
+	}
+
+	lowLevelRequest(res, url, method, authorization, data, (error, response, body) => {
+		res.send(200);
+		if (req.body.comment != "") { commentIssue(res, obj.body.id, req.body.comment) }
+	});
+}
+
+// Effettua una richiesta per commentare
+function commentIssue(res, key, commentBody) {
+	var url = base + "issue/" + key + "/comment";
+	var method = 'POST';
+	var authorization = auth();
+	var data = { 'body': commentBody };
+
+	lowLevelRequest(res, url, method, authorization, data, (error, response, body) => res.send(response.statusCode));
+}
+
 /*----------------------------------------------------------------------------*/ // Intercettazione richieste client
 
 routes.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
+// Richieste che modificano i dati globali
 routes.post("/login", bodyParser, (req, res) => checkCredentials(res, req.body.user, req.body.pass));
+routes.post('/filter', bodyParser, (req, res) => setFilter(res, req.body.filter));
 
+// Richieste per la modifica delle issues
 routes.get('/get', (req, res) => getAllIssues(res, "DEV", "key+desc"));
-
-routes.post('/filter', bodyParser, (req, res) => {
-	var filters = ["", "resolution=Unresolved", "statusCategory=Done", "assignee=currentUser()+and+resolution=Unresolved"];
-	currentFilter = filters[req.body.filter]
-	res.send(200);
-});
-
-routes.post('/create', bodyParser, (req, res) => {
-	request(
-		{
-			url: base + "issue",
-			method: 'POST',
-			headers: {
-				'Authorization': auth()
-			},
-			json: {
-				"fields": {
-					"project": {
-						"key": "DEV"
-					},
-					"summary": req.body.summary,
-					"description": req.body.description,
-					"issuetype": {
-						"name": req.body.type
-					}
-				}
-			}
-		}, function(err, obj, body) {
-			if (err) {
-				out.err(err);
-			}
-			else {
-				res.send(200);
-				if (req.body.comment != "")
-				comment(res, obj.body.id, req.body.comment);
-			}
-		}
-	)
-}); // Creazione di una issue
-
-routes.post('/comment', bodyParser, (req, res) => {
-	comment(res, req.body.key, req.body.comment);
-});
+routes.post('/create', bodyParser, (req, res) => createIssue(res, "DEV", req.body.summary, req.body.type, req.body.description, req.body.comment));
+routes.post('/comment', bodyParser, (req, res) => commentIssue(res, req.body.key, req.body.comment));
 
 module.exports = routes;

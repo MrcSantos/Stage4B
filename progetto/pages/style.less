@@ -1,41 +1,26 @@
 @import (less) "https://www.w3schools.com/w3css/4/w3.css";
 
 /* Inizio CSS tradizionale */
+/* Font alternativi */
+@font-face { font-family: Helvetica; src: url('fonts/Helvetica.ttf'); }
 
 body {
     background-color: #fefefe;
+    font-family: Helvetica;
 }
 
-/* Font e scritte */
-@font-face { font-family: Helvetica; src: url('fonts/Helvetica.ttf'); }
-@font-face { font-family: Domotika; src: url('fonts/Domotika.ttf'); }
-@font-face { font-family: Domotika; font-weight: bold; src: url('fonts/Domotika-bold.ttf'); }
-
-.h {
-    text-transform: uppercase;
-}
-h1 {
-    font-family: Domotika;
-    &:extend(.h);
+/* Titoli */
+.title {
     font-size: 4vw;
-    letter-spacing: 10px;
-    word-spacing: 100px;
 }
-h2 {
-    font-family: Helvetica;
-    &:extend(.h, .w3-display-topmiddle);
-    font-size: 2vw;
-    letter-spacing: 5px;
-    word-spacing: 50px;
-}
-p {
-    font-family: Helvetica;
+.subTitle {
+
 }
 
 /* Stile immagini */
 .logo {
     width: 4%;
-    &:extend(.w3-left, .w3-round-xxlarge, .w3-card, .w3-margin-top);
+    &:extend(.w3-left, .w3-round-xxlarge, .w3-margin-top);
 }
 
 /* Stile bottoni */
@@ -83,20 +68,22 @@ td {
 }
 .commTab {
     max-height: 40vh;
-    font-size: 1.5vw;
+    font-size: 1vw;
     overflow-y: scroll;
 }
 .mainTab {
-    text-transform: uppercase;
-    font-size: 2vw;
-    max-height: 75vh;
+    font-family: verdana;
+    font-size: 1.5vw;
+    height: 75vh;
     overflow-y: scroll;
     cursor: pointer;
 }
-.fix {
-    font-size: 2.5vw;
+.mainTabHeader {
+    text-transform: uppercase;
+    text-align: center;
+    font-size: 2vw;
     position: sticky;
-    top: 0px;
+    top: -1px;
 }
 
 /* Stile dei popup */

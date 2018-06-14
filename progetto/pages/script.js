@@ -4,52 +4,75 @@ $(checkLogin()); // Al caricamento della pagina manda la richiesta al server
 setInterval(() => checkLogin(), 10000); // Aggiorna i dati ogni 5 secondi
 
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
-var currentDetailsId;
+var currentDetailsId = 0; // L'id del popup dei dettagli aperto al momento (utile per aggiornare automaticamente il popup dopo un commento)
 
+// Controlla i cookies e, nel caso non ci sia un login valido, richiede l'accesso
 function checkLogin() {
+    // Prendo i cookies
     var user = getCookie("jit_user");
     var pass = getCookie("jit_pass");
 
+    // Controllo esistenza cookies
     if (user != "" && pass != "") {
         $.post("/login", {user: user, pass: pass})
-        .done(() => {
-            getIssues();
-        });
+        .done(getIssues()) // Credenziali corrette
+        .fail(() => window.location.href = 'login/login.html'); // Credenziali errate (reindirizza al login)
     }
     else {
-        window.location.href = 'login/login.html';
+        window.location.href = 'login/login.html'; // Reindirizza al login
     }
 }
 
+// Effettua il logout cancellando i cookies
 function logOut() {
+    // Cancello i cookies
     deleteCookies("jit_user");
     deleteCookies("jit_pass");
+
+    // Ricontrollo il login che farà ri inserire i dati richiesti
     checkLogin();
 }
 
+// Funzione che cancella i cookies
 function deleteCookies(name) {
     setCookie(name, "");
 }
 
+// Assegna al cookie specificato il valore indicato
 function setCookie(name, value) {
+    // Assegno la data di "scadenza" a 12h dopo l'assegnazione
     var expDate = new Date();
     expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
-    var expires = "expires="+expDate.toUTCString();
+    var expires = "expires=" + expDate.toUTCString();
+
+    // Assegno il cookie
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
-function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+// Ottiene il valore del cookie specificato
+function getCookie(name) {
+    var cookieName = name + "=";
+
+    // Divido il cookie nei suoi elementi (nome, valore e data)
+    var cookieElementsArray = document.cookie.split(';');
+
+    // Fino a che ci sono elementi nel cookie
+    for(var i = 0; i < cookieElementsArray.length; i++) {
+        // Prendo l'elemento corrente
+        var currentCookieElement = cookieElementsArray[i];
+
+        // ???
+        while (currentCookieElement.charAt(0) == ' ') {
+            currentCookieElement = currentCookieElement.substring(1);
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+
+        // ???
+        if (currentCookieElement.indexOf(name) == 0) {
+            return currentCookieElement.substring(name.length, currentCookieElement.length);
         }
     }
+
+    // Se il cookie è vuoto returna una stringa vuota
     return "";
 }
 
@@ -97,10 +120,10 @@ function getIssues() {
 // Permette di creare una issue quando tutti i campi sono corretti
 function createIssue() {
     // Prendo tutti i valori necessari dal popup
-    var summary = $("#C-titolo").val();
-    var type = $("#C-tipo").val();
-    var description = $("textarea#C-descrizione").val();
-    var comment = $("textarea#C-commento").val();
+    var summary = $("#currentCookieElement-titolo").val();
+    var type = $("#currentCookieElement-tipo").val();
+    var description = $("textarea#currentCookieElement-descrizione").val();
+    var comment = $("textarea#currentCookieElement-commento").val();
 
     // Controllo della presenza del titolo (Obbligatorio per creare una issue)
     if (summary.length > 0 && type.length > 0) {
@@ -150,7 +173,7 @@ function toggleDetails(id) { // L'id passato rappresenta il numero di issue/riga
     $(".details").toggle();
     resetFields();
 
-    currentDetailsId = id;
+    currentDetailsId = id; // Assegna l'id corrente con quello globale per usarlo successivamente
 
     assignPopupValues(); // Assegno i valori nel popup tramite l'id
 }
@@ -222,13 +245,13 @@ function getCommentsHtml() {
 
 // Azzero tutti i campi di input dei popup
 function resetFields() {
-    $('#C-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
-    $('#C-descrizione').val('');
-    $('#C-commento').val('');
+    $('#currentCookieElement-titolo').val(''); // Resetta tutto il form dentro al popup di creazione di una issue
+    $('#currentCookieElement-descrizione').val('');
+    $('#currentCookieElement-commento').val('');
     $('#D-commento').val(''); // Resetta dentro al commento nei dettagli
 }
 
-// Resetta le impostazioni della tabella
+// Resetta le impostazioni della tabella e la aggiorna
 function resetSettings() {
     $("form")[0].reset();
     setDataInPlace();
@@ -244,7 +267,7 @@ function getTableHtml(data) {
     function newRow(id, obj, isHeader) { // id = numero della riga da passare a pop(); obj = oggetto in una riga; isHeader = controllo per l'header della tabella
         var out = "";
 
-        if(isHeader) out += "<thead class='head'><tr class='w3-light-grey fix'>";
+        if(isHeader) out += "<thead class='head'><tr class='w3-light-grey mainTabHeader'>";
         else out += "<tr onclick='toggleDetails(" + id + ")'>";
 
         for (var i in obj) {
@@ -252,6 +275,7 @@ function getTableHtml(data) {
             " + obj[i] + "\
             </td>";
         }
+
         out += "</tr>";
         if(isHeader) out += "</thead>";
 
