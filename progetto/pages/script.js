@@ -38,41 +38,25 @@ function deleteCookies(name) {
     setCookie(name, "");
 }
 
-// Assegna al cookie specificato il valore indicato
 function setCookie(name, value) {
-    // Assegno la data di "scadenza" a 12h dopo l'assegnazione
     var expDate = new Date();
     expDate.setTime(expDate.getTime() + (12 * 60 * 60 * 1000));
-    var expires = "expires=" + expDate.toUTCString();
-
-    // Assegno il cookie
+    var expires = "expires="+expDate.toUTCString();
     document.cookie = name + "=" + value + ";" + expires + ";path=/";
 }
 
-// Ottiene il valore del cookie specificato
-function getCookie(name) {
-    var cookieName = name + "=";
-
-    // Divido il cookie nei suoi elementi (nome, valore e data)
-    var cookieElementsArray = document.cookie.split(';');
-
-    // Fino a che ci sono elementi nel cookie
-    for(var i = 0; i < cookieElementsArray.length; i++) {
-        // Prendo l'elemento corrente
-        var currentCookieElement = cookieElementsArray[i];
-
-        // ???
-        while (currentCookieElement.charAt(0) == ' ') {
-            currentCookieElement = currentCookieElement.substring(1);
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
         }
-
-        // ???
-        if (currentCookieElement.indexOf(name) == 0) {
-            return currentCookieElement.substring(name.length, currentCookieElement.length);
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
         }
     }
-
-    // Se il cookie è vuoto returna una stringa vuota
     return "";
 }
 

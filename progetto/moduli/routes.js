@@ -113,7 +113,7 @@ function getAllIssues(res, projectName, sortType) {
 	var method = 'GET';
 	var authorization = auth();
 	lowLevelRequest(res, url, method, authorization, null, (error, response, body) => {
-		if (username && password) {
+		if (response.statusCode <= 400) {
 			var data = JSON.parse(body);
 			out.all(res, data);
 		}
