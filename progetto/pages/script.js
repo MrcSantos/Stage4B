@@ -17,7 +17,6 @@ function checkLogin() {
         });
     }
     else {
-        alert("Effettua il login per continuare");
         window.location.href = 'login/login.html';
     }
 }
@@ -91,6 +90,7 @@ function getIssues() {
     $.get("/get", (data, status) => {
         allIssuesFields = emptyFieldsHandler(data);
         setDataInPlace();
+        assignPopupValues();
     });
 };
 
@@ -187,7 +187,7 @@ function assignPopupValues() { // L'id passato rappresenta il numero di issue/ri
     var currentIssue = allIssuesFields[Math.floor(currentDetailsId)]; // Controllo solo l'issue corrente
 
     // Prendo tutti i campi del popup leggendoli dalla variabile master
-    $("#key").text(currentIssue.key);
+    $("#key").text("Issue: " + currentIssue.key);
     $("#summary").text("Titolo: " + currentIssue.summary);
     $("#status").text("Status: " + currentIssue.status);
     $("#type").text("Tipo issue: " + currentIssue.type);

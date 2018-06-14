@@ -26,13 +26,13 @@
         </div>
         <div id="settings" class="w3-responsive">
             <form onsubmit="return false;">
-                <input type="checkbox" class="settings" onclick="setDataInPlace()" disabled> Chiave<br>
+                <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()" disabled> Chiave<br>
                 <input checked="true" type="checkbox" class="settings" disabled> Titolo<br>
                 <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Status<br>
                 <input checked="true" type="checkbox" class="settings" onclick="setDataInPlace()"> Descrizione<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Tipo issue<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Priorità<br>
-                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Data<br>
+                <input type="checkbox" class="settings" onclick="setDataInPlace()"> Data creazione<br>
                 <input type="checkbox" class="settings" onclick="setDataInPlace()"> Assegnati<br>
                 <button onclick="resetSettings()" class="w3-tiny blu" type="button" name="button">Default</button>
             </form>
@@ -88,6 +88,7 @@
                     <div class="w3-row-padding w3-margin-top field">
                         <div class="w3-half">
                             <p id="summary"></p>
+                            <p id="type"></p>
                             <p id="description"></p>
                             <span>Commenti:</span>
                             <div class="commTab">
@@ -96,7 +97,6 @@
                         </div>
                         <div class="w3-half">
                             <p id="status"></p>
-                            <p id="type"></p>
                             <p id="priority"></p>
                             <p id="assignee"></p>
                             <p id="date"></p>

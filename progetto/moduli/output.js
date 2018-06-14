@@ -12,7 +12,7 @@ exports.all = function all(res, obj) {
             'status': obj.issues[i].fields.status.name,
             'description': obj.issues[i].fields.description,
             'priority': obj.issues[i].fields.priority.name,
-            'date': created.toLocaleDateString() + " - " + created.toLocaleTimeString(),
+            'date': created.toLocaleDateString(),
             'type': obj.issues[i].fields.issuetype.name,
             'comments': []
         };

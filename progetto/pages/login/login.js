@@ -17,13 +17,11 @@ function login() {
 function success(user, pass) {
     setCookie("jit_user", user);
     setCookie("jit_pass", pass);
-    alert("Login eseguito con successo, benvenuto " + user);
     window.location.href = '../index.html';
 }
 
 function fail() {
     tentativi ++;
-    alert("Login errato, " + parseInt(3-tentativi) + " tentativi rimasti");
 
     if (tentativi == 3) {
         tentativi = 0;
