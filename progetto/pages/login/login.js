@@ -20,6 +20,7 @@ function success(user, pass, host) {
     localStorage.setItem("jit_user", user);
     localStorage.setItem("jit_pass", pass);
     localStorage.setItem("jit_host", host);
+
     window.location.href = '../index.html';
 }
 

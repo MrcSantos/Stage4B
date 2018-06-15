@@ -6,22 +6,43 @@ setInterval(() => checkLogin(), 10000); // Aggiorna i dati ogni 5 secondi
 var allIssuesFields = []; // Contiene tutte le informazioni di tutte le issues
 var currentDetailsId = 0; // L'id del popup dei dettagli aperto al momento (utile per aggiornare automaticamente il popup dopo un commento)
 
+var isAlreadyRequesting = false;
+
 // Controlla i cookies e, nel caso non ci sia un login valido, richiede l'accesso
 function checkLogin() {
-    // Prendo i cookies
-    var user = localStorage.getItem("jit_user");
-    var pass = localStorage.getItem("jit_pass");
-    var host = localStorage.getItem("jit_host");
+    isAlreadyRequesting = !isAlreadyRequesting;
 
-    // Controllo esistenza cookies
-    if (user != "" && pass != "" && host != "") {
-        $.post("/login", { user: user, pass: pass, host: host })
-        .done(getIssues()) // Credenziali corrette
-        .fail(() => window.location.href = 'login/login.html'); // Credenziali errate (reindirizza al login)
+    if (isAlreadyRequesting) {
+        // Prendo i cookies
+        var user = localStorage.getItem("jit_user");
+        var pass = localStorage.getItem("jit_pass");
+        var host = localStorage.getItem("jit_host");
+        var project = getCurrentProject();
+
+        // Controllo esistenza cookies
+        if (user != "" && pass != "" && host != "") {
+            $.post("/login", { user: user, pass: pass, host:host, project: project })
+            .done((data, status) => {
+                if (!project) { setProjects(data) }
+
+                getIssues();
+            }) // Credenziali corrette
+            .fail(() => window.location.href = 'login/login.html'); // Credenziali errate (reindirizza al login)
+        }
+        else {
+            window.location.href = 'login/login.html'; // Reindirizza al login
+        }
     }
-    else {
-        window.location.href = 'login/login.html'; // Reindirizza al login
-    }
+
+    isAlreadyRequesting = !isAlreadyRequesting;
+}
+
+function getCurrentProject() {
+    return $("#projects").val();
+}
+
+function setProjects(data) {
+    $("#projects").html(getProjectsHtml(data));
 }
 
 // Effettua il logout cancellando i cookies
@@ -69,7 +90,7 @@ function emptyFieldsHandler(data) {
 
 // Effettua la richiesta di visualizzare le issues e le mette in allIssuesFields
 function getIssues() {
-    $.get("/get", (data, status) => {
+    $.get("/getIssues", (data, status) => {
         allIssuesFields = emptyFieldsHandler(data);
         setDataInPlace();
         assignPopupValues();
@@ -86,9 +107,6 @@ function createIssue() {
 
     // Controllo della presenza del titolo (Obbligatorio per creare una issue)
     if (summary.length > 0 && type.length > 0) {
-        // Converte il titolo in formato univoco per tutte le issues
-        summary = summary.slice(0, 1).toUpperCase() + summary.slice(1);
-
         // Mando la richiesta al server con tutti i dati
         $.post("/create", {"summary": summary, "type": type, "description":description, "comment":comment}, () => checkLogin());
 
@@ -212,11 +230,11 @@ function resetFields() {
 
 // Resetta le impostazioni della tabella e la aggiorna
 function resetSettings() {
-    $("form")[0].reset();
+    $("form")[1].reset();
     setDataInPlace();
 }
 
-/*----------------------------------------------------------------------------*/ // Funzioni tabella principale
+/*----------------------------------------------------------------------------*/ // Funzioni per costruire html
 
 // Restituisce l'html necessario per costruire la tabella principale
 function getTableHtml(data) {
@@ -249,6 +267,19 @@ function getTableHtml(data) {
     for (var i in data)
         out += newRow(i, data[i], false);
     out += "</tbody>";
+
+    return out;
+}
+
+// Restituisce l'html necessario per impaginare tutti i pregetti da scegliere
+function getProjectsHtml(obj) {
+    var out = "";
+
+    for (var i in obj) {
+        out += "<option onclick='checkLogin()' value='" + obj[i] + "'>"
+        out += obj[i];
+        out += "</option>"
+    }
 
     return out;
 }

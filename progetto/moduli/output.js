@@ -1,7 +1,3 @@
-/*----------------------------------------------------------------------------*/ // Moduli
-
-/*----------------------------------------------------------------------------*/ // Moduli
-
 exports.all = function all(res, obj) {
     function extract(i) {
         var created = new Date(obj.issues[i].fields.created);
@@ -36,10 +32,16 @@ exports.all = function all(res, obj) {
 
     function issues() {
         var issues = [];
-        for (var i in obj.issues)
-        issues.push(extract(i));
+        for (var i in obj.issues) { issues.push(extract(i)) }
         return issues;
     }
 
     res.send(issues());
+}
+
+exports.projects = function projects(res, obj) {
+    var projectsName = [];
+    for (var i in obj) { projectsName.push(obj[i].key) }
+
+    res.send(projectsName);
 }

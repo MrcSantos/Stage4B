@@ -11,7 +11,12 @@
     <body>
         <div class="w3-container w3-center head">
             <img src="logo.ico" alt="Logo" class="logo">
-            <h1 class="title">Jira Issues Table</h1>
+            <h1 class="w3-left title">Jira Issues Table</h1>
+            <form class="w3-right" onsubmit="return false;" action="setProject()">
+                <label>Progetto</label>
+                <select id="projects" style="max-height: 3vh; overflow: scroll;">
+                </select>
+            </form>
         </div>
         <div class="w3-container mainTab">
             <table class="w3-hoverable w3-bordered mainTab" id="out">
