@@ -13,29 +13,16 @@ routes.use(express.static('pages'));
 
 const bodyParser = bp.urlencoded({ extended: false }); // Utilizzato per leggere i dati passati dal client
 
-/*----------------------------------------------------------------------------*/ // Variabili globali
-
-var host = ""; // Host da Inizializzare
-
-var project = "";
-
-var currentFilter = ""; // Filtro corrente, se vuoto prende tutte le issues
-
-/* Variabili autenticazione */
-var username = "";
-var password = "";
-
 /*----------------------------------------------------------------------------*/ // Funzioni
 
 // Returna tutta la prima parte dell'URL
-function getBaseUrl() {
-	const path = "/rest/api/2/";
-	return host + path;
+function getBaseUrl(host) {
+	return host + "/rest/api/2/";
 }
 
 // Returna la stringa di autenticazione per l'header delle richieste utilizzando le var di autenticazione globali
-function auth() {
-	return 'Basic ' + new Buffer(username + ':' + password).toString('base64'); // Stringa richiesta basic
+function auth(user, pass) {
+	return 'Basic ' + new Buffer(user + ':' + pass).toString('base64'); // Stringa richiesta basic
 }
 
 // Imposta il filtro corrente
@@ -46,19 +33,24 @@ function setFilter(res, filterNumber) {
 }
 
 // Effettua una richiesta a Jira chiedendo tutti i parametri necessari
-function lowLevelRequest (res, url, method, authorization, data, callback) {
-	if (res && url && method && authorization) { // Controllo delle variabili fondamentali per una richiesta
+function lowLevelRequest (res, url, authorization, data, callback) {
+	function getMethod() {
+		if (data) {
+			requestData.json = data;
+			requestData.method = 'POST';
+		}
+		else { requestData.method = 'GET' }
+	}
+
+	if (res && url && authorization) { // Controllo delle variabili fondamentali per una richiesta
 		// Costruisco l'oggetto con i dati per la richiesta
 		var requestData = {
 			url: url,
-			method: method,
 			headers: {
 				'Content-Type':'application/json',
 				'Authorization': authorization
 			}
 		};
-		// Se ci sono dei dati allora li metto dentro alla voce json
-		if (data) { requestData.json = data; }
 	}
 	else throw "Parameters error"; // Lancia un errore se non ci sono tutti i dati richiesti
 
@@ -90,14 +82,10 @@ function getAllProjects(res) {
 }
 
 // Effettua una richiesta per controllare le credenziali
-function checkCredentials(res, user, pass, hostNet, proj) {
-	username = user;
-	password = pass;
-	host = hostNet;
-
-	var url = getBaseUrl() + "issue/createmeta";
+function checkCredentials(res, host, user, pass, proj) {
+	var url = getBaseUrl(host) + "issue/createmeta";
 	var method = 'GET';
-	var authorization = auth();
+	var authorization = auth(user, pass);
 
 	lowLevelRequest (res, url, method, authorization, null, (error, response, body) => {
 		if (error || response.statusCode >= 400) { res.send(400) }
@@ -168,7 +156,7 @@ function createIssue(res, project, summary, type, description, comment) {
 			"summary": summary,
 			"description": description,
 			"issuetype": {
-				"name": type
+				"name": "Task"
 			}
 		}
 	}
@@ -194,14 +182,24 @@ function commentIssue(res, idIssue, commentBody) {
 routes.get('/', (req, res) => res.render('index')); // Fornisce l'index
 
 // Richieste che modificano i dati globali
-routes.post("/login", bodyParser, (req, res) => checkCredentials(res, req.body.user, req.body.pass, req.body.host, req.body.project));
+routes.post("/login", bodyParser, (req, res) => {
+	var sent = req.body;
+
+	var host = sent.host;
+	var name = sent.name;
+	var pass = sent.pass;
+
+	checkCredentials(res, host, name, pass)
+});
+
 routes.post('/filter', bodyParser, (req, res) => setFilter(res, req.body.filter));
 
 // Richieste per la modifica delle issues
-routes.get('/getIssues', (req, res) => getAllIssues(res, project, "key+desc"));
+routes.get('/getIssues', (req, res) => console.log(req.body));
+// getAllIssues(res, req.body.project, "key+desc")
 routes.get('/getProjects', (req, res) => getAllProjects(res));
 
-routes.post('/create', bodyParser, (req, res) => createIssue(res, project, req.body.summary, req.body.type, req.body.description, req.body.comment));
+routes.post('/create', bodyParser, (req, res) => createIssue(res, req.body.project, req.body.summary, req.body.type, req.body.description, req.body.comment));
 routes.post('/comment', bodyParser, (req, res) => commentIssue(res, req.body.key, req.body.comment));
 
 module.exports = routes;

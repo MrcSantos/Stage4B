@@ -9,7 +9,7 @@ function login() {
         alert("Tutti i campi sono obbligatori");
     }
     else {
-        $.post("/login", { user: user, pass: pass, host:host })
+        $.post("/login", { name: user, pass: pass, host:host })
         .done((res) => success(user, pass, host))
         .fail((res) => fail())
     }
@@ -36,4 +36,9 @@ function fail() {
         $("#button").hide();
         setTimeout(()=> $("#button").show(), 5000);
     }
+}
+
+if (localStorage.getItem("jit_user") == "") {
+
+    alert(localStorage.getItem("jit_user"));
 }

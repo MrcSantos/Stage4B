@@ -1,4 +1,10 @@
-/*----------------------------------------------------------------------------*/ // Inizializzazione dati e funzioni
+/*----------------------------------------------------------------------------*/ // Inizializzazione dati
+
+var user = {
+    'host': localStorage.getItem("jit_host"),
+    'name': localStorage.getItem("jit_user"),
+    'pass': localStorage.getItem("jit_pass")
+};
 
 $(checkLogin()); // Al caricamento della pagina manda la richiesta al server
 setInterval(() => checkLogin(), 10000); // Aggiorna i dati ogni 5 secondi
@@ -8,22 +14,20 @@ var currentDetailsId = 0; // L'id del popup dei dettagli aperto al momento (util
 
 var isAlreadyRequesting = false;
 
+/*----------------------------------------------------------------------------*/ // Login e accesso
+
 // Controlla i cookies e, nel caso non ci sia un login valido, richiede l'accesso
 function checkLogin() {
     isAlreadyRequesting = !isAlreadyRequesting;
 
     if (isAlreadyRequesting) {
-        // Prendo i cookies
-        var user = localStorage.getItem("jit_user");
-        var pass = localStorage.getItem("jit_pass");
-        var host = localStorage.getItem("jit_host");
         var project = getCurrentProject();
 
         // Controllo esistenza cookies
-        if (user != "" && pass != "" && host != "") {
-            $.post("/login", { user: user, pass: pass, host:host, project: project })
+        if (user.name != "" || user.pass != "" || user.host != "") {
+            $.post("/login", user)
             .done((data, status) => {
-                if (!project) { setProjects(data) }
+                if (!project) { setProjectsInPlace(data) }
 
                 getIssues();
             }) // Credenziali corrette
@@ -37,14 +41,6 @@ function checkLogin() {
     isAlreadyRequesting = !isAlreadyRequesting;
 }
 
-function getCurrentProject() {
-    return $("#projects").val();
-}
-
-function setProjects(data) {
-    $("#projects").html(getProjectsHtml(data));
-}
-
 // Effettua il logout cancellando i cookies
 function logOut() {
     // Cancello i cookies
@@ -56,6 +52,13 @@ function logOut() {
     checkLogin();
 }
 
+/*----------------------------------------------------------------------------*/ // Data handlers
+
+//
+function setProjectsInPlace(data) {
+    $("#projects").html(getProjectsHtml(data));
+}
+
 // Controlla e assegna i dati ricevuti nelle variabili e nella pagine in modo corretto
 function setDataInPlace() {
     var table = []; // Contiene gli elementi della tabella principale
@@ -63,7 +66,7 @@ function setDataInPlace() {
     for (var i in allIssuesFields) { // Costruisce la tabella tenendo conto delle impostazioni della tabella
         table.push(buildRowFromSettings(allIssuesFields[i]));
     }
-    // "Tabelizza" tutte le issues e le returna
+    // "Tabelizza" tutte le issues e le restituisce
     $("#out").html(getTableHtml(table));
 }
 
@@ -83,7 +86,28 @@ function emptyFieldsHandler(data) {
         }
     }
 
-    return data; // Returna i dati validi per assegnarli a allIssuesFields
+    return data; // Restituisce i dati validi per assegnarli a allIssuesFields
+}
+
+/*----------------------------------------------------------------------------*/ // Data getters
+
+// Restituisce
+function getCurrentProject() {
+    if ($("#projects").val())
+        return $("#projects").val();
+    else
+        return "";
+}
+
+// Restituisce il numero di riga checkato nel form
+function getFilter() {
+    filters = $(".filters");
+
+    for (var i = 0; i < filters.length; i++) {
+        if (filters[i].checked) {
+            return i;
+        }
+    }
 }
 
 /*----------------------------------------------------------------------------*/ // Gestione delle issues
@@ -108,7 +132,7 @@ function createIssue() {
     // Controllo della presenza del titolo (Obbligatorio per creare una issue)
     if (summary.length > 0 && type.length > 0) {
         // Mando la richiesta al server con tutti i dati
-        $.post("/create", {"summary": summary, "type": type, "description":description, "comment":comment}, () => checkLogin());
+        $.post("/create", { user, "summary": summary, "type": type, "description":description, "comment":comment}, getIssues());
 
         // Chiudo il popup e resetto i campi
         toggleCreate();
@@ -120,14 +144,14 @@ function createIssue() {
 // Permette di creare un commento quando tutti i campi sono corretti
 function commentIssue() {
     // Prendo tutti i valori necessari dal popup
-    var userComment = $("textarea#D-commento").val();
+    var commentBody = $("textarea#D-commento").val();
 
     // Controllo della presenza del commento
-    if (userComment != "") {
+    if (commentBody != "") {
         resetFields();
 
         // Mando la richiesta al server con tutti i dati
-        $.post("/comment", {'key': allIssuesFields[currentDetailsId].key, 'comment': userComment}, () => {
+        $.post("/comment", { user, 'key': allIssuesFields[currentDetailsId].key, 'comment': commentBody}, () => {
             checkLogin();
         });
     }
@@ -165,22 +189,6 @@ function toggleFilters() {
     $("#filters").toggle();
 }
 
-// Manda al server il numero di filtro e aggiorna i dati
-function setFilter() {
-    $.post("/filter", { "filter": getFilter() })
-    .done(checkLogin());
-}
-
-// Returna il numero di riga checkato nel form
-function getFilter() {
-    filters = $(".filters");
-
-    for (var i = 0; i < filters.length; i++) {
-        if (filters[i].checked) {
-            return i;
-        }
-    }
-}
 
 // Assegno i valori nel popup tramite l'id
 function assignPopupValues() { // L'id passato rappresenta il numero di issue/riga (in locale)
@@ -312,7 +320,7 @@ function buildRowFromSettings(data) {
     return row;
 }
 
-// Returna tutte le opzioni della checkbox in un array
+// Restituisce tutte le opzioni della checkbox in un array
 function getSettings() {
     var allOptions = $(".settings"); // Prende Tutti gli elementi della checkbox
     var options = [];
@@ -322,6 +330,6 @@ function getSettings() {
         options.push(allOptions[i].checked);
     }
 
-    // Returna l'array di booleani
+    // Restituisce l'array di booleani
     return options;
 }
